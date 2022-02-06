@@ -1,5 +1,4 @@
 using CSV
-using Plots
 
 #Choices for Description : Snf1:glucose_repression | wt:cAMP | sch9Delta:cAMP | Sch9P:100_glutamine | Sch9P:1_glutamine |
 # Sch9:gtr1Delta | Sch9:glucose_starve | Sch9:glucose_relief | Mig1:glucose_relief | Rib:rap | Gln3:rap
