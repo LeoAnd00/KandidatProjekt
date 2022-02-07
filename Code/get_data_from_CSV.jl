@@ -6,6 +6,13 @@ using CSV
 #This code gives a dictionary with time points, experimentall values and pre shift and post shift values of
 #some parameters like ex: Carbon and ATP.
 
+#Exampel of use:
+#Description = Sch9:glucose_starve
+#Dictionary = get_data_from_CSV(Description)
+#Time_points = Dictionary["Time_points"]
+#Experimental_values = Dictionary["Experimental_values"]
+#Pre_shift_carbon = Dictionary["pre_shift"]["Carbon"]
+
 function get_data_from_CSV(Description)
 
     function looking_for_row_number(Description)
