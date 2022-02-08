@@ -7,7 +7,7 @@ using CSV
 #some parameters like ex: Carbon and ATP.
 
 #Exampel of use:
-#Description = Sch9:glucose_starve
+#Description = "Sch9:glucose_starve"
 #Dictionary = get_data_from_CSV(Description)
 #Time_points = Dictionary["Time_points"]
 #Experimental_values = Dictionary["Experimental_values"]
