@@ -13,3 +13,5 @@ prob = ODEProblem(ODE_sys, u0, tspan, p) # Definierar ODE-problemet
 
 sol = solve(prob) # Löser ODE-problemet
 plot(sol, legend = false) # Plottar lösningen, utan legend
+xlabel!("t [min]")
+title!("ODE-lösning, Carbon=0.5, Glut_ext=0.0, ATP=0.5")

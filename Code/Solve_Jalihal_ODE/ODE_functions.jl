@@ -10,30 +10,28 @@ using ModelingToolkit
 
 # gamma_gcn4, gamma_rtg13, gamma_gis1, gamma_Dot6 saknar värde, tas ej med i denna modell
 @parameters gammacyr Cyr1_T w_cyr_glu w_cyr_snf sigma_cyr w_cyr w_dot sigma_dot w_dot_sch_pka Dot6_T w_ego sigma_ego w_ego_basal EGO_T gammaego w_ego_gap gammagap sigma_gap w_gap_torc w_gap_N EGOGAP_T gamma_gcn2 Gcn2_T w_gcn_torc sigma_gcn2 w_gcn w_gcn4_gcn2_trna w_gcn4 tRNA_sensitivity sigma_gcn4 tRNA_total Gcn4_T sigma_gis1 w_gis Gis1_T w_gis_pka w_gis_sch w_gln1_gln3 Gln1_T w_gln1 gammagln1 sigma_gln1 w_gln_snf sigma_gln w_gln_sit Gln3_T w_gln3 gammagln3 k_acc_pro k_acc_glu k_degr k_acc_nh4 Glutamine_ext NH4 Carbon Proline w_mig_snf w_mig sigma_mig1 Mig1_T gamma_mig w_mig_pka sigma_pde gammapde w_pde_pka PDE_T w_pde w_pka w_pka_sch9 PKA_T w_pka_camp sigma_pka gammapka k_pr ATP tRNA_total w_ras_pka sigma_ras Ras_T gammaras w_ras_glu w_ras k_mRNA_degr k_transcription w_rtg sigma_rtg w_rtg_torc Rtg13_T w_sak Sak_T w_sak_pka sigma_sak w_sch9_torc w_sch9 gammasch9 sigma_sch9 Sch9_T w_snf_sak gammasnf w_snf_glc sigma_snf w_snf Snf1_T w_torc_egoin w_torc w_torc_snf w_torc_glut sigma_tor gammator TORC1_T w_torc_ego w_tps_pka sigma_tps gammatps w_tps PKA_T Tps1_T w_tre gammatre w_tre_pka Trehalase_T sigma_trehalase k_camp_cyr ATP k_camp_deg k_camp_pde eIF_T w_eif_gcn2 sigma_eif gammaeif w_eif
-@variables t Cyr1(t) Dot6(t) EGO(t) EGOGAP(t) Gcn2(t) Gcn4(t) Gis1(t) Gln1(t) Gln3(t) Glutamine(t) Mig1(t) PDE(t) PKA(t) Protein(t) Ras(t) Rib(t) Rtg13(t) Sak(t) Sch9(t) Snf1(t) TORC1(t) Tps1(t) Trehalase(t) cCAMP(t) eIF(t)
+@variables t Cyr1(t) Dot6(t) EGO(t) EGOGAP(t) Gcn2(t) Gcn4(t) Gis1(t) Gln1(t) Gln3(t) Glutamine(t) Mig1(t) PDE(t) PKA(t) Protein(t) Ras(t) Rib(t) Rtg13(t) Sak(t) Sch9(t) Snf1(t) TORC1(t) Tps1(t) Trehalase(t) cAMP(t) eIF(t)
 D = Differential(t)
-
-include("parameter_values.jl")
 
 function soft_Heaviside(sigma, W)
     1/(1+exp(-sigma*W))
 end
 
-# gamma_gcn4, gamma_rtg13, gamma_gis1, gamma_dot6 ska läggas in
+# gamma_gcn4, gamma_rtg13, gamma_gis1, gamma_dot6 antas vara ett i denna modell
 eqs = [
     # Nutrient signal sensing and transduction 
-    D(Glutamine) ~ (k_acc_glu*Glutamine_ext+ k_acc_pro*Proline +k_acc_nh4*NH4*Gln1*Carbon)-k_degr*Glutamine,
-    D(Cyr1) ~ gammacyr*(Cyr1_T*soft_Heaviside(sigma_cyr,w_cyr_glu*Carbon*Ras-w_cyr-w_cyr_snf*Snf1)-Cyr1), 
+    D(Glutamine) ~ (k_acc_glu*Glutamine_ext+k_acc_pro*Proline+k_acc_nh4*NH4*Gln1*Carbon)-k_degr*Glutamine,
+    D(Cyr1) ~ gammacyr*(Cyr1_T*soft_Heaviside(sigma_cyr, w_cyr_glu*Carbon*Ras-w_cyr-w_cyr_snf*Snf1)-Cyr1), 
     D(Ras) ~ gammaras* (Ras_T*soft_Heaviside(sigma_ras,-w_ras_pka*PKA+w_ras_glu*Carbon+w_ras)-Ras),
-    D(EGO) ~ gammaego*(EGO_T*soft_Heaviside(sigma_ego,w_ego_gap*EGOGAP*(Glutamine_ext+0.5*NH4+0.01Proline)-w_ego*(1-Glutamine)-w_ego_basal)-EGO),
+    D(EGO) ~ gammaego*(EGO_T*soft_Heaviside(sigma_ego,w_ego_gap*EGOGAP*(Glutamine_ext+0.5*NH4+0.01*Proline)-w_ego*(1-Glutamine)-w_ego_basal)-EGO),
     D(EGOGAP) ~ gammagap*(EGOGAP_T*soft_Heaviside(sigma_gap,w_gap_N*(1-Glutamine)-w_gap_torc*TORC1)-EGOGAP),
-    D(cCAMP) ~ (k_camp_cyr*Cyr1*ATP-k_camp_pde*PDE*cCAMP-k_camp_deg*cCAMP),
+    D(cAMP) ~ (k_camp_cyr*Cyr1*ATP-k_camp_pde*PDE*cAMP-k_camp_deg*cAMP),
     D(PDE) ~ gammapde*(PDE_T*soft_Heaviside(sigma_pde,w_pde_pka*PKA-w_pde)-PDE),
     D(Sak) ~ (Sak_T*soft_Heaviside(sigma_sak,w_sak-w_sak_pka*PKA)-Sak),
     # Master regulators
     D(TORC1) ~ gammator*(TORC1_T*soft_Heaviside(sigma_tor,w_torc_glut*Glutamine+w_torc_ego*EGO-w_torc_egoin*(1-EGO)-w_torc-w_torc_snf*Snf1)-TORC1),
     D(Snf1) ~ gammasnf*(Snf1_T*soft_Heaviside(sigma_snf,-w_snf_glc*Carbon+w_snf_sak*Sak-w_snf)-Snf1),
-    D(PKA) ~ gammapka*(PKA_T*soft_Heaviside(sigma_pka,w_pka_camp*cCAMP-w_pka-w_pka_sch9*Sch9)-PKA),
+    D(PKA) ~ gammapka*(PKA_T*soft_Heaviside(sigma_pka,w_pka_camp*cAMP-w_pka-w_pka_sch9*Sch9)-PKA),
     D(Sch9) ~ gammasch9*(Sch9_T*soft_Heaviside(sigma_sch9,w_sch9_torc*TORC1-w_sch9)-Sch9),
     # Downstream responses
     D(Gcn2) ~ gamma_gcn2*(Gcn2_T*soft_Heaviside(sigma_gcn2,w_gcn-w_gcn_torc*Sch9)-Gcn2),
