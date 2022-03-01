@@ -18,8 +18,7 @@ include("ODE_methods.jl")
 u0_SS_sit4 = Steady_state_solver(p) # Returnerar steady state för parametrarna p
 
 # Post-shift, Rapamycin treatment Sit4 => TORC1_T = 0 => no change in parameter values
-tspan = (0.0, 90.0) # [min]
-
+tspan_sit4 = (0.0, 150.0) # [min]
 sol_sit4 = ODE_solver(u0_SS_sit4, tspan, p_sit4)
 
 ########## wt #########
@@ -33,11 +32,15 @@ u0_SS_wt = Steady_state_solver(p_wt) # Returnerar steady state för parametrarna
 # Post-shift, Rapamycin treatment wt => TORC1_T = 0
 p_wt[findfirst(x->x=="TORC1_T", p_lookup_table)] = TORC1_T => 0.0
 
-sol_wt = ODE_solver(u0_SS_wt, tspan, p_wt)
+tspan_wt = (90.0, 150.0)
+sol_wt = ODE_solver(u0_SS_wt, tspan_wt, p_wt)
 
-plot(sol_sit4, vars = 1-Gln3, label = "Sit4 (1-Gln3)", linewidth = 4, linestyle=:dash, legend=:right)
-plot!(sol_wt, vars = Gln3, label = "wt (Gln3)", linewidth = 4, linestyle=:dash)
+plot(sol_sit4, vars = 1-Gln3, label = "Sit4 (1-Gln3)", lw = 4, ls=:dash, legend=:right)
+plot!(sol_wt, vars = Gln3, label = "wt (Gln3)", lw = 4, ls=:dash, color = "red")
+plot!([0.0, 90.0], [u0_SS_wt[16], u0_SS_wt[16]], ls=:dash, lw=4, color = "red", label="")
+
 xlabel!("t [min]")
 ylabel!("Gln3") 
+xlims!((0, 150))
 ylims!((0, 1.0))
 title!("Rapamycin treatment, TORC1_T = 0")

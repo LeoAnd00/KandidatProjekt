@@ -21,7 +21,10 @@ p[findfirst(x->x=="Carbon", p_lookup_table)] = Carbon => 1.0
 tspan_cAMP = (0.0, 3.0) # [min]
 sol = ODE_solver(u0_SS, tspan_cAMP, p)
 
-plot1 = plot(sol, vars = cAMP, legend = false)
+include("exp_data.jl")
+scatter(t_wt_cAMP,data_wt_cAMP)
+
+plot1 = plot!(sol, vars = cAMP, legend = false)
 xlabel!("t [min]")
 ylabel!("cAMP")
 title!("Glucose addition, Carbon = 1.0")
@@ -30,7 +33,10 @@ display(plot1)
 tspan_Sch9 = (0.0, 30.0) # [min]
 sol = ODE_solver(u0_SS, tspan_Sch9, p)
 
-plot2 = plot(sol, vars = Sch9, legend = false)
+include("exp_data.jl")
+scatter(t_Sch9_glucose_relief,data_Sch9_glucose_relief)
+
+plot2 = plot!(sol, vars = Sch9, legend = false)
 xlabel!("t [min]")
 ylabel!("Sch9")
 title!("Glucose addition, Carbon = 1.0")

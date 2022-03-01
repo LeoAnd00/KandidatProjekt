@@ -21,7 +21,11 @@ p[findfirst(x->x=="Carbon", p_lookup_table)] = Carbon => 1.0
 tspan = (0.0, 20.0) # [min]
 sol = ODE_solver(u0_SS, tspan, p)
 
-plot(sol, vars=log(10, Mig1/(1.0-Mig1)), legend=false)
+
+include("exp_data.jl")
+scatter(t_Mig1_glucose_relief,data__Mig1_glucose_relief)
+
+plot!(sol, vars=log(10, Mig1/(1.0-Mig1)), legend=false)
 xlabel!("t [min]")
 ylabel!("log(Mig1/(Mig1_T-Mig1)")
 ylims!((1.0, 1.6))

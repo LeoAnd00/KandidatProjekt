@@ -25,7 +25,10 @@ p[findfirst(x->x=="Glutamine_ext", p_lookup_table)] = Glutamine_ext => 1.0
 tspan = (0.0, 30.0) # [min]
 sol = ODE_solver(u0_SS, tspan, p)
 
-plot(sol, vars=Sch9, legend=false)
+include("exp_data.jl")
+scatter(t_Sch9_gtr1Delta,data_Sch9_gtr1Delta)
+
+plot!(sol, vars=Sch9, legend=false)
 xlabel!("t [min]")
 ylabel!("Sch9")
 ylims!((0.0, 1.0))
