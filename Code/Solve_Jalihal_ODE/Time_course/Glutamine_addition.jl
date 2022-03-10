@@ -17,12 +17,12 @@ tspan = (0.0, 30.0) # [min]
 sol_low = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, p)
 
 include("exp_data.jl")
-scatter(t_Sch9P_glutamine_L,data_Sch9P_glutamine_L)
+scatter(t_Sch9P_glutamine_L, data_Sch9P_glutamine_L./maximum(data_Sch9P_glutamine_L))
 
 p1 = plot!(sol_low, vars = Sch9, legend = false)
 xlabel!("t [min]")
 ylabel!("Sch9")
-ylims!((0,1))
+ylims!((0, 1.1))
 title!("Glutamine addition, Low Glutamine (0.3)")
 display(p1)
 

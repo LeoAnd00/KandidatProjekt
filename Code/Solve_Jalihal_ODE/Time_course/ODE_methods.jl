@@ -23,6 +23,7 @@ function ODE_solver(u0_SS, model_inputs, tspan, p)
     end
 
     prob = ODEProblem(ODE_sys, u0_SS, tspan, p)
-    return solve(prob, Rodas5(), abstol=1e-12, reltol=1e-12)
+    # return solve(prob, Rodas5(), abstol=1e-12, reltol=1e-12)
+    return solve(prob)
 end
 

@@ -17,24 +17,24 @@ tspan = (0.0, 61.0) # [min]
 sol_snf1 = ODE_solver(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p)
 
 include("exp_data.jl")
-scatter(t_snf1,data_snf1)
+scatter(t_snf1,data_snf1./maximum(data_snf1))
 
 p1 = plot!(sol_snf1, vars=Snf1, legend=false)
 xlabel!("t [min]")
 ylabel!("Snf1")
-ylims!((0.0, 1.0))
+ylims!((0.0, 1.1))
 title!("Glucose starvation, Carbon = 0, ATP = 0")
-display(p1)
+# display(p1)
 
-tspan_Sch9 = (0.0, 30.0) # [min]
-sol_sch9 = ODE_solver(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan_Sch9, p)
+# tspan_Sch9 = (0.0, 30.0) # [min]
+# sol_sch9 = ODE_solver(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan_Sch9, p)
 
-include("exp_data.jl")
-scatter(t_Sch9_glucose_starve,data_Sch9_glucose_starve)
+# include("exp_data.jl")
+# # p2 = scatter(t_Sch9_glucose_starve, data_Sch9_glucose_starve)
 
-p2 = plot!(sol_sch9, vars=Sch9, legend=false)
-xlabel!("t [min]")
-ylabel!("Sch9")
-ylims!((0.0, 1.0))
-title!("Glucose starvation, Carbon = 0, ATP = 0")
-display(p2)
+# # plot!(sol_sch9, vars=Sch9, legend=false)
+# xlabel!("t [min]")
+# ylabel!("Sch9")
+# ylims!((0.0, 1.0))
+# title!("Glucose starvation, Carbon = 0, ATP = 0")
+# # display(p2)
