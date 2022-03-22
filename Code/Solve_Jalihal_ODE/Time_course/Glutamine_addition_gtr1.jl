@@ -23,7 +23,7 @@ sol = ODE_solver(u0_SS, (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan
 
 include("exp_data.jl")
 
-data = Minmaxnorm(data_Sch9_gtr1Delta)
+data = Minmaxnorm(data_Sch9_gtr1Delta, 4.82, 52.27)
 plot1 = scatter(t_Sch9_gtr1Delta, data)
 
 plot!(sol, vars=Sch9, legend=false)

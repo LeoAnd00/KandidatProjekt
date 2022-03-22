@@ -44,6 +44,17 @@ function Minmaxnorm(input_list)
     return output_list
 end
 
+function Minmaxnorm(input_list, min, max)
+
+    output_list = []
+
+    for element in input_list
+        append!(output_list, (element - min)/(max-min))
+    end
+
+    return output_list
+end
+
 function Get_index(input_list, key)
     return findfirst(x->x==key, input_list)     
 end

@@ -40,6 +40,3 @@ data__Mig1_glucose_relief=[1.070, 1.233, 1.363, 1.428, 1.490, 1.465, 1.432, 1.42
 # Rapamycin treament (Rel. Rib)
 t_Rib_rap=[0.0,15.0,30.0,60.0,90.0] #min
 data_Rib_rap=[1.00,0.43,0.19,0.09,0.07] # Ingen skalning. De flesta punkterna ser bra ut
-
-# t_Gln3_rap=[0,5,10,15,20] #min
-# data_Gln3_rap=[0.0, 1048.464, 7846.120999999999, 9644.262999999999, 12018.475999999999]
