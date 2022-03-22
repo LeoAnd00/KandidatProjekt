@@ -18,4 +18,4 @@ include("ODE_methods.jl")
 
 # Steady_state_pertubation_solver((Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), Snf1)
 
-Steady_state_pertubation_solver(("TORC1_T" => 0.0), (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), Snf1)
+Steady_state_pertubation_solver_mut([Sch9_T => 0.0], (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), Gis1)
