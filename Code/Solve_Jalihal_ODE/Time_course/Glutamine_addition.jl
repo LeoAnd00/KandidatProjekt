@@ -18,7 +18,7 @@ sol_low = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), t
 
 include("exp_data.jl")
 
-data = Minmaxnorm(data_Sch9P_glutamine_L)
+data = Minmaxnorm(data_Sch9P_glutamine_L, 4.82, 52.57)
 plot1 = scatter(t_Sch9P_glutamine_L, data)
 
 plot!(sol_low, vars = Sch9, legend = false)
@@ -34,7 +34,7 @@ sol_high = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), 
 
 include("exp_data.jl")
 
-data = Minmaxnorm(data_Sch9P_glutamine_H)
+data = Minmaxnorm(data_Sch9P_glutamine_H, 4.82, 52.57)
 plot2 = scatter(t_Sch9P_glutamine_H, data)
 
 plot!(sol_high, vars = Sch9, label = "High Glutamine (1.0)", legend = false)

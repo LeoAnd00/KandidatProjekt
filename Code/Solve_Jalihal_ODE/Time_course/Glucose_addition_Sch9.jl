@@ -20,8 +20,11 @@ sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan
 
 include("exp_data.jl")
 
-data = Minmaxnorm(data_sch9Delta_cAMP)
-scatter(t_sch9Delta_cAMP, data/2)
+# data = Minmaxnorm(data_sch9Delta_cAMP)
+# scatter(t_sch9Delta_cAMP, data/2)
+
+data = Minmaxnorm(data_sch9Delta_cAMP, 0.052, 1.227)
+scatter(t_sch9Delta_cAMP, data)
 
 plot1 = plot!(sol, vars=cAMP, legend=false)
 xlabel!("t [min]")

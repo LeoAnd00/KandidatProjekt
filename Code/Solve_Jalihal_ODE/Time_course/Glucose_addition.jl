@@ -18,7 +18,7 @@ sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan
 
 include("exp_data.jl")
 
-data = Minmaxnorm(data_cAMP)
+data = Minmaxnorm(data_cAMP, 0.052, 1.227)
 plot1 = scatter(t_cAMP, data)
 
 plot!(sol, vars = cAMP, legend = false)
