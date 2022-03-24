@@ -38,7 +38,7 @@ function est_param(ODE_sys, tvals, init_vals, start_guess, n_ps = length(start_g
 
     #General condition on alpha: positive parameters.
     function GC(current_params,search_dir,alpha)
-        for i in 1:length(current_params)
+        for i in 1:n_ps
             if current_params[i]+alpha*search_dir[i] < 0
                 return false
             end
@@ -112,14 +112,9 @@ function est_param(ODE_sys, tvals, init_vals, start_guess, n_ps = length(start_g
         alpha,accepted = armijo(current_params,grad,search_dir)
 
         if !accepted
-            print("Steepest descent: ")
             search_dir = -grad
             alpha = steepest_descent_step(current_params,search_dir)
-        else
-            print("Quasi Newton: ")
         end
-
-        print("alpha = ",alpha,"\n")
 
         return alpha*search_dir
     end
@@ -136,10 +131,6 @@ function est_param(ODE_sys, tvals, init_vals, start_guess, n_ps = length(start_g
         C2 = prev_costs[i-1] - prev_costs[i] <= epsilon[2]*(1+abs(prev_costs[i]))
         C3 = norm(step) <= epsilon[3]*(1+norm(prev_params[i]))
 
-        # if (C1 && C2) || (C2 && C3) || (C1 && C3)
-        #     print("Terminated with C1 ",C1,", C2 ",C2,", C3 ",C3,".\n")
-        # end
-
         return (C1 && C2) || (C2 && C3) || (C1 && C3)
     end
 
@@ -151,7 +142,7 @@ function est_param(ODE_sys, tvals, init_vals, start_guess, n_ps = length(start_g
         push!(prev_costs,cost_fun_of_param(param))
 
         #Calculate gradient and step, then take the step.
-        gradient = calc_grad(exp_ODE_sys,init_vals,tspan,param,tvals)
+        gradient = calc_grad_sens(exp_ODE_sys,init_vals,tspan,param,tvals)
         step = calc_step(param,gradient)
         param += step
         prev_grad = gradient
@@ -187,8 +178,8 @@ end
 """
 function cost_fun(pred)
     s = 0
-    for t in 1:n_ts
-        for y in 1:n_ys
+    for t in 1:length(pred)
+        for y in 1:length(pred[1])
             s += (pred[t][y]-data[t][y])^2
         end
     end
@@ -198,7 +189,7 @@ end
 """
     calc_grad_sens(...(TBD)...)
 
-    Calculate gradient using sensitivity analysis.
+    Calculate gradient using sensitivity analysis. (Trasig pga n_ts, etc.)
 """
 function calc_grad_sens(ODE_exp,init_vals,tspan,param,tvals)
     init_vals = [init_vals; ones(4)]                                #ooga booga
