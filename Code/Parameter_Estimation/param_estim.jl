@@ -1,5 +1,6 @@
 using DifferentialEquations
 using LinearAlgebra
+include("../Solve_Jalihal_ODE/Time_course/ODE_methods.jl")
 
 """
     est_param(ODE_system, tvals, initial_values, start_guess[, n_parameters])
@@ -8,7 +9,7 @@ using LinearAlgebra
 
     If n_parameters is unspecified, estimation is done for all parameters in start_guess.
 """
-function est_param(ODE_sys, tvals, init_vals, start_guess, n_ps = length(start_guess))
+function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_shift)
 
     param = start_guess[1:n_ps]
     tspan = [first(tvals),last(tvals)]
@@ -25,6 +26,9 @@ function est_param(ODE_sys, tvals, init_vals, start_guess, n_ps = length(start_g
     #---------------------#---------------------
     #Cost as function of parameters. Uses cost_fun(pred) below.
     function cost_fun_of_param(params)
+
+        #Leo
+
         prob = ODEProblem(ODE_sys,init_vals,tspan,params)
         sol = solve(prob,Rodas5(),saveat=tvals,verbose = false)
         if sol.retcode != :Success
@@ -141,8 +145,12 @@ function est_param(ODE_sys, tvals, init_vals, start_guess, n_ps = length(start_g
         push!(prev_params,param)
         push!(prev_costs,cost_fun_of_param(param))
 
+        steady_state_sol = Steady_state_solver(p_const,param,pre_shift)
+
+        sensitivity_sol = Sensitivity_solver(steady_state_sol,post_shift,tspan,p_const,param)
+
         #Calculate gradient and step, then take the step.
-        gradient = calc_grad_sens(exp_ODE_sys,init_vals,tspan,param,tvals)
+        gradient = calc_grad_sens(sensitivity_sol)
         step = calc_step(param,gradient)
         param += step
         prev_grad = gradient
@@ -189,27 +197,17 @@ end
 """
     calc_grad_sens(...(TBD)...)
 
-    Calculate gradient using sensitivity analysis. (Trasig pga n_ts, etc.)
+    Calculate gradient using sensitivity analysis.
 """
-function calc_grad_sens(ODE_exp,init_vals,tspan,param,tvals)
-    init_vals = [init_vals; ones(4)]                                #ooga booga
-    prob = ODEProblem(ODE_exp,init_vals,tspan,param)
-    sol = solve(prob,Rodas5(),saveat=tvals,verbose = false)
+function calc_grad_sens(sens_sol)
+    #extract local sensitivities... (får solution till sensitivity problem från ODE_methods)
+end
 
-    grad = zeros(n_ps)
+"""
+    calc_grad_AD(...(TBD)...)
 
-    if sol.retcode != :Success
-        print("Instability... Setting gradient to 0.\n")            #ooga booga
-        return grad
-    end
-
-    for p = 1:n_ps
-        for y = 1:n_ys
-            for t = 1:n_ts
-                grad[p] += (sol.u[t][y]-data[t][y])*sol.u[t][y*2+p] #ooga booga
-            end
-        end
-    end
-
-    return grad.*2
+    Calculate gradient using automatic differentiation.
+"""
+function calc_grad_AD()
+    #Leo
 end
