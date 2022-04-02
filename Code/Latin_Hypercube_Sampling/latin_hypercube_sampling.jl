@@ -8,6 +8,7 @@ using DataFrames
 
 """
     calc_cost(p_var, p_const)
+    
     Calculate the sum of least square / cost for all chosen ODE:s
 """
 function calc_cost(p_var, p_const)
@@ -229,6 +230,7 @@ end
 ######################################### LatinHypercubeSampling ################################################################
 """
     Check_if_p_works(p_var, p_const, scaled_plan)
+
     Checks if the parameter sets from the latin hypercube works and saves them into a CSV file.
 """
 function Check_if_p_works(p_var, p_const, scaled_plan)
