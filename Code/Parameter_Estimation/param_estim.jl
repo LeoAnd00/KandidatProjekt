@@ -191,12 +191,27 @@ end
     Calculate gradient using sensitivity analysis.
 """
 function calc_grad_sens(sens_sol)
-    sens_mat = extract_local_sensitivities(sens_sol,true) #asmatrix = true
-    print("sens_mat = ",sens_mat,"\n") #vet inte riktigt vad man får av raden ovan
-    #och mitt test i egen kod funkar inte av ngn anledning
-    #fortsätter efter nästa möte när jag bett er om hjälp att skriva lite skelett i main
-    #så man kan testa grejer
-    #alt löst problemet i min egen testkod
+    sens_mat = extract_local_sensitivities(sol)
+
+    #y(p,t) = #sens_sol.u[t][y]
+    #dy_dp = sens_mat[2][p][y,t]
+    n_ps = size(sens_mat[2])[0]
+    n_ts,n_ys = size(sens_sol.u)
+
+    grad = zeros(n_ps)
+    if sol.retcode != :Success
+        print("Instability... Setting gradient to 0.\n") #ooga booga
+        return grad
+    end
+
+    for p = 1:n_ps
+        for y = 1:n_ys
+            for t = 1:n_ts
+                grad[p] += (sens_sol.u[t][y]-data[t][y])*sens_mat[2][p][y,t]
+            end
+        end
+    end
+    return grad.*2
 end
 
 """
