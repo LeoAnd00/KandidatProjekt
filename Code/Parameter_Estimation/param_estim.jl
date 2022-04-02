@@ -1,25 +1,20 @@
 using DifferentialEquations
 using LinearAlgebra
 using ForwardDiff
-include("../Solve_Jalihal_ODE/Time_course/ODE_methods.jl")
-include("../Solve_Jalihal_ODE/Time_course/ODE_functions.jl")
-include("../Solve_Jalihal_ODE/Time_course/exp_data.jl")
-include("../Solve_Jalihal_ODE/Time_course/parameter_values.jl")
 
 """
-    est_param(ODE_system, tvals, initial_values, start_guess[, n_parameters])
+    est_p_var(ODE_system, tvals, initial_values, start_guess[, n_parameters])
 
     Estimate parameters for ODE_system.
 
     If n_parameters is unspecified, estimation is done for all parameters in start_guess.
 """
-function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_shift)
+function est_p_var(ODE_sys, tvals, init_vals, p_const, p_var, pre_shift, post_shift)
 
-    param = start_guess[1:n_ps]
     tspan = [first(tvals),last(tvals)]
 
     #Information updated in each iteration.
-    prev_params = [] #list of all previous parameter values, "memory"
+    prev_p_vars = [] #list of all previous parameter values, "memory"
     prev_costs = [] #list of corresponding costs, "memory"
     prev_H = [1 0; 0 1] #last Hessian approximation
     prev_grad = [0,0] #last gradient
@@ -29,237 +24,17 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
 
     #---------------------#---------------------
     #Cost as function of parameters. Uses cost_fun(pred) below.
-    #function cost_fun_of_param(params)
-    function cost_fun_of_param(p_var, p_const)
-
-        function Calc_cost_Glucose_addition_Mig1(p_var, p_const)
-
-            data_for_ode = data__Mig1_glucose_relief
-            timelist_for_ode = t_Mig1_glucose_relief
-            tspan = (0.0, 20.0) # [min]
-    
-            u0_SS = Steady_state_solver(p_const, p_var, (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-            
-            sol = ODE_solver_FWD(u0_SS, (ATP => 1.0, Carbon => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
-            
-            u_approx = getindex.(sol.u, 20) #ODE for MIG1 on row 20 in ODE system
-    
-            MK_Glucose_addition_Mig1 = sum((data_for_ode - (log.(10,u_approx./(1e-5 .+ 1.0 .- u_approx)))).^2)
-        
-            return MK_Glucose_addition_Mig1
-        end
-    
-        function Calc_cost_Glucose_addition_Sch9(p_var, p_const)
-    
-            data_for_ode = Minmaxnorm(data_sch9Delta_cAMP, 0.052, 1.227)
-            timelist_for_ode = t_sch9Delta_cAMP
-            tspan = (0.0, 3.5) # [min]
-            # Mutant Sch9_Delta => Sch9_T = 0
-            p_const[Get_index(p_const_lookup_table, "Sch9_T")] = Sch9_T => 0.0
-        
-            # Pre-shift => ATP, Carbon = 0
-            u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-        
-            # Post-shift => ATP, Carbon = 1
-            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
-        
-            u_approx = getindex.(sol.u, 6) #ODE for cAMP on row 6 in ODE system
-    
-            MK_Glucose_addition_Sch9 = sum((data_for_ode - u_approx).^2)
-    
-            p_const[Get_index(p_const_lookup_table, "Sch9_T")] = Sch9_T => 1.0
-        
-            return MK_Glucose_addition_Sch9
-        end
-    
-        function Calc_cost_Glucose_addition_cAMP(p_var, p_const)
-    
-            data_for_ode = Minmaxnorm(data_cAMP, 0.052, 1.227)
-            timelist_for_ode = t_cAMP
-            tspan = (0.0, 3.5) # [min]
-        
-            u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-        
-            # Post-shift, Glucose addition => ATP, Carbon = 1
-            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
-        
-            u_approx = getindex.(sol.u, 6) #ODE for cAMP on row 6 in ODE system
-                
-            MK_Glucose_addition_cAMP = sum((data_for_ode - u_approx).^2)
-    
-            return MK_Glucose_addition_cAMP
-        end
-    
-        function Calc_cost_Glucose_addition_Sch9_p(p_var, p_const)
-    
-            data_for_ode = Minmaxnorm(data_Sch9_glucose_relief)
-            timelist_for_ode = t_Sch9_glucose_relief
-            tspan = (0.0, 30) # [min]
-        
-            u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-        
-            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
-        
-            u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
-    
-            MK_Glucose_addition_Sch9_p = sum((data_for_ode - u_approx).^2)
-    
-            return MK_Glucose_addition_Sch9_p
-        end
-    
-        function Calc_cost_Glucose_starvation_Snf1_p(p_var, p_const)
-    
-            data_for_ode = Minmaxnorm(data_Snf1)
-            timelist_for_ode = t_Snf1
-            tspan = (0.0, 62) # [min]
-        
-            u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-        
-            # Post-shift, Glucose starvation => Carbon, ATP = 0
-        
-            sol = ODE_solver_FWD(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
-            u_approx = getindex.(sol.u, 10) #ODE for Snf1 on row 10 in ODE system
-    
-            MK_Glucose_starvation_Snf1_p = sum((data_for_ode - u_approx).^2)
-    
-            return MK_Glucose_starvation_Snf1_p
-        end
-    
-        function Calc_cost_Glucose_starvation_Sch9_p(p_var, p_const)
-    
-            data_for_ode = Minmaxnorm(data_Sch9_glucose_starve)
-            timelist_for_ode = t_Sch9_glucose_starve
-            tspan = (0.0, 30) # [min]
-        
-            u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-        
-            sol = ODE_solver_FWD(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
-        
-            u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
-    
-            MK_Glucose_starvation_Sch9_p = sum((data_for_ode - u_approx).^2)
-    
-            return MK_Glucose_starvation_Sch9_p
-        end
-    
-        function Calc_cost_Sch9P_glutamine_L(p_var, p_const)
-    
-            data_for_ode = Minmaxnorm(data_Sch9P_glutamine_L, 4.82, 52.57)
-            timelist_for_ode = t_Sch9P_glutamine_L
-            tspan = (0.0, 32) # [min]
-        
-            u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returnerar steady state för parametrarna p
-        
-            # Low glutamine => Glutamine_ext = 0.3
-            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, p_const, p_var, timelist_for_ode)
-        
-            u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
-    
-            MK_Sch9P_glutamine_L = sum((data_for_ode - u_approx).^2)
-    
-            return MK_Sch9P_glutamine_L
-        end
-    
-        function Calc_cost_Sch9P_glutamine_H(p_var, p_const)
-    
-            data_for_ode = Minmaxnorm(data_Sch9P_glutamine_H, 4.82, 52.57)
-            timelist_for_ode = t_Sch9P_glutamine_H
-            tspan = (0.0, 32) # [min]
-        
-            u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returnerar steady state för parametrarna p
-        
-            # High Glutamine => Glutamine_ext = 1.0
-            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
-        
-            u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
-     
-            MK_Sch9P_glutamine_H = sum((data_for_ode - u_approx).^2)
-    
-            return MK_Sch9P_glutamine_H
-        end
-    
-        function Calc_cost_Glutamine_addition_Sch9_gtr1Delta(p_var, p_const)
-    
-            data_for_ode = Minmaxnorm(data_Sch9_gtr1Delta, 4.82, 52.27)
-            timelist_for_ode = t_Sch9_gtr1Delta
-            tspan = (0.0, 32) # [min]
-        
-            w_torc_ego_true = p_var[Get_index(p_var_lookup_table, "w_torc_ego")]
-            w_torc_egoin_true = p_var[Get_index(p_var_lookup_table, "w_torc_egoin")]
-        
-            # Mutant gtr1_Delta => EGO_T = 0, w_torc_ego = 0, w_torc_egoin = 0 i 
-            p_const[Get_index(p_const_lookup_table, "EGO_T")] = EGO_T => 0.0
-            p_var[Get_index(p_var_lookup_table, "w_torc_ego")] = w_torc_ego => 0.0
-            p_var[Get_index(p_var_lookup_table, "w_torc_egoin")] = w_torc_egoin => 0.0
-        
-            # Pre-shift => Glutamine_ext = 0, ATP, Carbon = 1 
-            u0_SS = Steady_state_solver(p_const, p_var, (Glutamine_ext => 0.0, Carbon => 1.0, ATP => 1.0)) 
-        
-            # High glutamine => Glutamine_ext = 1
-            sol = ODE_solver_FWD(u0_SS, (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan, p_const, p_var, timelist_for_ode)
-        
-            u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
-                    
-            MK_Glutamine_addition_Sch9_gtr1Delta = sum((data_for_ode - u_approx).^2)
-        
-            p_const[Get_index(p_const_lookup_table, "EGO_T")] = EGO_T => 1.0
-            p_var[Get_index(p_var_lookup_table, "w_torc_ego")] = w_torc_ego_true
-            p_var[Get_index(p_var_lookup_table, "w_torc_egoin")] = w_torc_egoin_true
-        
-            return MK_Glutamine_addition_Sch9_gtr1Delta
-        end
-    
-        function Calc_cost_Rapamycin_treatment(p_var, p_const)
-    
-            data_for_ode = Minmaxnorm(data_Rib_rap)
-            timelist_for_ode = t_Rib_rap
-            tspan = (0.0, 92.0) # [min]
-        
-            u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-        
-            # Post-shift: Rapamycin treatment => TORC1_T = 0.0 
-            p_const[Get_index(p_const_lookup_table, "TORC1_T")] = TORC1_T => 0.0
-        
-            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
-        
-            u_approx = getindex.(sol.u, 25) #ODE for RIB on row 25 in ODE system
-    
-            MK_Rapamycin_treatment = sum((data_for_ode - (u_approx./(1e-3 .+ u0_SS[25]))).^2)
-        
-            p_const[Get_index(p_const_lookup_table, "TORC1_T")] = TORC1_T => 1.0
-        
-            return MK_Rapamycin_treatment
-        end
-    
-        MK_Glucose_addition_Mig1 = Calc_cost_Glucose_addition_Mig1(p_var, p_const)
-        MK_Glucose_addition_Sch9 = Calc_cost_Glucose_addition_Sch9(p_var, p_const)
-        MK_Glucose_addition_cAMP = Calc_cost_Glucose_addition_cAMP(p_var, p_const)
-        MK_Glucose_addition_Sch9_p = Calc_cost_Glucose_addition_Sch9_p(p_var, p_const)
-        MK_Glucose_starvation_Snf1_p = Calc_cost_Glucose_starvation_Snf1_p(p_var, p_const)
-        MK_Glucose_starvation_Sch9_p = Calc_cost_Glucose_starvation_Sch9_p(p_var, p_const)
-        MK_Sch9P_glutamine_L = Calc_cost_Sch9P_glutamine_L(p_var, p_const)
-        MK_Sch9P_glutamine_H = Calc_cost_Sch9P_glutamine_H(p_var, p_const)
-        MK_Glutamine_addition_Sch9_gtr1Delta = Calc_cost_Glutamine_addition_Sch9_gtr1Delta(p_var, p_const)
-        MK_Rapamycin_treatment = Calc_cost_Rapamycin_treatment(p_var, p_const)
-    
-        MK = MK_Glucose_addition_Mig1 + MK_Glucose_addition_Sch9 + MK_Glucose_addition_cAMP + MK_Glucose_addition_Sch9_p + MK_Glucose_starvation_Snf1_p + MK_Glucose_starvation_Sch9_p + MK_Sch9P_glutamine_L + MK_Sch9P_glutamine_H + MK_Glutamine_addition_Sch9_gtr1Delta + MK_Rapamycin_treatment
-
-        #prob = ODEProblem(ODE_sys,init_vals,tspan,params)
-        #sol = solve(prob,Rodas5(),saveat=tvals,verbose = false)
-        #if sol.retcode != :Success
-        #    return Inf
-        #end
-        #return cost_fun(sol.u)
-        return MK
+    function cost_fun_of_p(p_var)
+        return calc_cost(p_var, p_const)
     end
 
     #---------------------#---------------------
     #Conditions used when calculating the step length alpha.
 
     #General condition on alpha: positive parameters.
-    function GC(current_params,search_dir,alpha)
+    function GC(current_p_vars,search_dir,alpha)
         for i in 1:n_ps
-            if current_params[i]+alpha*search_dir[i] < 0
+            if current_p_vars[i]+alpha*search_dir[i] < 0
                 return false
             end
         end
@@ -267,37 +42,37 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
     end
 
     #Condition on alpha used for steepest descent: new cost lower than previous cost.
-    function SDC(current_params,search_dir,alpha)
-        return cost_fun_of_param(current_params+alpha*search_dir) <= cost_fun_of_param(current_params)
+    function SDC(current_p_vars,search_dir,alpha)
+        return cost_fun_of_p(current_p_vars+alpha*search_dir) <= cost_fun_of_p(current_p_vars)
     end
 
     #Wolfe condition 1 (aka Armijo condition).
-    function WC1(current_params,grad,search_dir,alpha)
-        return cost_fun_of_param(current_params+alpha*search_dir)-cost_fun_of_param(current_params) <= mu*alpha*search_dir'*grad
+    function WC1(current_p_vars,grad,search_dir,alpha)
+        return cost_fun_of_p(current_p_vars+alpha*search_dir)-cost_fun_of_p(current_p_vars) <= mu*alpha*search_dir'*grad
     end
 
     #Wolfe condition 2 (strong form).
-    function WC2(current_params,grad,search_dir,alpha)
-        return abs(search_dir'*calc_grad(exp_ODE_sys,init_vals,tspan,current_params+alpha*search_dir,tvals)) >= abs(nu*search_dir'*grad)
+    function WC2(current_p_vars,grad,search_dir,alpha)
+        return abs(search_dir'*calc_grad(exp_ODE_sys,init_vals,tspan,current_p_vars+alpha*search_dir,tvals)) >= abs(nu*search_dir'*grad)
     end
 
     #---------------------#---------------------
     #Functions to calculate step length (alpha).
 
     #For steepest descent.
-    function steepest_descent_step(current_params,search_dir)
+    function steepest_descent_step(current_p_vars,search_dir)
         alpha = 1
-        while !(SDC(current_params,search_dir,alpha) && GC(current_params,search_dir,alpha))
+        while !(SDC(current_p_vars,search_dir,alpha) && GC(current_p_vars,search_dir,alpha))
             alpha *= 1/2
         end
         return alpha
     end
 
     #Armijo step length rule (using Wolfe conditions).
-    function armijo(current_params,grad,search_dir)
+    function armijo(current_p_vars,grad,search_dir)
         alpha = 1
         accept = true
-        while !(WC1(current_params,grad,search_dir,alpha) && WC2(current_params,grad,search_dir,alpha) && GC(current_params,search_dir,alpha))
+        while !(WC1(current_p_vars,grad,search_dir,alpha) && WC2(current_p_vars,grad,search_dir,alpha) && GC(current_p_vars,search_dir,alpha))
             alpha *= 1/2
             if alpha < 10^-6
                 accept = false
@@ -309,31 +84,31 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
 
     #---------------------#---------------------
     #BFGS Hessian approximation.
-    function BFGS(current_params,grad)
-        l = length(prev_params)
+    function BFGS(current_p_vars,grad)
+        l = length(prev_p_vars)
         if l < 2
             return [1 0; 0 1]
         end    
         Hk = prev_H   
         dk = grad-prev_grad
-        pk = current_params-prev_params[l-1]
+        pk = current_p_vars-prev_p_vars[l-1]
 
         return Hk - (Hk*dk)*(Hk*dk)'/(dk'*Hk*dk)+(pk*pk')/(pk'*dk)
     end
 
     #---------------------#---------------------
     #Calculate step (direction and length).
-    function calc_step(current_params,grad)
+    function calc_step(current_p_vars,grad)
         # hessian_approx = (1/2).*grad*grad'      <--- old hessian approx
-        hessian_approx = BFGS(current_params,grad)
+        hessian_approx = BFGS(current_p_vars,grad)
         prev_H = hessian_approx
         search_dir = -inv(hessian_approx)*grad #Newton search direction
 
-        alpha,accepted = armijo(current_params,grad,search_dir)
+        alpha,accepted = armijo(current_p_vars,grad,search_dir)
 
         if !accepted
             search_dir = -grad
-            alpha = steepest_descent_step(current_params,search_dir)
+            alpha = steepest_descent_step(current_p_vars,search_dir)
         end
 
         return alpha*search_dir
@@ -349,7 +124,7 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
 
         C1 = norm(grad) <= epsilon[1]*(1+abs(prev_costs[i]))
         C2 = prev_costs[i-1] - prev_costs[i] <= epsilon[2]*(1+abs(prev_costs[i]))
-        C3 = norm(step) <= epsilon[3]*(1+norm(prev_params[i]))
+        C3 = norm(step) <= epsilon[3]*(1+norm(prev_p_vars[i]))
 
         return (C1 && C2) || (C2 && C3) || (C1 && C3)
     end
@@ -358,17 +133,17 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
     #Estimation loop.
     while true
         #Add current parameters/cost to "memory".
-        push!(prev_params,param)
-        push!(prev_costs,cost_fun_of_param(param))
+        push!(prev_p_vars,p_var)
+        push!(prev_costs,cost_fun_of_p(p_var))
 
-        steady_state_sol = Steady_state_solver(p_const,param,pre_shift)
+        steady_state_sol = Steady_state_solver(p_const,p_var,pre_shift)
 
-        sensitivity_sol = Sensitivity_solver(steady_state_sol,post_shift,tspan,p_const,param)
+        sensitivity_sol = sensitivity_solver(steady_state_sol,post_shift,tvals,p_const,p_var)
 
         #Calculate gradient and step, then take the step.
         gradient = calc_grad_sens(sensitivity_sol)
-        step = calc_step(param,gradient)
-        param += step
+        step = calc_step(p_var,gradient)
+        p_var += step
         prev_grad = gradient
 
         #Termination.
@@ -378,9 +153,9 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
     end
     
     #Add the found parameters and cost to "memory", then return "memory" vectors.
-    push!(prev_params,param)
-    push!(prev_costs,cost_fun_of_param(param))
-    return prev_params, prev_costs
+    push!(prev_p_vars,p_var)
+    push!(prev_costs,cost_fun_of_p(p_var))
+    return prev_p_vars, prev_costs
 end
 
 """
@@ -411,12 +186,17 @@ function cost_fun(pred)
 end
 
 """
-    calc_grad_sens(...(TBD)...)
+    calc_grad_sens(sensitivity_sol)
 
     Calculate gradient using sensitivity analysis.
 """
 function calc_grad_sens(sens_sol)
-    #extract local sensitivities... (får solution till sensitivity problem från ODE_methods)
+    sens_mat = extract_local_sensitivities(sens_sol,true) #asmatrix = true
+    print("sens_mat = ",sens_mat,"\n") #vet inte riktigt vad man får av raden ovan
+    #och mitt test i egen kod funkar inte av ngn anledning
+    #fortsätter efter nästa möte när jag bett er om hjälp att skriva lite skelett i main
+    #så man kan testa grejer
+    #alt löst problemet i min egen testkod
 end
 
 """
