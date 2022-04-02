@@ -2,9 +2,9 @@ using DifferentialEquations
 using LinearAlgebra
 using ForwardDiff
 include("../Solve_Jalihal_ODE/Time_course/ODE_methods.jl")
-include("ODE_methods.jl")
 include("../Solve_Jalihal_ODE/Time_course/ODE_functions.jl")
 include("../Solve_Jalihal_ODE/Time_course/exp_data.jl")
+include("../Solve_Jalihal_ODE/Time_course/parameter_values.jl")
 
 """
     est_param(ODE_system, tvals, initial_values, start_guess[, n_parameters])
@@ -40,7 +40,7 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
     
             u0_SS = Steady_state_solver(p_const, p_var, (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
             
-            sol = ODE_solver(u0_SS, (ATP => 1.0, Carbon => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
+            sol = ODE_solver_FWD(u0_SS, (ATP => 1.0, Carbon => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
             
             u_approx = getindex.(sol.u, 20) #ODE for MIG1 on row 20 in ODE system
     
@@ -61,7 +61,7 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
             u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
         
             # Post-shift => ATP, Carbon = 1
-            sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
+            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
         
             u_approx = getindex.(sol.u, 6) #ODE for cAMP on row 6 in ODE system
     
@@ -81,7 +81,7 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
             u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
         
             # Post-shift, Glucose addition => ATP, Carbon = 1
-            sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
+            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
         
             u_approx = getindex.(sol.u, 6) #ODE for cAMP on row 6 in ODE system
                 
@@ -98,7 +98,7 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
         
             u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
         
-            sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
+            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
         
             u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
     
@@ -117,7 +117,7 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
         
             # Post-shift, Glucose starvation => Carbon, ATP = 0
         
-            sol = ODE_solver(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
+            sol = ODE_solver_FWD(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
             u_approx = getindex.(sol.u, 10) #ODE for Snf1 on row 10 in ODE system
     
             MK_Glucose_starvation_Snf1_p = sum((data_for_ode - u_approx).^2)
@@ -133,7 +133,7 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
         
             u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
         
-            sol = ODE_solver(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
+            sol = ODE_solver_FWD(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
         
             u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
     
@@ -151,7 +151,7 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
             u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returnerar steady state för parametrarna p
         
             # Low glutamine => Glutamine_ext = 0.3
-            sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, p_const, p_var, timelist_for_ode)
+            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, p_const, p_var, timelist_for_ode)
         
             u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
     
@@ -169,7 +169,7 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
             u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returnerar steady state för parametrarna p
         
             # High Glutamine => Glutamine_ext = 1.0
-            sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
+            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
         
             u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
      
@@ -196,7 +196,7 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
             u0_SS = Steady_state_solver(p_const, p_var, (Glutamine_ext => 0.0, Carbon => 1.0, ATP => 1.0)) 
         
             # High glutamine => Glutamine_ext = 1
-            sol = ODE_solver(u0_SS, (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan, p_const, p_var, timelist_for_ode)
+            sol = ODE_solver_FWD(u0_SS, (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan, p_const, p_var, timelist_for_ode)
         
             u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
                     
@@ -220,7 +220,7 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
             # Post-shift: Rapamycin treatment => TORC1_T = 0.0 
             p_const[Get_index(p_const_lookup_table, "TORC1_T")] = TORC1_T => 0.0
         
-            sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
+            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var, timelist_for_ode)
         
             u_approx = getindex.(sol.u, 25) #ODE for RIB on row 25 in ODE system
     
@@ -243,7 +243,6 @@ function est_param(ODE_sys, tvals, init_vals, p_const, param, pre_shift, post_sh
         MK_Rapamycin_treatment = Calc_cost_Rapamycin_treatment(p_var, p_const)
     
         MK = MK_Glucose_addition_Mig1 + MK_Glucose_addition_Sch9 + MK_Glucose_addition_cAMP + MK_Glucose_addition_Sch9_p + MK_Glucose_starvation_Snf1_p + MK_Glucose_starvation_Sch9_p + MK_Sch9P_glutamine_L + MK_Sch9P_glutamine_H + MK_Glutamine_addition_Sch9_gtr1Delta + MK_Rapamycin_treatment
-    
 
         #prob = ODEProblem(ODE_sys,init_vals,tspan,params)
         #sol = solve(prob,Rodas5(),saveat=tvals,verbose = false)
@@ -429,9 +428,8 @@ function calc_grad_AD(p_var, p_const)
     function dMK_dp_Glucose_addition_Mig1(p_var,p_const)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_grad(u0_SS, (ATP => 1.0, Carbon => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (ATP => 1.0, Carbon => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 20) #ODE for MIG1 on row 20 in ODE system
-            #print("u_approx: ",u_approx)
 
             MK_for_diff = sum((data_for_ode - (log.(10,u_approx./(1e-5 .+ 1.0 .- u_approx)))).^2)
             return MK_for_diff
@@ -451,7 +449,7 @@ function calc_grad_AD(p_var, p_const)
     function dMK_dp_Glucose_addition_Sch9(p_var,p_const)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_grad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 6)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -474,7 +472,7 @@ function calc_grad_AD(p_var, p_const)
     function dMK_dp_Glucose_addition_cAMP(p_var,p_const)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_grad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 6) 
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -495,7 +493,7 @@ function calc_grad_AD(p_var, p_const)
     function dMK_dp_Glucose_addition_Sch9_p(p_var,p_const)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_grad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 12) 
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -516,7 +514,7 @@ function calc_grad_AD(p_var, p_const)
     function dMK_dp_Glucose_starvation_Snf1_p(p_var,p_const)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_grad(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 10)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -537,7 +535,7 @@ function calc_grad_AD(p_var, p_const)
     function dMK_dp_Glucose_starvation_Sch9_p(p_var,p_const)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_grad(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 12)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -558,7 +556,7 @@ function calc_grad_AD(p_var, p_const)
     function dMK_dp_Sch9P_glutamine_L(p_var,p_const)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_grad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 12)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -579,7 +577,7 @@ function calc_grad_AD(p_var, p_const)
     function dMK_dp_Sch9P_glutamine_H(p_var,p_const)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_grad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 12)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -600,7 +598,7 @@ function calc_grad_AD(p_var, p_const)
     function dMK_dp_Glutamine_addition_Sch9_gtr1Delta(p_var,p_const)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_grad(u0_SS, (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 12)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -631,7 +629,7 @@ function calc_grad_AD(p_var, p_const)
     function dMK_dp_Rapamycin_treatment(p_var,p_const)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_grad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 25)
 
             MK_for_diff = sum((data_for_ode - (u_approx./(1e-3 .+ u0_SS[25]))).^2)
@@ -663,5 +661,6 @@ function calc_grad_AD(p_var, p_const)
     dMK_dp_Rapamycin_treatment_solution = dMK_dp_Rapamycin_treatment(p_var,p_const)
 
     True_grad = dMK_dp_Glucose_addition_Mig1_solution + dMK_dp_Glucose_addition_Sch9_solution + dMK_dp_Glucose_addition_cAMP_solution + dMK_dp_Glucose_addition_Sch9_p_solution + dMK_dp_Glucose_starvation_Snf1_p_solution + dMK_dp_Glucose_starvation_Sch9_p_solution + dMK_dp_Sch9P_glutamine_L_solution + dMK_dp_Sch9P_glutamine_H_solution + dMK_dp_Glutamine_addition_Sch9_gtr1Delta_solution + dMK_dp_Rapamycin_treatment_solution
+
     return True_grad
 end
