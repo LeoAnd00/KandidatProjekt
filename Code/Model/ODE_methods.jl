@@ -61,7 +61,7 @@ function ODE_solver(u0_SS, model_inputs, tspan, p_conc)
     return solve(prob, Rodas5(), abstol=1e-9, reltol=1e-9)
 end
 
-function sensitivity_solver(u0_SS, model_inputs, tspan, p_const, p_var)
+function sensitivity_solver(u0_SS, model_inputs, tvals, p_const, p_var)
 
     p = vcat(p_const, p_var)
 
@@ -69,9 +69,9 @@ function sensitivity_solver(u0_SS, model_inputs, tspan, p_const, p_var)
         u0_SS[Get_index(u_lookup_table, string(first.(model_inputs)[i]))] = last.(model_inputs)[i]
     end
 
-    prob = ODEForwardSensitivityProblem(ODE_sys, u0_SS, tspan, p)
+    prob = ODEForwardSensitivityProblem(ODE_sys, u0_SS, [first(tvals),last(tvals)], p)
 
-    return solve(prob)
+    return solve(prob,Rodas5(),saveat=tvals)
 end
 
 function sensitivity_solver(u0_SS, model_inputs, tspan, p_conc)
@@ -113,6 +113,32 @@ end
 
 function Get_index(input_list, key)
     return findfirst(x->x==key, input_list)     
+end
+
+function ODE_solver_FWDgrad(u0_SS, model_inputs, tspan, p_values, timelist_for_ode, prob)
+            
+    for i in range(1, length(model_inputs))
+        u0_SS[findfirst(x->x==string(first.(model_inputs)[i]), u_lookup_table)] = last.(model_inputs)[i]
+    end
+
+    nprob = remake(prob; p = p_values)
+    nprob = remake(nprob; u0_SS = u0_SS)
+    nprob = remake(nprob; tspan = tspan)
+
+    return solve(nprob,Rodas5(),abstol=1e-8,reltol=1e-8, saveat = timelist_for_ode)#, maxiters = 1e5,dtmin = 1e-5)
+end
+
+function ODE_solver_FWD(u0_SS, model_inputs, tspan, p_const, p_var, timelist_for_ode)
+
+    p = vcat(p_var, p_const) 
+
+    for i in range(1, length(model_inputs))
+        u0_SS[findfirst(x->x==string(first.(model_inputs)[i]), u_lookup_table)] = last.(model_inputs)[i]
+    end
+
+    prob = ODEProblem(ODE_sys, u0_SS, tspan, p)
+
+    return solve(prob,Rodas5(),abstol=1e-8,reltol=1e-8, saveat = timelist_for_ode)#, maxiters = 1e5,dtmin = 1e-5)
 end
 
 nutrient_shifts = [
