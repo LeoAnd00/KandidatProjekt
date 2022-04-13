@@ -1,7 +1,7 @@
-include("../Time_course/ODE_methods.jl")
+include("../Model/ODE_methods.jl")
 
 function Steady_state_pertubation_solver(model_inputs_preshift, model_inputs_postshift, output_variable)
-    include("../Time_course/parameter_values.jl")
+    include("../Model/parameter_values.jl")
 
     # Pre-shift
     u0_SS_preshift = Steady_state_solver(p_const, p_var, model_inputs_preshift) # Returnerar steady state för parametrarna p
@@ -15,7 +15,7 @@ function Steady_state_pertubation_solver(model_inputs_preshift, model_inputs_pos
 end
 
 function Steady_state_pertubation_solver(p_changes, model_inputs_preshift, model_inputs_postshift, output_variable)
-    include("../Time_course/parameter_values.jl")
+    include("../Model/parameter_values.jl")
 
     # Implement parameter changes
     for i in range(1, length(p_changes))
