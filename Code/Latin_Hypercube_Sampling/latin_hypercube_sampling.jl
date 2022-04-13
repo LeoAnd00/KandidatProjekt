@@ -290,9 +290,9 @@ function main()
     N = Check_if_p_works(p_var, p_const, scaled_plan)
     print(" Number of working parameter sets: ", N) 
 end
-include("../Solve_Jalihal_ODE/Time_course/ODE_methods.jl")
-include("../Solve_Jalihal_ODE/Time_course/exp_data.jl")
-include("../Solve_Jalihal_ODE/Time_course/ODE_functions.jl")
+include("../Model/ODE_methods.jl")
+include("../../Data/exp_data.jl")
+include("../Model/ODE_functions.jl")
 main()
 
 ################################################################################################################################

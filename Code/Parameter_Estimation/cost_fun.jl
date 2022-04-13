@@ -1,7 +1,7 @@
-include("../Solve_Jalihal_ODE/Time_course/ODE_methods.jl")
-include("../Solve_Jalihal_ODE/Time_course/ODE_functions.jl")
-include("../Solve_Jalihal_ODE/Time_course/exp_data.jl")
-include("../Solve_Jalihal_ODE/Time_course/parameter_values.jl")
+include("../Model/ODE_methods.jl")
+include("../Model/ODE_functions.jl")
+include("../../Data/exp_data.jl")
+include("../Model/parameter_values.jl")
 
 function calc_cost(p_var, p_const)
 
