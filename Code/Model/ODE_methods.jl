@@ -22,7 +22,7 @@ function Steady_state_solver(p_const, p_var, model_inputs)
 
     SS_prob = SteadyStateProblem(ODE_sys, u0, p) # Definierar steady-state problemet, vilket är ett simpelt ODE-problem
 
-    SS_sol = solve(SS_prob, DynamicSS(Rodas5(), abstol=1e-12, reltol=1e-12)) # Löser steady-state problemet
+    SS_sol = solve(SS_prob, DynamicSS(Rodas5(), abstol=1e-9, reltol=1e-9)) # Löser steady-state problemet
     return SS_sol.u
 end
 
@@ -35,7 +35,7 @@ function Steady_state_solver(p_conc, model_inputs)
     end
     SS_prob = SteadyStateProblem(ODE_sys, u0, p_conc) # Definierar steady-state problemet, vilket är ett simpelt ODE-problem
 
-    SS_sol = solve(SS_prob, DynamicSS(Rodas5(), abstol=1e-12, reltol=1e-12)) # Löser steady-state problemet
+    SS_sol = solve(SS_prob, DynamicSS(Rodas5(), abstol=1e-9, reltol=1e-9)) # Löser steady-state problemet
     return SS_sol.u
 end
 
@@ -48,7 +48,7 @@ function ODE_solver(u0_SS, model_inputs, tspan, p_const, p_var)
     end
 
     prob = ODEProblem(ODE_sys, u0_SS, tspan, p)
-    return solve(prob, DynamicSS(Rodas5(), abstol=1e-12, reltol=1e-12))
+    return solve(prob, Rodas5(), abstol=1e-9, reltol=1e-9)
 end
 
 function ODE_solver(u0_SS, model_inputs, tspan, p_conc)
@@ -58,7 +58,7 @@ function ODE_solver(u0_SS, model_inputs, tspan, p_conc)
     end
 
     prob = ODEProblem(ODE_sys, u0_SS, tspan, p_conc)
-    return solve(prob, DynamicSS(Rodas5(), abstol=1e-12, reltol=1e-12))
+    return solve(prob, Rodas5(), abstol=1e-9, reltol=1e-9)
 end
 
 function sensitivity_solver(u0_SS, model_inputs, tvals, p_const, p_var)
@@ -82,7 +82,7 @@ function sensitivity_solver(u0_SS, model_inputs, tspan, p_conc)
 
     prob = ODEForwardSensitivityProblem(ODE_sys, u0_SS, tspan, p_conc)
 
-    return solve(prob)
+    return solve(prob, Rodas5())
 end
 
 # Minmaxnorm normaliserar värdena i input list.
@@ -140,3 +140,17 @@ function ODE_solver_FWD(u0_SS, model_inputs, tspan, p_const, p_var, timelist_for
 
     return solve(prob,Rodas5(),abstol=1e-8,reltol=1e-8, saveat = timelist_for_ode)#, maxiters = 1e5,dtmin = 1e-5)
 end
+
+nutrient_shifts = [
+(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0) => (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0),
+(Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0),
+(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), 
+(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)
+]
+
+nutrient_shifts_lookup_table = ["Glucose starvation", "Glucose addition", "High glutamine", "Nitrogen starvation"] # Shiftningarnas position
+
+index_glucose_starvation = Get_index(nutrient_shifts_lookup_table, "Glucose starvation")
+index_glucose_addition = Get_index(nutrient_shifts_lookup_table, "Glucose addition")
+index_high_glutamine = Get_index(nutrient_shifts_lookup_table, "High glutamine")
+index_nitrogen_starvation = Get_index(nutrient_shifts_lookup_table, "Nitrogen starvation")

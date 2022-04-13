@@ -1,20 +1,6 @@
 #
 include("perturbation_methods.jl")
 
-# Simulerings shift används för att skapa fiurerna
-nutrient_shifts = [
-(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0) => (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0),
-(Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0),
-(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), 
-(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)]
-
-nutrient_shifts_lookup_table = ["Glucose starvation", "Glucose addition", "High glutamine", "simulation_Gln3_Gcn4"] # Shiftningarnas position
-
-index_glucose_starvation = Get_index(nutrient_shifts_lookup_table, "Glucose starvation")
-index_glucose_addition = Get_index(nutrient_shifts_lookup_table, "Glucose addition")
-index_high_glutamine = Get_index(nutrient_shifts_lookup_table, "High glutamine")
-index_simulation_Gln3_Gcn4 = Get_index(nutrient_shifts_lookup_table, "simulation_Gln3_Gcn4")
-
 # Perturbation simulations wild typ
 Snf1_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_glucose_starvation]), last.(nutrient_shifts[index_glucose_starvation]), Snf1)
 Snf1_mutant_shift = Steady_state_pertubation_solver([Sak_T => 0.0], first.(nutrient_shifts[index_glucose_starvation]), last.(nutrient_shifts[index_glucose_starvation]), Snf1)
@@ -50,12 +36,12 @@ Sch9_gtr1_gtr2_mutant_shift = Steady_state_pertubation_solver([EGO_T => 0.0, w_t
 Sch9_gtr1_2_mutant_shift = Steady_state_pertubation_solver([EGO_T => 0.0, w_torc_ego => 0.0, w_torc_egoin => 0.0], first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
  
 # Gcn4
-Gcn4_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_simulation_Gln3_Gcn4]), last.(nutrient_shifts[index_simulation_Gln3_Gcn4]), Gcn4)
-Gcn4_mutant_shift = Steady_state_pertubation_solver([Gcn2_T => 0.0], first.(nutrient_shifts[index_simulation_Gln3_Gcn4]), last.(nutrient_shifts[index_simulation_Gln3_Gcn4]), Gcn4)
+Gcn4_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gcn4)
+Gcn4_mutant_shift = Steady_state_pertubation_solver([Gcn2_T => 0.0], first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gcn4)
 
 # Gln3
-Gln3_shift_sit = Steady_state_pertubation_solver(first.(nutrient_shifts[index_simulation_Gln3_Gcn4]), last.(nutrient_shifts[index_simulation_Gln3_Gcn4]), Gln3)
-Gln3_mutant_shift_sit = Steady_state_pertubation_solver([w_gln_sit => 0.0, TORC1_T => 0.0], first.(nutrient_shifts[index_simulation_Gln3_Gcn4]), last.(nutrient_shifts[index_simulation_Gln3_Gcn4]), Gln3)
+Gln3_shift_sit = Steady_state_pertubation_solver(first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gln3)
+Gln3_mutant_shift_sit = Steady_state_pertubation_solver([w_gln_sit => 0.0, TORC1_T => 0.0], first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gln3)
 
 # Normalisering av cAMP och Rib simuleringar
 

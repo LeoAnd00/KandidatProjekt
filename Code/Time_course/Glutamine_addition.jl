@@ -4,22 +4,21 @@ using DifferentialEquations
 using ModelingToolkit
 using Plots
 
-include("ODE_functions.jl") 
+include("../Model/ODE_functions.jl") 
 
-include("parameter_values.jl")
+include("../Model/parameter_values.jl")
 
 # Pre-shift => Glutamine_ext = 0
-include("ODE_methods.jl")
+include("../Model/ODE_methods.jl")
 u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returnerar steady state för parametrarna p
 
 # Low glutamine => Glutamine_ext = 0.3
 tspan = (0.0, 30.0) # [min]
 sol_low = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, p_const, p_var)
 
-include("exp_data.jl")
+include("../../Data/exp_data_norm.jl")
 
-data = Minmaxnorm(data_Sch9P_glutamine_L, 4.82, 52.57)
-plot1 = scatter(t_Sch9P_glutamine_L, data)
+plot1 = scatter(t_Sch9P_glutamine_L, data_Sch9P_glutamine_L)
 
 plot!(sol_low, vars = Sch9, legend = false)
 xlabel!("t [min]")
@@ -32,10 +31,7 @@ display(plot1)
 # High Glutamine => Glutamine_ext = 1.0
 sol_high = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var)
 
-include("exp_data.jl")
-
-data = Minmaxnorm(data_Sch9P_glutamine_H, 4.82, 52.57)
-plot2 = scatter(t_Sch9P_glutamine_H, data)
+plot2 = scatter(t_Sch9P_glutamine_H, data_Sch9P_glutamine_H)
 
 plot!(sol_high, vars = Sch9, label = "High Glutamine (1.0)", legend = false)
 xlabel!("t [min]")

@@ -4,15 +4,15 @@ using DifferentialEquations
 using ModelingToolkit
 using Plots
 
-include("ODE_functions.jl") 
+include("../Model/ODE_functions.jl") 
 
 ########## Sit4 #########
-include("parameter_values.jl")
+include("../Model/parameter_values.jl")
 
 # Pre-shift Sit4 => TORC1_T = 0
 p_const[Get_index(p_const_lookup_table, "TORC1_T")] = TORC1_T => 0.0
 
-include("ODE_methods.jl")
+include("../Model/ODE_methods.jl")
 u0_SS_sit4 = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) 
 
 # Post-shift, Rapamycin treatment Sit4 => TORC1_T = 0 => no change in parameter values
@@ -20,7 +20,7 @@ tspan_sit4 = (0.0, 150.0) # [min]
 sol_sit4 = ODE_solver(u0_SS_sit4, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan_sit4, p_const, p_var)
 
 ########## wt #########
-include("parameter_values.jl")
+include("../Model/parameter_values.jl")
 
 # Pre-shift wt => no change in parameter values
 
