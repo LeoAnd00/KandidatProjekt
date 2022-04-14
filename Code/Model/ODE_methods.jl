@@ -69,9 +69,9 @@ function sensitivity_solver(u0_SS, model_inputs, tvals, p_const, p_var)
         u0_SS[Get_index(u_lookup_table, string(first.(model_inputs)[i]))] = last.(model_inputs)[i]
     end
 
-    prob = ODEForwardSensitivityProblem(ODE_sys, u0_SS, [first(tvals),last(tvals)], p)
+    prob = ODEForwardSensitivityProblem(ODE_sys, u0_SS, [first(tvals),last(tvals)], p, sensealg=ForwardSensitivity(autodiff=false))
 
-    return solve(prob,Rodas5(),saveat=tvals)
+    return solve(prob,Rodas5(autodiff = false),saveat=tvals, sensealg=ForwardSensitivity(autodiff=false))
 end
 
 function sensitivity_solver(u0_SS, model_inputs, tspan, p_conc)
