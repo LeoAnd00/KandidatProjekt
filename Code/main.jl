@@ -1,7 +1,8 @@
 using LatinHypercubeSampling
-include("Parameter_Estimation/param_estim.jl")
-include("Model/ODE_methods.jl")
+include("Sensitivity_Analysis/sensitivity_analysis.jl")
 
-#p0 via latin hypercube på logskala (log 10) från -3 till 3
-n_ps = 2 #ska vara antal p_var
-p0 = scaleLHC(randomLHC(100,n_ps),[(-3,3),(-3,3)])
+n_ps = 81
+scale = repeat([(-3,3)],n_ps)
+p0 = scaleLHC(randomLHC(100,n_ps),scale)
+
+sensitivities = get_sensitivity_matrix(exp.(p0[1,:]))

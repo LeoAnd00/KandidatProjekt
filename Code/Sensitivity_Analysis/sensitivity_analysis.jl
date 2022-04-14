@@ -1,7 +1,7 @@
-include("../Solve_Jalihal_ODE/Time_course/exp_data.jl")
-include("../Solve_Jalihal_ODE/Time_course/ODE_methods.jl")
-include("../Solve_Jalihal_ODE/Time_course/parameter_values.jl")
-include("../Solve_Jalihal_ODE/Time_course/ODE_functions.jl")
+include("../../Data/exp_data.jl")
+include("../Model/ODE_methods.jl")
+include("../Model/parameter_values.jl")
+include("../Model/ODE_functions.jl")
 include("shift_dicts.jl")
 
 function sim_out(param,key)
@@ -26,7 +26,6 @@ function sim_out(param,key)
         sim_param[Get_index(p_var_lookup_table,p_key)] = value
     end
 
-    
     u0 = Steady_state_solver(last.(pre_p_const),sim_param,pre_shift)
 
     sens_sol = sensitivity_solver(u0,post_shift,tvals,last.(post_p_const),sim_param)    

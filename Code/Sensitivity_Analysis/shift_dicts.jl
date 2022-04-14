@@ -1,14 +1,16 @@
+include("../../Data/exp_data.jl")
+
 tvals_dict = Dict("Snf1" => t_Snf1, "cAMP" => t_cAMP, "sch9Delta_cAMP" => t_sch9Delta_cAMP,
 "Sch9P_glutamine_H" => t_Sch9P_glutamine_H, "Sch9P_glutamine_L" => t_Sch9P_glutamine_L,
 "Sch9_gtr1Delta" => t_Sch9_gtr1Delta, "Sch9_glucose_starve" => t_Sch9_glucose_starve,
 "Sch9_glucose_relief" => t_Sch9_glucose_relief, "Mig1_glucose_relief" => t_Mig1_glucose_relief,
 "Rib_rap" => t_Rib_rap)
 
-dat_dict = Dict("Snf1" => data_Snf1, "cAMP" => data_cAMP, "sch9Delta_cAMP" => data_sch9Delta_cAMP,
-"Sch9P_glutamine_H" => data_Sch9P_glutamine_H, "Sch9P_glutamine_L" => data_Sch9P_glutamine_L,
-"Sch9_gtr1Delta" => data_Sch9_gtr1Delta, "Sch9_glucose_starve" => data_Sch9_glucose_starve,
-"Sch9_glucose_relief" => data_Sch9_glucose_relief, "Mig1_glucose_relief" => data_Mig1_glucose_relief,
-"Rib_rap" => data_Rib_rap)
+dat_dict = Dict("Snf1" => raw_data_Snf1, "cAMP" => raw_data_cAMP, "sch9Delta_cAMP" => raw_data_sch9Delta_cAMP,
+"Sch9P_glutamine_H" => raw_data_Sch9P_glutamine_H, "Sch9P_glutamine_L" => raw_data_Sch9P_glutamine_L,
+"Sch9_gtr1Delta" => raw_data_Sch9_gtr1Delta, "Sch9_glucose_starve" => raw_data_Sch9_glucose_starve,
+"Sch9_glucose_relief" => raw_data_Sch9_glucose_relief, "Mig1_glucose_relief" => raw_data_Mig1_glucose_relief,
+"Rib_rap" => raw_data_Rib_rap)
 
 u_dict = Dict("sch9Delta_cAMP" => "cAMP", "Sch9P_glutamine_H" => "Sch9", "Sch9P_glutamine_L" => "Sch9",
 "Sch9_gtr1Delta" => "Sch9","Sch9_glucose_starve" => "Sch9", "Sch9_glucose_relief" => "Sch9",
