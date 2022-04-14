@@ -2,7 +2,7 @@ include("../Solve_Jalihal_ODE/Time_course/exp_data.jl")
 include("../Solve_Jalihal_ODE/Time_course/ODE_methods.jl")
 include("../Solve_Jalihal_ODE/Time_course/parameter_values.jl")
 include("../Solve_Jalihal_ODE/Time_course/ODE_functions.jl")
-include("shifts.jl")
+include("shift_dicts.jl")
 
 function sim_out(param,key)
     sim_param = param
