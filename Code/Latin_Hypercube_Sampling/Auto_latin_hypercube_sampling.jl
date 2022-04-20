@@ -5,8 +5,9 @@ using DiffEqSensitivity
 using ModelingToolkit
 using CSV
 using DataFrames
-
+include("../Model/ODE_functions.jl")
 include("../Model/parameter_values.jl")
+include("../Parameter_Estimation/Optimization.jl")
 ######################################### LatinHypercubeSampling ################################################################
 """
     Check_if_p_works(p_var, p_const, scaled_plan)
