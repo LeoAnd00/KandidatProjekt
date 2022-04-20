@@ -109,7 +109,7 @@ function Histograms_of_cost()
     title = "Rapamycin treatment, TORC1_T = 0",
     legend = false
   )
-  plot1 = plot(His1, His2, His3, His4, His5, His6, His7, His8, His9, His10, layout = (5, 2), legend = false, titlefontsize = 14, guidefontsize = 10, guide_position = :left, margin= 20Plots.mm)
+  plot1 = plot(His1, His2, His3, His4, His5, His6, His7, His8, His9, His10, layout = (5, 2), titlefontsize = 14, guidefontsize = 10, guide_position = :left, margin= 20Plots.mm)
   plot!(plot1,size=(1500,2500))
   #display(plot1)
   return plot1
