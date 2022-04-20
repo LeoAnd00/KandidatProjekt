@@ -1,3 +1,4 @@
+include("../../Code/Model/ODE_functions.jl")
 #Alt 1
 Color_alt_1 = RGB(249/255,212/255,35/255)
 label_alt_1 = "Alt 1"
