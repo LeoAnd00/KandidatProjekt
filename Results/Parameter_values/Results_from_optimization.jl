@@ -1,5 +1,8 @@
 #Alt 1
-p_var = [gammacyr => 18.322882081228986, w_cyr_glu => 3.6633999531005634, w_cyr_snf => 0.1285302238461551, 
+Color_alt_1 = RGB(249/255,212/255,35/255)
+label_alt_1 = "Alt 1"
+
+p_var_alt_1 = [gammacyr => 18.322882081228986, w_cyr_glu => 3.6633999531005634, w_cyr_snf => 0.1285302238461551, 
 w_cyr => 0.6059280389339637, w_dot => 0.29859496480262826, w_dot_sch_pka => 0.26984973500579434, 
 w_ego => 0.14425669637415833, w_ego_basal => 0.006814200479995382, gammaego => 14.736736141864862, 
 w_ego_gap => 3.084279203114428, gammagap => 0.6663448945308855, w_gap_torc => 65.85992935027903, 
@@ -28,7 +31,10 @@ k_camp_cyr => 3.8238530492568787, k_camp_deg => 0.024634668345843064, k_camp_pde
 w_eif_gcn2 => 0.418875925117752, gammaeif => 1.3510931647965105, w_eif => 2.9038537977882704]
 
 #Alt2
-p_var = [gammacyr => 7.37813213215515, w_cyr_glu => 4.0997184519675685, w_cyr_snf => 0.15618803057097008, 
+Color_alt_2 = RGB(255/255,156/255,91/255)
+label_alt_2 = "Alt 2"
+
+p_var_alt_2 = [gammacyr => 7.37813213215515, w_cyr_glu => 4.0997184519675685, w_cyr_snf => 0.15618803057097008, 
 w_cyr => 1.185464238821411, w_dot => 0.4111950209759053, w_dot_sch_pka => 0.1503256183734567, 
 w_ego => 0.17637124054254413, w_ego_basal => 0.01210236974294936, gammaego => 28.126358175661938, 
 w_ego_gap => 3.237868986459061, gammagap => 0.5612427739487568, w_gap_torc => 74.83866008764363, 
@@ -55,5 +61,35 @@ w_tps_pka => 0.43402968635316597, gammatps => 0.33650873776774165, w_tps => 0.02
 w_tre => 1.0427720464617893, gammatre => 0.2491200987057159, w_tre_pka => 2.8906249963284982, 
 k_camp_cyr => 6.834825028889938, k_camp_deg => 0.052875098172279325, k_camp_pde => 11.19861069411881, 
 w_eif_gcn2 => 0.21385697180334579, gammaeif => 0.5726657082381318, w_eif => 3.718324521854869]
+
+#Jalihal
+Color_jalihal = RGB(59/255,129/255,131/255)
+label_jalihal = "Jalihal"
+
+p_var_jalihal = [gammacyr => 8.96, w_cyr_glu => 5.13, w_cyr_snf => 0.12, w_cyr => 1.35, # Cyr1
+w_dot => 0.29, w_dot_sch_pka => 0.16, # Dot6
+w_ego => 0.28, w_ego_basal => 0.01, gammaego => 50.66, w_ego_gap => 2.21, # EGO
+gammagap => 0.56, w_gap_torc => 88.33, w_gap_N => 7.76, # EGOGAP
+gamma_gcn2 => 4.71, w_gcn_torc => 1.29, w_gcn => 0.12, # Gcn2
+w_gcn4_gcn2_trna => 1.53, w_gcn4 => 0.74, tRNA_sensitivity => 74.51, tRNA_total => 2.47, # Gcn4
+w_gis => 1.3, w_gis_pka => 3.3, w_gis_sch => 0.84, #Gis1
+w_gln1_gln3 => 0.52, w_gln1 => 0.22, gammagln1 => 0.06, # Gln1
+w_gln_snf => 3.9, w_gln_sit => 0.86, w_gln3 => 0.64, gammagln3 => 0.08, # Gln3
+k_acc_pro => 0.0, k_acc_glu => 0.05, k_degr => 0.09, k_acc_nh4 => 0.0, # Glutamine
+w_mig_snf => 1.21, w_mig => 10.64, gamma_mig => 0.66, w_mig_pka => 2.31, # Mig1
+gammapde => 0.28, w_pde_pka => 2.89, w_pde => 0.38, # PDE
+w_pka => 0.06, w_pka_sch9 => 17.5, w_pka_camp => 102.11, gammapka => 2.68, # PKA
+k_pr => 0.02, # Protein
+w_ras_pka => 1.87, gammaras => 1.82, w_ras_glu => 0.21, w_ras => 0.02, # Ras
+k_mRNA_degr => 0.07, k_transcription => 0.24, # Rib
+w_rtg => 0.19, w_rtg_torc => 0.88, # Rtg13
+w_sak => 0.21, w_sak_pka => 0.38, # Sak
+w_sch9_torc => 1.96, w_sch9 => 0.57, gammasch9 => 4.63, # Sch9
+w_snf_sak => 1.52, gammasnf => 0.82, w_snf_glc => 1.15, w_snf => 0.54, # Snf1
+w_torc_egoin => 0.3, w_torc_ego => 0.88, w_torc => 0.54, w_torc_snf => 0.44, w_torc_glut => 0.86, gammator => 7.55, # TORC1
+w_tps_pka => 0.57, gammatps => 0.47, w_tps => 0.05, # Tps1
+w_tre => 1.07, gammatre => 0.34, w_tre_pka => 3.07, # Trehalase
+k_camp_cyr => 10.87, k_camp_deg => 0.08, k_camp_pde => 14.12, # cAMP
+w_eif_gcn2 => 0.28, gammaeif => 0.47, w_eif => 3.73] # eIF
 
 
