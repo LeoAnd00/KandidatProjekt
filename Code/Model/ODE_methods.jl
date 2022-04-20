@@ -3,6 +3,7 @@
 
 using DifferentialEquations
 using DiffEqSensitivity
+using Documenter
 
 include("ODE_functions.jl") 
 
@@ -10,6 +11,17 @@ include("ODE_functions.jl")
 # INPUTS: model_inputs ges som en vektor av par, enligt (name => value, ...), där alla inputs som inte är noll behöver vara med. 
 # OUTPUT: En vektor av steady-state värden 
 
+"""
+    Steady_state_solver(p_const, p_var, model_inputs)
+    Steady_state_solver(p_conc, model_inputs)
+
+Compute the steady state for the parameters and nutrient conditions in `model_input`
+
+# Examples
+```julia-repl
+julia> Steady_state_solver(p_conc, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
+```
+"""
 function Steady_state_solver(p_const, p_var, model_inputs)
     
     p = vcat(p_const, p_var)

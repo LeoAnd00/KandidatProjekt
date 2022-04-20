@@ -41,7 +41,7 @@ display(plot3)
 u0_SS = Steady_state_solver(p_conc, first.(nutrient_shifts[index_glucose_starvation]))
 
 sol =  ODE_solver(u0_SS, (Carbon => 0.3, ATP => 0.3, Glutamine_ext => 1.0), (0.0, 10.0), p_conc)
-plot_y = plot(sol, vars = [Gis1, PKA, Snf1], title = "början av glukossvältning (låg glukoshalt)", legend=:right) # Oscillerande ämnen
+plot_y = plot(sol, vars = [Gis1, PKA, Snf1], title = "början av glukossvältning (låg glukoshalt)", legend=:right) 
 display(plot_y)
 
 ###### Kvävetillsättning ######
@@ -59,7 +59,6 @@ display(plot_x2)
 p_conc[Get_index(p_conc_lookup_table, "EGO_T")] = EGO_T => 0.0
 
 u0_SS = Steady_state_solver(p_conc, first.(nutrient_shifts[index_nitrogen_starvation]))
-
 sol = ODE_solver(u0_SS, last.(nutrient_shifts[index_nitrogen_starvation]), (0.0, 50.0), p_conc)
 
 plot_T = plot(sol, vars = [Gln3], title = "EGO\$\\Delta\$", legend=:right)
