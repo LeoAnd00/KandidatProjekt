@@ -906,9 +906,9 @@ end
     Here you choose different options and values for the entire optimisation process.
 """
 function main_FWD_optimization(p_0_var)
-    println("Works")
+
     include("../Model/parameter_values.jl")
-    println("works2")
+
     p_var = p_0_var
     condition_num_to_use_SD = 1e100 #Not using atm, hence a big number 1e100
 
