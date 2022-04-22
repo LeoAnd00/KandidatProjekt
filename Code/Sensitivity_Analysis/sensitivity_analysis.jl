@@ -46,15 +46,11 @@ function sens_mat(p)
         block = dy_dp(p,out_indices[i],i)
         append!(sens_mat,block)
     end
-    return sens_mat
-end
-
-function cond_nr(sens)
     sm = zeros(81,86)
     for i in 1:86
-        sm[:,i] = sens[i]
+        sm[:,i] = sens_mat[i]
     end
-    return cond(sm)
+    return sm
 end
 
 sens_Jalihal = sens_mat(last.(p_var))
@@ -62,7 +58,33 @@ sens_alt1 = sens_mat(last.(p_var_alt_1))
 sens_alt2 = sens_mat(last.(p_var_alt_2))
 sens_alt3 = sens_mat(last.(p_var_alt_3))
 
-cond_nr_J = cond_nr(sens_Jalihal)
-cond_nr_1 = cond_nr(sens_alt1)
-cond_nr_2 = cond_nr(sens_alt2)
-cond_nr_3 = cond_nr(sens_alt3)
+cond_nr_J = cond(sens_Jalihal)
+cond_nr_1 = cond(sens_alt1)
+cond_nr_2 = cond(sens_alt2)
+cond_nr_3 = cond(sens_alt3)
+
+rank_J = rank(sens_Jalihal)
+rank_1 = rank(sens_alt1)
+rank_2 = rank(sens_alt2)
+rank_3 = rank(sens_alt3)
+
+
+
+#tillfälligt (kör innan rank)
+sm = zeros(81,86)
+for i in 1:86
+    sm[:,i] = sens_Jalihal[i]
+end
+sens_Jalihal = sm
+for i in 1:86
+    sm[:,i] = sens_alt1[i]
+end
+sens_alt1 = sm
+for i in 1:86
+    sm[:,i] = sens_alt2[i]
+end
+sens_alt2 = sm
+for i in 1:86
+    sm[:,i] = sens_alt3[i]
+end
+sens_alt3 = sm
