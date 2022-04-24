@@ -67,24 +67,3 @@ rank_J = rank(sens_Jalihal)
 rank_1 = rank(sens_alt1)
 rank_2 = rank(sens_alt2)
 rank_3 = rank(sens_alt3)
-
-
-
-#tillfälligt (kör innan rank)
-sm = zeros(81,86)
-for i in 1:86
-    sm[:,i] = sens_Jalihal[i]
-end
-sens_Jalihal = sm
-for i in 1:86
-    sm[:,i] = sens_alt1[i]
-end
-sens_alt1 = sm
-for i in 1:86
-    sm[:,i] = sens_alt2[i]
-end
-sens_alt2 = sm
-for i in 1:86
-    sm[:,i] = sens_alt3[i]
-end
-sens_alt3 = sm
