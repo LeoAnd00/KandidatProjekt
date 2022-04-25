@@ -1,23 +1,24 @@
-# 
+# Creates plot for high and low glutamine addition after starvation with Sch9 as a readout
 
 using DifferentialEquations
 using ModelingToolkit
 using Plots
 
 include("../Model/ODE_functions.jl") 
-
 include("../Model/parameter_values.jl")
 
-# Pre-shift => Glutamine_ext = 0
+# Pre-shift => Glutamine_ext = 0, glutamine starvation
 include("../Model/ODE_methods.jl")
-u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returnerar steady state för parametrarna p
+u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returns steady state values for p from pre-shift
 
 # Low glutamine => Glutamine_ext = 0.3
 tspan = (0.0, 30.0) # [min]
+# Solve the ODEs with low additon of glutamin as post shift
 sol_low = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, p_const, p_var)
 
 include("../../Data/exp_data_norm.jl")
 
+# Creates the plot for low glutamine addition after starvation for Sch9
 plot1 = scatter(t_Sch9P_glutamine_L, data_Sch9P_glutamine_L)
 
 plot!(sol_low, vars = Sch9, legend = false)
@@ -29,10 +30,11 @@ title!("Glutamine addition, Low Glutamine (0.3)")
 display(plot1)
 
 # High Glutamine => Glutamine_ext = 1.0
+# Solves the same ODEs with high glutamin additon 
 sol_high = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var)
 
+# Plot the solution for high glutamine addition, with experimental data form seperate file
 plot2 = scatter(t_Sch9P_glutamine_H, data_Sch9P_glutamine_H)
-
 plot!(sol_high, vars = Sch9, label = "High Glutamine (1.0)", legend = false)
 xlabel!("t [min]")
 xlims!((-0.5, last(tspan)*1.02))
