@@ -32,7 +32,6 @@ Sch9_lst4_lst7_mutant_shift = Steady_state_pertubation_solver([EGOGAP_T => 0.0],
 Sch9_gtr1_gtr2_mutant_shift = Steady_state_pertubation_solver([EGO_T => 0.0, w_torc_ego => 0.0, w_torc_egoin => 0.0, w_torc_glut => 0.5], first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
 # println(Sch9_gtr1_gtr2_mutant_shift)
 
-
 Sch9_gtr1_2_mutant_shift = Steady_state_pertubation_solver([EGO_T => 0.0, w_torc_ego => 0.0, w_torc_egoin => 0.0], first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
  
 # Gcn4
@@ -100,6 +99,8 @@ exp_data_wt_norm = vcat(exp_data_Rib_norm[1], exp_data_cAMP_pde_norm[1], exp_dat
 using Plots
 using StatsPlots
 
+default(dpi=300)
+
 # Wild typ
 shifts_wt = vcat(Rib_shifts_wt_norm, cAMP_shifts_wt_norm, raw_shifts_wt)
 
@@ -135,6 +136,10 @@ plot1 = groupedbar(
     ylabel="Readouts, wt", xlabel="Shift magnitude", bar_width = 0.65, framestyle=:box, orientation=:horizontal
 )
 display(plot1)
+
+file_name = "perturb_wt"
+savefig(plot1, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".png")    
+savefig(plot1, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".pdf")
 
 ####### MUTANT #######
 
@@ -182,3 +187,7 @@ plot2 = groupedbar(
     ylabel="Readouts mutanter", xlabel="Shift magnitude", orientation=:horizontal, ytickfont = font(9), framestyle=:box
 )
 display(plot2)
+
+file_name = "perturb_mut"
+savefig(plot2, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".png")    
+savefig(plot2, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".pdf") 

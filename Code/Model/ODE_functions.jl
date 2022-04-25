@@ -41,7 +41,7 @@ eqs = [
     D(Gln3) ~ gammagln3*(Gln3_T*soft_Heaviside(sigma_gln,-w_gln3+w_gln_snf*Snf1+ w_gln_sit*(1-TORC1))-Gln3),
     D(Gln1) ~ gammagln1*(Gln1_T*soft_Heaviside(sigma_gln1,w_gln1_gln3*Gln3-w_gln1)-Gln1),
     D(Rtg13) ~ (Rtg13_T*soft_Heaviside(sigma_rtg,-w_rtg_torc*TORC1+w_rtg)-Rtg13), # gamma_rtg13 ska läggas in, saknar värde
-    D(Gis1) ~ (Gis1_T*soft_Heaviside(sigma_gis1,-w_gis_pka*PKA-w_gis_sch*Sch9+w_gis)-Gis1), # gamma_gis1 ska läggas in, saknar värde
+    D(Gis1) ~ (Gis1_T*soft_Heaviside(sigma_gis1,-w_gis_pka*PKA-w_gis_sch*Sch9+w_gis)-Gis1), # 
     D(Mig1) ~ gamma_mig*(Mig1_T*soft_Heaviside(sigma_mig1,w_mig_pka*PKA-w_mig_snf*Snf1+w_mig)-Mig1),
     D(Dot6) ~ (Dot6_T*soft_Heaviside(sigma_dot,-w_dot_sch_pka*Sch9*PKA+w_dot)-Dot6), # gamma_dot6 ska läggas in, saknar värde
     D(Tps1) ~ gammatps*(Tps1_T*soft_Heaviside(sigma_tps, w_tps_pka*(PKA_T-PKA)-w_tps)-Tps1), # 22, Tps1

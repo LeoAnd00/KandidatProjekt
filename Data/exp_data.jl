@@ -26,7 +26,7 @@ t_Sch9_gtr1Delta=[0.15, 0.7, 1.04, 1.51, 2.06, 3.05, 4.04, 5.06, 8.06, 11.0, 15.
 raw_data_Sch9_gtr1Delta=[7.96, 8.48, 8.48, 7.44, 7.44, 7.31, 7.44, 7.96, 9.64, 12.49, 25.7, 51.72] # Skalas med maxvärde *Blir inte rätt. Första värdena behöver neråt
 
 # Glucose starvation (Sch9)
-t_Sch9_glucose_starve=[0.0,2.5,5.0,15.0,30.0] #min
+t_Sch9_glucose_starve=[0.0, 2.5, 5.0, 15.0,30.0] #min
 raw_data_Sch9_glucose_starve=[1.0,0.34,0.13,0.15,0.20] # Hur skalar man denna?
 
 # Glucose relief (Sch9)

@@ -4,6 +4,9 @@ using DifferentialEquations
 using ModelingToolkit
 using Plots
 
+default(dpi = 300)
+default(titlefontsize=13)
+
 include("../Model/ODE_functions.jl") 
 
 include("../Model/parameter_values.jl")
@@ -28,6 +31,10 @@ xlims!((-0.5, last(tspan_Snf1)*1.02))
 title!("Glucose starvation")
 display(plot1)
 
+file_name = "Snf1_gluc_starve_reconstr"
+savefig(plot1, pwd()*"/Results/Time_course_reconstructed/pixel_images/"*file_name*".png")    
+savefig(plot1, pwd()*"/Results/Time_course_reconstructed/vector_images/"*file_name*".pdf") 
+
 tspan_Sch9 = (0.0, 30.0) # [min]
 sol_sch9 = ODE_solver(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan_Sch9, p_const, p_var)
 
@@ -40,3 +47,7 @@ ylims!((0.0, 1.1))
 xlims!((-0.5, last(tspan_Sch9)*1.02))
 title!("Glucose starvation")
 display(plot2)
+
+file_name = "Sch9_gluc_starve_reconstr"
+savefig(plot2, pwd()*"/Results/Time_course_reconstructed/pixel_images/"*file_name*".png")    
+savefig(plot2, pwd()*"/Results/Time_course_reconstructed/vector_images/"*file_name*".pdf")

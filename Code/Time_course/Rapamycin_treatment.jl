@@ -4,6 +4,9 @@ using DifferentialEquations
 using ModelingToolkit
 using Plots
 
+default(dpi = 300)
+default(titlefontsize=13)
+
 include("../Model/ODE_functions.jl") 
 
 include("../Model/parameter_values.jl")
@@ -29,3 +32,7 @@ xlabel!("t [min]")
 ylabel!("Rel. RPL32 mRNA") # Motsvarar konc. Rib relativt steady state
 title!("Rapamycin treatment, TORC1_T = 0")
 display(plot1)
+
+file_name = "Rib_rap_treat_reconstr"
+savefig(plot1, pwd()*"/Results/Time_course_reconstructed/pixel_images/"*file_name*".png")    
+savefig(plot1, pwd()*"/Results/Time_course_reconstructed/vector_images/"*file_name*".pdf") 
