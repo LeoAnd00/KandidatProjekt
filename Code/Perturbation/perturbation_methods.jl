@@ -24,11 +24,9 @@ function Steady_state_pertubation_solver(p_changes, model_inputs_preshift, model
 
     # Pre-shift
     u0_SS_preshift = Steady_state_solver(p_conc, model_inputs_preshift) # Returnerar steady state för parametrarna p
-    # println(u0_SS_preshift[Get_index(u_lookup_table, "EGOGAP(t)")])
 
     # Post-shift
     u0_SS_postshift = Steady_state_solver(p_conc, model_inputs_postshift)
-    # println(u0_SS_postshift[Get_index(u_lookup_table, "EGOGAP(t)")])
 
     index = Get_index(u_lookup_table, string(output_variable))
 

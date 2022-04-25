@@ -3,13 +3,21 @@
 
 using DifferentialEquations
 using DiffEqSensitivity
+using Documenter
 
 include("ODE_functions.jl") 
 
-# Steady-state_solver löser ut steady-state för ODE-systemet vid givna parametervärden och näringsvärden
-# INPUTS: model_inputs ges som en vektor av par, enligt (name => value, ...), där alla inputs som inte är noll behöver vara med. 
-# OUTPUT: En vektor av steady-state värden 
+"""
+    Steady_state_solver(p_const, p_var, model_inputs)
+    Steady_state_solver(p_conc, model_inputs)
 
+Compute the steady state for the parameters and nutrient conditions in `model_input`
+
+# Examples
+```julia-repl
+julia> Steady_state_solver(p_conc, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
+```
+"""
 function Steady_state_solver(p_const, p_var, model_inputs)
     
     p = vcat(p_const, p_var)
@@ -26,6 +34,9 @@ function Steady_state_solver(p_const, p_var, model_inputs)
     return SS_sol.u
 end
 
+"""
+
+"""
 function Steady_state_solver(p_conc, model_inputs)
     
     u0 = zeros(length(eqs)) # Initialkoncentrationer för variabler är noll 
@@ -115,6 +126,19 @@ function Get_index(input_list, key)
     return findfirst(x->x==key, input_list)     
 end
 
+nutrient_shifts = [
+(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0) => (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0),
+(Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0),
+(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), 
+(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)
+]
+nutrient_shifts_lookup_table = ["Glucose starvation", "Glucose addition", "High glutamine", "Nitrogen starvation"] # Shiftningarnas position
+
+index_glucose_starvation = Get_index(nutrient_shifts_lookup_table, "Glucose starvation")
+index_glucose_addition = Get_index(nutrient_shifts_lookup_table, "Glucose addition")
+index_high_glutamine = Get_index(nutrient_shifts_lookup_table, "High glutamine")
+index_nitrogen_starvation = Get_index(nutrient_shifts_lookup_table, "Nitrogen starvation")
+
 function Steady_state_solver_FWD(p_const_FWD, p_var_FWD, model_inputs)
     
     p = vcat(p_var_FWD, p_const_FWD)
@@ -191,17 +215,3 @@ function ODE_solver_FWD(u0_SS, model_inputs, tspan, p_const_FWD, p_var_FWD, time
 
     return solve(prob,Rodas4P(),abstol=1e-8,reltol=1e-8, saveat = timelist_for_ode)#, maxiters = 1e5,dtmin = 1e-5)
 end
-
-nutrient_shifts = [
-(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0) => (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0),
-(Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0),
-(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), 
-(Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)
-]
-
-nutrient_shifts_lookup_table = ["Glucose starvation", "Glucose addition", "High glutamine", "Nitrogen starvation"] # Shiftningarnas position
-
-index_glucose_starvation = Get_index(nutrient_shifts_lookup_table, "Glucose starvation")
-index_glucose_addition = Get_index(nutrient_shifts_lookup_table, "Glucose addition")
-index_high_glutamine = Get_index(nutrient_shifts_lookup_table, "High glutamine")
-index_nitrogen_starvation = Get_index(nutrient_shifts_lookup_table, "Nitrogen starvation")

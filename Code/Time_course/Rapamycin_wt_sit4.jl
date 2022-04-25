@@ -4,6 +4,9 @@ using DifferentialEquations
 using ModelingToolkit
 using Plots
 
+default(dpi = 300)
+default(titlefontsize=13)
+
 include("../Model/ODE_functions.jl") 
 
 ########## Sit4- mutant #########
@@ -45,3 +48,7 @@ xlims!((0, 150))
 ylims!((0, 1.0))
 title!("Rapamycin treatment, TORC1_T = 0")
 display(p1)
+
+file_name = "Gln3_rap_treat_wt_sit4_reconstr"
+savefig(p1, pwd()*"/Results/Time_course_reconstructed/pixel_images/"*file_name*".png")    
+savefig(p1, pwd()*"/Results/Time_course_reconstructed/vector_images/"*file_name*".pdf") 

@@ -4,6 +4,9 @@ using DifferentialEquations
 using ModelingToolkit
 using Plots
 
+default(titlefontsize=13)
+default(dpi=300)
+
 include("../Model/ODE_functions.jl") 
 
 include("../Model/parameter_values.jl")
@@ -30,3 +33,7 @@ xticks!([0.0, 20.0])
 # yticks!([1.2, 1.4])
 title!("Glucose addition")
 display(plot1)
+
+file_name = "Mig1_gluc_add_reconstr"
+savefig(plot1, pwd()*"/Results/Time_course_reconstructed/pixel_images/"*file_name*".png")    
+savefig(plot1, pwd()*"/Results/Time_course_reconstructed/vector_images/"*file_name*".pdf") 

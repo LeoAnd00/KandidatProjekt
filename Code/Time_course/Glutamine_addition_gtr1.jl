@@ -4,6 +4,9 @@ using DifferentialEquations
 using ModelingToolkit
 using Plots
 
+default(dpi = 300)
+default(titlefontsize=13)
+
 include("../Model/ODE_functions.jl") 
 include("../Model/parameter_values.jl")
 
@@ -34,3 +37,7 @@ ylims!((0.0, 1.1))
 xlims!((-0.5, last(tspan)*1.02))
 title!("Glutamine addition gtr1\\Delta, Glutamine_{ext} = 1.0")
 display(plot1)
+
+file_name = "Sch9_nit_add_reconstr"
+savefig(plot1, pwd()*"/Results/Time_course_reconstructed/pixel_images/"*file_name*".png")    
+savefig(plot1, pwd()*"/Results/Time_course_reconstructed/vector_images/"*file_name*".pdf") 
