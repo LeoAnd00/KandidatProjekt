@@ -1,7 +1,7 @@
-using Plots
-
 include("../../Code/Model/ODE_functions.jl")
 include("../../Code/Model/parameter_values.jl")
+
+using Plots
 
 #Alt 1
 Color_alt_1 = RGB(249/255,212/255,35/255)

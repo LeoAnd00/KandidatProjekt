@@ -1,3 +1,4 @@
+# Plot all solutions from all sperate files in one
 include("Glucose_addition_Mig1.jl")
 include("Glucose_addition_Sch9.jl")
 include("Glucose_addition.jl")
