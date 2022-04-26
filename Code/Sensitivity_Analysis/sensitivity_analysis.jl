@@ -53,6 +53,17 @@ function sens_mat(p)
     return sm
 end
 
+function sum_vec_sens(sens_mat)
+    s = 0
+    v = []
+    for i in 1:length(sens_mat[1,:])
+        n = norm(sens_mat[:,i])
+        s += n
+        append!(v,n)
+    end
+    return s,v
+end
+
 sens_Jalihal = sens_mat(last.(p_var))
 sens_alt1 = sens_mat(last.(p_var_alt_1))
 sens_alt2 = sens_mat(last.(p_var_alt_2))
@@ -67,3 +78,29 @@ rank_J = rank(sens_Jalihal)
 rank_1 = rank(sens_alt1)
 rank_2 = rank(sens_alt2)
 rank_3 = rank(sens_alt3)
+
+abs_sens_J,sens_vector_norms_J = sum_vec_sens(sens_Jalihal)
+abs_sens_1,sens_vector_norms_1 = sum_vec_sens(sens_alt1)
+abs_sens_2,sens_vector_norms_2 = sum_vec_sens(sens_alt2)
+abs_sens_3,sens_vector_norms_3 = sum_vec_sens(sens_alt3)
+
+out = "k_J = "*string(cond_nr_J)*"\n
+k_1 = "*string(cond_nr_1)*"\n
+k_2 = "*string(cond_nr_2)*"\n
+k_3 = "*string(cond_nr_3)*"\n
+r_J = "*string(rank_J)*"\n
+r_1 = "*string(rank_1)*"\n
+r_2 = "*string(rank_2)*"\n
+r_3 = "*string(rank_3)*"\n
+sum sens vecs J = "*string(abs_sens_J)*"\n
+sum sens vecs 1 = "*string(abs_sens_1)*"\n
+sum sens vecs 2 = "*string(abs_sens_2)*"\n
+sum sens vecs 3 = "*string(abs_sens_3)*"\n
+sens vecs norms J = "*string(sens_vector_norms_J)*"\n
+sens vecs norms 1 = "*string(sens_vector_norms_1)*"\n
+sens vecs norms 2 = "*string(sens_vector_norms_2)*"\n
+sens vecs norms 3 = "*string(sens_vector_norms_3);
+
+open("out.txt","w") do file
+    write(file,out)
+end
