@@ -1,125 +1,43 @@
-include("../Model/ODE_methods.jl")
-include("../Model/parameter_values.jl")
+include("simulation_methods.jl")
 
-using Plots
+###### Glucose starvation ######
+sol_array_gluc_starve = Generate_sol_array(index_glucose_starvation, (0.0, 40.0)) # Generates array of simulation
 
-###### Glukossvältning ######
+plot_simulation_result(false, sol_array_gluc_starve, Mig1, (0.0, 20.0), (0.8, 1.0), "Glukossvältning", "Mig1_gluc_starve", :topright) 
+plot_simulation_result(false, sol_array_gluc_starve, Snf1, (0.0, 1.0), "Glukossvältning", "Snf1_gluc_starve", :right) 
+plot_simulation_result(false, sol_array_gluc_starve, Gis1, (0.0, 10.0), (0.0, 1.0), "Glukossvältning", "Gis1_gluc_starve", :topright) 
+plot_simulation_result(false, sol_array_gluc_starve, Gln3, (0.0, 1.0), "Glukossvältning", "Gln3_gluc_starve", :right) 
+plot_simulation_result(false, sol_array_gluc_starve, Dot6, (0.0, 4.0), (0.8, 1.0), "Glukossvältning", "Dot6_gluc_starve", :topright) 
 
-u0_SS = Steady_state_solver(p_conc, first.(nutrient_shifts[index_glucose_starvation]))
 
-sol_gluc_starve =  ODE_solver(u0_SS, last.(nutrient_shifts[index_glucose_starvation]), (0.0, 10.0), p_conc)
-plot1 = plot(sol_gluc_starve, vars = [Snf1, Gln3, Cyr1, Mig1], title = "Glukossvältning") # Gln3 & Cyr1 beror på Snf1
-display(plot1)
-plot1_2 = plot(sol_gluc_starve, vars = [Dot6, Gis1, Rib, Sch9], title = "Glukossvältning")
-display(plot1_2)
+###### Nitrogen starvation ######
+sol_array_nit_starve = Generate_sol_array(index_nitrogen_starvation, (0.0, 40.0))
 
-###### Kvävesvältning ######
+plot_simulation_result(false, sol_array_nit_starve, Snf1,(0.0, 15.0), (0.0, 0.2), "Kvävesvältning", "Snf1_nit_starve", :right) 
+plot_simulation_result(false, sol_array_nit_starve, TORC1, (0.0, 1.0), "Kvävesvältning", "TORC1_nit_starve", :right) 
+plot_simulation_result(false, sol_array_nit_starve, Sch9, (0.0, 1.0), "Kvävesvältning", "Sch9_nit_starve", :right) 
+plot_simulation_result(false, sol_array_nit_starve, Gln3, (0.0, 1.0), "Kvävesvältning", "Gln3_nit_starve" ,:right) 
+plot_simulation_result(false, sol_array_nit_starve, Rtg13, (0.0, 1.0), "Kvävesvältning", "Rtg13_nit_starve" ,:bottomright) 
 
-# Gln3, Dot6, Rtg13 bör defosforyleras, men gör ej det
 
-u0_SS = Steady_state_solver(p_conc, first.(nutrient_shifts[index_nitrogen_starvation]))
+###### Glucose addition ######
+sol_array_gluc_add = Generate_sol_array(index_glucose_addition, (0.0, 15.0))
 
-sol_nit_starve =  ODE_solver(u0_SS, last.(nutrient_shifts[index_nitrogen_starvation]), (0.0, 50.0), p_conc)
-plot2 = plot(sol_nit_starve, vars = [TORC1, Sch9, Gln3], title = "Kvävesvältning", legend=:right)
-display(plot2)
-plot2_2 = plot(sol_nit_starve, vars = [Rtg13, Dot6, Snf1], title = "Kvävesvältning")
-display(plot2_2)
+plot_simulation_result(false, sol_array_gluc_add, cAMP, (0.0, 15.0), (0.0, 1.05), "Glukostillsättning", "cAMP_gluc_add", :right) 
+plot_simulation_result(false, sol_array_gluc_add, PKA, (0.0, 15.0), (0.0, 1.05), "Glukostillsättning", "PKA_gluc_add", :right) 
+plot_simulation_result(false, sol_array_gluc_add, Snf1, (0.0, 10.0), (0.0, 1.0), "Glukostillsättning", "Snf1_gluc_add", :right) 
+plot_simulation_result(false, sol_array_gluc_add, Gis1, (0.0, 7.0), (0.0, 1.0), "Glukostillsättning", "Gis1_gluc_add", :right) 
 
-####### Glukostillsättning #######
+###### Gtr1Delta | EGO deletion, Nitrogen addition ######
+sol_array_gtr1Delta = Generate_sol_array(index_high_glutamine, (0.0, 40.0), [EGO_T => 0.0])
+plot_simulation_result(false, sol_array_gtr1Delta, Gln3, (0.0, 25.0), (0.0, 1.0), "Kvävetillsättning, gtr1\$\\Delta\$", "Gln3_gtr1Delta_nit_addition", :right)
 
-u0_SS = Steady_state_solver(p_conc, first.(nutrient_shifts[index_glucose_addition]))
+sol_array_gtr1Delta = Generate_sol_array(index_nitrogen_starvation, (0.0, 40.0), [EGO_T => 0.0])
+plot_simulation_result(false, sol_array_gtr1Delta, Gln3, (0.0, 25.0), (0.0, 1.0), "Kvävesvältning, gtr1\$\\Delta\$", "Gln3_gtr1Delta_nit_starve", :right)
 
-sol_gluc_add =  ODE_solver(u0_SS, last.(nutrient_shifts[index_glucose_addition]), (0.0, 10.0), p_conc)
-# plot3 = plot(sol_gluc_add, vars = [Snf1, Gis1, Mig1, PKA, Sch9], title = "Glukostillsättning", legend=:right)
-# plot3 = plot(sol_gluc_add, vars = [PKA, PDE, cAMP, Cyr1, Ras, Sak], title = "Glukostillsättning", legend=:right) # Oscillerande ämnen
-plot3 = plot(sol_gluc_add, vars = [cAMP, PKA, Sak], title = "Glukostillsättning", legend=:right) # Oscillerande ämnen
+###### Snf1 deletion, Glucose starvation ######
+sol_array_Snf1Delta = Generate_sol_array(index_glucose_starvation, (0.0, 1.0), [Snf1_T => 0.0])
 
-display(plot3)
+plot_simulation_result(false, sol_array_Snf1Delta, Gln3, (0.0, 1.0), "Glukostillsättning, Snf1\$\\Delta\$", "Gln3_Snf1Delta_gluc_add", :right)
 
-####### början av glukossvältning (låg) #######
-
-u0_SS = Steady_state_solver(p_conc, first.(nutrient_shifts[index_glucose_starvation]))
-
-sol =  ODE_solver(u0_SS, (Carbon => 0.3, ATP => 0.3, Glutamine_ext => 1.0), (0.0, 10.0), p_conc)
-plot_y = plot(sol, vars = [Gis1, PKA, Snf1], title = "början av glukossvältning (låg glukoshalt)", legend=:right) # Oscillerande ämnen
-display(plot_y)
-
-###### Kvävetillsättning ######
-
-u0_SS = Steady_state_solver(p_conc, first.(nutrient_shifts[index_high_glutamine]))
-
-sol = ODE_solver(u0_SS, last.(nutrient_shifts[index_high_glutamine]), (0.0, 34.0), p_conc)
-plot_x = plot(sol, vars = [TORC1, Gln3, Rtg13], legend=:right, title = "Kvävetillsättning")
-display(plot_x)
-plot_x2 = plot(sol, vars = [Dot6, Rib], legend=:right, title = "Kvävetillsättning")
-display(plot_x2)
-
-###### EGO deletion #######
-
-p_conc[Get_index(p_conc_lookup_table, "EGO_T")] = EGO_T => 0.0
-
-u0_SS = Steady_state_solver(p_conc, first.(nutrient_shifts[index_nitrogen_starvation]))
-
-sol = ODE_solver(u0_SS, last.(nutrient_shifts[index_nitrogen_starvation]), (0.0, 50.0), p_conc)
-
-plot_T = plot(sol, vars = [Gln3], title = "EGO\$\\Delta\$", legend=:right)
-plot!(sol_nit_starve, vars = [Gln3], label = "Gln3_wt")
-display(plot_T)
-
-###### Snf1 deletion ######
-
-# Gln3 fosforyleras ej, vilket är förväntat.
-# Cyr1 förväntas sluta defosforyleras, men den uppvisar samma beteende
-
-include("../Model/parameter_values.jl")
-
-p_conc[Get_index(p_conc_lookup_table, "Snf1_T")] = Snf1_T => 0.0
-
-u0_SS = Steady_state_solver(p_conc, first.(nutrient_shifts[index_glucose_starvation]))
-
-sol = ODE_solver(u0_SS, last.(nutrient_shifts[index_glucose_starvation]), (0.0, 10.0), p_conc)
-
-plot5 = plot(sol, vars = [Gln3], title = "Snf1\$\\Delta\$")
-plot!(sol_gluc_starve, vars = [Gln3], label = "Gln3_wt", legend=:right)
-display(plot5)
-
-plot5_2 = plot(sol, vars = [Cyr1], title = "Snf1\$\\Delta\$")
-plot!(sol_gluc_starve, vars = [Cyr1], label = "Cyr1_wt")
-display(plot5_2)
-
-###### Sak1 deletion ######
-
-# include("../Time_course/parameter_values.jl")
-
-# p_conc[Get_index(p_conc_lookup_table, "Sak_T")] = Sak_T => 0.0
-
-# u0_SS = Steady_state_solver(p_conc, first.(nutrient_shifts[index_glucose_starvation]))
-
-# sol = ODE_solver(u0_SS, last.(nutrient_shifts[index_glucose_starvation]), (0.0, 30.0), p_conc)
-
-# plot4 = plot(sol, vars = [Snf1], title = "Sak\$\\Delta\$")
-# plot!(sol_gluc_starve, vars = [Snf1], label = "wt")
-# display(plot4)
-
-###### Sit4 deletion ######
-
-# include("../Time_course/parameter_values.jl")
-
-# p_conc[Get_index(p_conc_lookup_table, "TORC1_T")] = TORC1_T => 0.0
-# p_conc[Get_index(p_conc_lookup_table, "w_gln_sit")] = w_gln_sit => 0.0
-
-# u0_SS = Steady_state_solver(p_conc, first.(nutrient_shifts[index_nitrogen_starvation]))
-
-# sol = ODE_solver(u0_SS, last.(nutrient_shifts[index_nitrogen_starvation]), (0.0, 30.0), p_conc)
-
-# plot6 = plot(sol, vars = [Gln3], title = "sit4\$\\Delta\$")
-# plot!(sol_nit_starve, vars = [Gln3], label = "Gln3_wt")
-# display(plot6)
-
-# plot7 = plot(sol, vars = [Rtg13], title = "sit4\$\\Delta\$")
-# plot!(sol_nit_starve, vars = [Rtg13], label = "Rtg13_wt")
-# display(plot7)
-
-# plot8 = plot(sol, vars = [Sch9], title = "sit4\$\\Delta\$")
-# plot!(sol_nit_starve, vars = [Sch9], label = "Sch9_wt")
-# display(plot8)
+plot_wt_mut_results(true, sol_array_gluc_starve, sol_array_Snf1Delta, Cyr1, (0.0, 0.5), (0.0, 0.8), "Glukossvältning, Snf1\$\\Delta\$", "Cyr1_gluc_add", :right)

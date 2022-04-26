@@ -1,15 +1,9 @@
-# Definierar ODE-ekvationerna genom ModelingToolkit
-
-# 1=Glutamine, Cyr1=2, 3=Ras, 4=EGO, 5=EGOGAP, 6=cAMP
-# 7=PDE, 8=Sak 9=TORC1, 10=Snf1, 11=PKA, 12=Sch9
-# 13=Gcn2, 14=Gcn4, 15=eIF, 16=Gln3, 17=Gln1, 18=Rtg13
-# 19=Gis1, 20=Mig1, 21=Dot6 22=Tps1, 23=Trehalase
-# 24=Protein, 25=Rib
+# Defines the ODE-model in ModelingToolkit
 
 using ModelingToolkit
 using DifferentialEquations
 
-# gamma_gcn4, gamma_rtg13, gamma_gis1, gamma_Dot6 antas vara ett, tas ej med i denna modell
+# Defines parameters, variables and derivative operator for constructing the model using ModelingToolkit
 @parameters gammacyr Cyr1_T w_cyr_glu w_cyr_snf sigma_cyr w_cyr w_dot sigma_dot w_dot_sch_pka Dot6_T w_ego sigma_ego w_ego_basal EGO_T gammaego w_ego_gap gammagap sigma_gap w_gap_torc w_gap_N EGOGAP_T gamma_gcn2 Gcn2_T w_gcn_torc sigma_gcn2 w_gcn w_gcn4_gcn2_trna w_gcn4 tRNA_sensitivity sigma_gcn4 tRNA_total Gcn4_T sigma_gis1 w_gis Gis1_T w_gis_pka w_gis_sch w_gln1_gln3 Gln1_T w_gln1 gammagln1 sigma_gln1 w_gln_snf sigma_gln w_gln_sit Gln3_T w_gln3 gammagln3 k_acc_pro k_acc_glu k_degr k_acc_nh4 NH4 Proline w_mig_snf w_mig sigma_mig1 Mig1_T gamma_mig w_mig_pka sigma_pde gammapde w_pde_pka PDE_T w_pde w_pka w_pka_sch9 w_pka_camp sigma_pka gammapka k_pr tRNA_total w_ras_pka sigma_ras Ras_T gammaras w_ras_glu w_ras k_mRNA_degr k_transcription w_rtg sigma_rtg w_rtg_torc Rtg13_T w_sak Sak_T w_sak_pka sigma_sak w_sch9_torc w_sch9 gammasch9 sigma_sch9 Sch9_T w_snf_sak gammasnf w_snf_glc sigma_snf w_snf Snf1_T w_torc_egoin w_torc w_torc_snf w_torc_glut sigma_tor gammator TORC1_T w_torc_ego w_tps_pka sigma_tps gammatps w_tps PKA_T Tps1_T w_tre gammatre w_tre_pka Trehalase_T sigma_trehalase k_camp_cyr ATP k_camp_deg k_camp_pde eIF_T w_eif_gcn2 sigma_eif gammaeif w_eif
 @variables t Cyr1(t) Dot6(t) EGO(t) EGOGAP(t) Gcn2(t) Gcn4(t) Gis1(t) Gln1(t) Gln3(t) Glutamine(t) Mig1(t) PDE(t) PKA(t) Protein(t) Ras(t) Rib(t) Rtg13(t) Sak(t) Sch9(t) Snf1(t) TORC1(t) Tps1(t) Trehalase(t) cAMP(t) eIF(t) Carbon(t) ATP(t) Glutamine_ext(t)
 D = Differential(t)
@@ -18,7 +12,7 @@ function soft_Heaviside(sigma, W)
     1/(1+exp(-sigma*W))
 end
 
-# gamma_gcn4, gamma_rtg13, gamma_gis1, gamma_dot6 antas vara 1 i denna modell
+# Defines the ODE-system for the implemented model
 eqs = [
     # Nutrient signal sensing and transduction 
     D(Glutamine) ~ (k_acc_glu*Glutamine_ext+k_acc_pro*Proline+k_acc_nh4*NH4*Gln1*Carbon)-k_degr*Glutamine,
@@ -41,14 +35,14 @@ eqs = [
     D(Gln3) ~ gammagln3*(Gln3_T*soft_Heaviside(sigma_gln,-w_gln3+w_gln_snf*Snf1+ w_gln_sit*(1-TORC1))-Gln3),
     D(Gln1) ~ gammagln1*(Gln1_T*soft_Heaviside(sigma_gln1,w_gln1_gln3*Gln3-w_gln1)-Gln1),
     D(Rtg13) ~ (Rtg13_T*soft_Heaviside(sigma_rtg,-w_rtg_torc*TORC1+w_rtg)-Rtg13), # gamma_rtg13 ska läggas in, saknar värde
-    D(Gis1) ~ (Gis1_T*soft_Heaviside(sigma_gis1,-w_gis_pka*PKA-w_gis_sch*Sch9+w_gis)-Gis1), # gamma_gis1 ska läggas in, saknar värde
+    D(Gis1) ~ (Gis1_T*soft_Heaviside(sigma_gis1,-w_gis_pka*PKA-w_gis_sch*Sch9+w_gis)-Gis1), # 
     D(Mig1) ~ gamma_mig*(Mig1_T*soft_Heaviside(sigma_mig1,w_mig_pka*PKA-w_mig_snf*Snf1+w_mig)-Mig1),
     D(Dot6) ~ (Dot6_T*soft_Heaviside(sigma_dot,-w_dot_sch_pka*Sch9*PKA+w_dot)-Dot6), # gamma_dot6 ska läggas in, saknar värde
     D(Tps1) ~ gammatps*(Tps1_T*soft_Heaviside(sigma_tps, w_tps_pka*(PKA_T-PKA)-w_tps)-Tps1), # 22, Tps1
     D(Trehalase) ~ gammatre*(Trehalase_T*soft_Heaviside(sigma_trehalase, w_tre_pka*PKA-w_tre)-Trehalase), # 23, Trehalase
     D(Protein) ~ k_pr*ATP*minimum([minimum([Rib, eIF]) minimum([tRNA_total, Glutamine])])*Protein,  # 24, Protein
     D(Rib) ~ k_transcription*(1-Dot6)-k_mRNA_degr*Rib, # 25, Rib
-    # Model inputs
+    # Model inputs which represent different nutrient conditions values are diefined as initial conditions
     D(Carbon) ~ 0,
     D(ATP) ~ 0,
     D(Glutamine_ext) ~ 0] 

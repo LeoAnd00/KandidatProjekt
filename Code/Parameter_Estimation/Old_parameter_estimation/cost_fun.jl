@@ -1,7 +1,7 @@
-include("../Model/ODE_methods.jl")
-include("../Model/ODE_functions.jl")
-include("../../Data/exp_data.jl")
-include("../Model/parameter_values.jl")
+include("../../Model/ODE_methods.jl")
+include("../../Model/ODE_functions.jl")
+include("../../../Data/exp_data.jl")
+include("../../Model/parameter_values.jl")
 
 function calc_cost(p_var, p_const)
 
