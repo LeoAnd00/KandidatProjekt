@@ -1,4 +1,4 @@
-# THe file explains how the experimental data is normalized in order to create the  time course plots
+# The file explains how the experimental data is normalized in order to create the  time course plots
 include("exp_data.jl")
 include("../Code/Model/ODE_methods.jl")
 

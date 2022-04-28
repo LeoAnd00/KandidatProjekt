@@ -22,12 +22,12 @@ cAMP_mutant_ras_shift = Steady_state_pertubation_solver([Ras_T => 0.0, w_pka_cam
 Rib_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Rib)
 Rib_mutant_shift = Steady_state_pertubation_solver([Sch9_T => 0.0], first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Rib)
 
-# Sch9 wild typ
+# Sch9 wild type
 Sch9_lst4_lst7_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
 Sch9_gtr1_gtr2_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
 Sch9_gtr1_2_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
 
-# Sch9 mutant
+# Sch9 mutants
 Sch9_lst4_lst7_mutant_shift = Steady_state_pertubation_solver([EGOGAP_T => 0.0], first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
 Sch9_gtr1_gtr2_mutant_shift = Steady_state_pertubation_solver([EGO_T => 0.0, w_torc_ego => 0.0, w_torc_egoin => 0.0, w_torc_glut => 0.5], first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
 
@@ -41,7 +41,7 @@ Gcn4_mutant_shift = Steady_state_pertubation_solver([Gcn2_T => 0.0], first.(nutr
 Gln3_shift_sit = Steady_state_pertubation_solver(first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gln3)
 Gln3_mutant_shift_sit = Steady_state_pertubation_solver([w_gln_sit => 0.0, TORC1_T => 0.0], first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gln3)
 
-# Normalisation of Rib and cAMP simulations
+# Normalization of Rib and cAMP simulations
 cAMP_shifts = [cAMP_shift_ras, cAMP_shift_pde, cAMP_mutant_ras_shift, cAMP_mutant_pde_shift]
 min_cAMP = minimum([first.(cAMP_shifts) last.(cAMP_shifts)])
 max_cAMP = maximum([first.(cAMP_shifts) last.(cAMP_shifts)])
@@ -92,7 +92,7 @@ exp_data_Gln3_sit_norm = Minmaxnorm_data(exp_data_Gln3_sit)
 
 exp_data_wt_norm = vcat(exp_data_Rib_norm[1], exp_data_cAMP_pde_norm[1], exp_data_cAMP_ras_norm[1], exp_data_Snf1_norm[1], exp_data_Gis1_norm[1], exp_data_Tre_norm[1], exp_data_Sch9_gtr1_2_norm[1], exp_data_Gcn4_norm[1], exp_data_Gln3_sit_norm[1])
 
-# Plotta resultatet in a bar-plott
+# Plotting the results
 using Plots
 using StatsPlots
 
@@ -108,7 +108,7 @@ shift_names_wt = ["\$\\mathrm{Rib}\$", "\$\\mathrm{cAMP}\$", "\$\\mathrm{cAMP}\$
  "\$\\mathrm{Sch9_{gtr1-gtr2}}\$","\$\\mathrm{Sch9_{lst4-lst7}}\$"
 ]
 
-# Calculates the diffrence between steady state solutions, add them to an epty vector
+# Calculates the diffrence between steady state solutions, add them to an empty vector
 shift_magnitude_wt = AbstractFloat[]
 for i in range(1, length(shifts_wt))
     push!(shift_magnitude_wt, last.(shifts_wt[i]) - first.(shifts_wt[i]))
@@ -143,8 +143,8 @@ file_name = "perturb_wt"
 savefig(plot1, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".png")    
 savefig(plot1, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".pdf")
 
-####### MUTANT #######
-# DO the same thing with de mutants
+####### Mutants #######
+# Do the same thingas above with the mutants
 
 # Scales the data according to the Minmaxnorm function 
 # cAMP
