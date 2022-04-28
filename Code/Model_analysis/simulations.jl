@@ -13,7 +13,7 @@ plot_simulation_result(false, sol_array_gluc_starve, Dot6, (0.0, 4.0), (0.8, 1.0
 ###### Nitrogen starvation ######
 sol_array_nit_starve = Generate_sol_array(index_nitrogen_starvation, (0.0, 40.0))
 
-plot_simulation_result(false, sol_array_nit_starve, Snf1,(0.0, 15.0), (0.0, 0.2), "Kvävesvältning", "Snf1_nit_starve", :right) 
+plot_simulation_result(false, sol_array_nit_starve, Snf1, (0.0, 15.0), (0.0, 0.2), "Kvävesvältning", "Snf1_nit_starve", :right) 
 plot_simulation_result(false, sol_array_nit_starve, TORC1, (0.0, 1.0), "Kvävesvältning", "TORC1_nit_starve", :right) 
 plot_simulation_result(false, sol_array_nit_starve, Sch9, (0.0, 1.0), "Kvävesvältning", "Sch9_nit_starve", :right) 
 plot_simulation_result(false, sol_array_nit_starve, Gln3, (0.0, 1.0), "Kvävesvältning", "Gln3_nit_starve" ,:right) 
