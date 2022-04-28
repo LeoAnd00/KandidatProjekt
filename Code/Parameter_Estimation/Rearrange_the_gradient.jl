@@ -2,12 +2,14 @@
 """
     Rearrange_the_gradient(p_var_FWD, p_const_FWD, dMK_dp)
 
-    Rearrange the gradient so that they are in the correct order.
+    Rearrange the gradient so that they are in the correct order. This is needed since the combination of FAD and ModelingToolkit
+    results in some strange rearranging of the gradient, this also happens to the parameters if you use prob.p to get them from
+    the ODEproblem. (This effect is easier to see in a simpler example.)
 """
 function Rearrange_the_gradient(p_var_FWD, p_const_FWD, dMK_dp)
 
-    tspan = (0.0, 30.0) # [min]
-    u0_SS = ones(1,28) 
+    tspan = (0.0, 30.0) # Simply needs to be defined, but that values doesn't matter
+    u0_SS = ones(1,28) # Simply needs to be defined, but that values doesn't matter
 
     p_var_FWD_new = []
     for i in 1:length(last.(p_var_FWD))

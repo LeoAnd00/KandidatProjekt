@@ -1,7 +1,13 @@
 using CSV
 using DataFrames
 include("../Model/ODE_functions.jl")
-include("../Model/parameter_values.jl") 
+include("../Model/parameter_values.jl")
+
+"""
+    Check_if_p_MK_under_x() 
+
+    Gives the user the parametervector in a form suitable for ModelingToolkit for parametervector i in p_0_values_MK_under_x.csv.
+"""
 function Check_if_p_MK_under_x() 
     df = CSV.read("Intermediate/p_0_values_MK_under_x.csv", DataFrame)
 

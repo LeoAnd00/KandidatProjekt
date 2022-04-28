@@ -2,14 +2,16 @@ using CSV
 using DataFrames
 include("../Model/ODE_functions.jl")
 include("../Model/parameter_values.jl") 
+
+"""
+    Check_if_p_MK_under_x() 
+
+    Gives the user the parametervector in a form suitable for ModelingToolkit for parametervector i in optimization_of_p0.csv.
+"""
 function Check_if_p_MK_under_x()
     df = CSV.read("Intermediate/optimization_of_p0.csv", DataFrame)
 
     i = 11 #Choose manually
-    df = CSV.read("Intermediate/optimization_of_p0.csv", DataFrame)
-    
-    MK_that_works = df[:, Symbol("Optimum_from_p_0_value_$i")][1:end]
-    #println("MK: ",MK_that_works)
 
     p_names_var = first.(p_var)
 

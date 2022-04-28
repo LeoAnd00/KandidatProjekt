@@ -2,6 +2,12 @@ using CSV
 using DataFrames
 include("../Model/ODE_functions.jl")
 include("../Model/parameter_values.jl") 
+
+"""
+    Check_if_p_MK_under_x(x) 
+
+    Creates a list called p_0_values_MK_under_x.csv which contains all parametervectors from p_0_values.csv with a cost below x.
+"""
 function Check_if_p_MK_under_x(x) 
     N = 0
     df = CSV.read("Intermediate/p_0_values.csv", DataFrame)

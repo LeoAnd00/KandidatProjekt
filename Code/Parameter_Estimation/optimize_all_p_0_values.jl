@@ -17,7 +17,7 @@ include("Optimization.jl")
 """
     main_Op_p_0()
 
-    Optimize the cost for multiple p_0_var values and puts the result in a CSV file
+    Optimize the cost for multiple parametervectors from p_0_values.csv and puts the result in a CSV file
 """
 function main_Op_p_0()
     include("../Model/parameter_values.jl")
