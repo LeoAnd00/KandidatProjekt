@@ -2,9 +2,10 @@
 include("exp_data.jl")
 include("../Code/Model/ODE_methods.jl")
 
+color_data = RGB(0.35, 0.4, 1) 
+
 # For Mig1 is no normalization done (logarithmic scale)
 data_Mig1_glucose_relief = raw_data_Mig1_glucose_relief
-
 
 # data for cAMP uses min and max taken from all data for cAMP
 data_sch9Delta_cAMP = Minmaxnorm(raw_data_sch9Delta_cAMP, 0.052, 1.227)

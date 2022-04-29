@@ -5,6 +5,8 @@ using DifferentialEquations
 using DiffEqSensitivity
 using Documenter
 
+color_jalihal = RGB(59/255,129/255,131/255)
+
 include("ODE_functions.jl") 
 
 """
