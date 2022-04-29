@@ -23,10 +23,10 @@ sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan
 
 # Makes a scatter-plot from the experimental data from cAMP 
 include("../../Data/exp_data_norm.jl")
-scatter(t_sch9Delta_cAMP, data_sch9Delta_cAMP)
+scatter(t_sch9Delta_cAMP, data_sch9Delta_cAMP, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
 # Plot results from simulation and experimental data
-plot1 = plot!(sol, vars=cAMP, legend=false)
+plot1 = plot!(sol, vars=cAMP, legend=false, color=color_jalihal)
 xlabel!("t [min]")
 ylabel!("cAMP")
 ylims!((0, 1.1))

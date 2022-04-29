@@ -25,9 +25,9 @@ sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan
 include("../../Data/exp_data_norm.jl")
 
 # Creat plot for cAMP and Sch9 separtly with experimental data in each
-plot1 = scatter(t_cAMP, data_cAMP)
+plot1 = scatter(t_cAMP, data_cAMP, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
-plot!(sol, vars = cAMP, legend = false)
+plot!(sol, vars = cAMP, legend = false, color=color_jalihal)
 xlabel!("t [min]")
 ylabel!("cAMP")
 ylims!((0.0, 1.02))
@@ -44,8 +44,8 @@ tspan_Sch9 = (0.0, 30.0) # [min]
 sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan_Sch9, p_const, p_var)
 
 # Plot the solutions for Sch9
-plot2 = scatter(t_Sch9_glucose_relief, data_Sch9_glucose_relief)
-plot!(sol, vars = Sch9, legend = false)
+plot2 = scatter(t_Sch9_glucose_relief, data_Sch9_glucose_relief, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
+plot!(sol, vars = Sch9, legend = false, color=color_jalihal)
 xlabel!("t [min]")
 ylabel!("Sch9")
 ylims!((0.0, 1.02))

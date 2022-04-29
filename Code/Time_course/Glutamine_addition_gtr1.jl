@@ -28,9 +28,9 @@ sol = ODE_solver(u0_SS, (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan
 include("../../Data/exp_data_norm.jl")
 
 # Plot the solution with experimental data from a seperate file
-plot1 = scatter(t_Sch9_gtr1Delta, data_Sch9_gtr1Delta)
+plot1 = scatter(t_Sch9_gtr1Delta, data_Sch9_gtr1Delta, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
-plot!(sol, vars=Sch9, legend=false)
+plot!(sol, vars=Sch9, legend=false, color=color_jalihal)
 xlabel!("t [min]")
 ylabel!("Sch9")
 ylims!((0.0, 1.1))

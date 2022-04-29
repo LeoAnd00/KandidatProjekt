@@ -23,8 +23,8 @@ sol_Snf1 = ODE_solver(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), 
 include("../../Data/exp_data_norm.jl")
 
 # Creates the plot for Snf1 with experimental data from another file
-plot1 = scatter(t_Snf1, data_Snf1)
-plot!(sol_Snf1, vars=Snf1, legend=false)
+plot1 = scatter(t_Snf1, data_Snf1, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
+plot!(sol_Snf1, vars=Snf1, legend=false, color=color_jalihal)
 xlabel!("t [min]")
 ylabel!("Snf1")
 ylims!((0.0, 1.1))
@@ -41,8 +41,8 @@ tspan_Sch9 = (0.0, 30.0) # [min]
 sol_sch9 = ODE_solver(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan_Sch9, p_const, p_var)
 
 # Plot solution with ex data from a diffrent file
-plot2 = scatter(t_Sch9_glucose_starve, data_Sch9_glucose_starve)
-plot!(sol_sch9, vars=Sch9, legend=false)
+plot2 = scatter(t_Sch9_glucose_starve, data_Sch9_glucose_starve, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
+plot!(sol_sch9, vars=Sch9, legend=false, color=color_jalihal)
 xlabel!("t [min]")
 ylabel!("Sch9")
 ylims!((0.0, 1.1))
