@@ -13,8 +13,9 @@ function Glucose_addition_Mig1()
     include("../Model/ODE_methods.jl")
     include("../../Data/exp_data_norm.jl")
     include("../../Results/Parameter_values/Results_from_optimization.jl")
+    include("../../Data/exp_data_norm.jl")
 
-    plot1 = scatter(t_Mig1_glucose_relief, data_Mig1_glucose_relief, markersize = 5.5, markercolor="blue", markerstrokewidth=0.8, labels= "Data")
+    plot1 = scatter(t_Mig1_glucose_relief, data_Mig1_glucose_relief, markersize = 5.5, color = color_data, markerstrokewidth=0.8, labels= "Data")
     # 1e-5 ensures denom != 0
 
 
