@@ -36,8 +36,8 @@ tspan_wt = (60.0, 150.0)
 sol_wt = ODE_solver(u0_SS_wt, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan_wt, p_const, p_var) # Solves ODEs
 
 # Plot the results 
-plot(sol_sit4, vars = 1-Gln3, label = "Sit4 (1-Gln3)", lw = 4, ls=:dash, legend=:right)
-plot!(sol_wt, vars = Gln3, label = "wt (Gln3)", lw = 4, ls=:dash, color = "red")
+plot(sol_sit4, vars = 1-Gln3, label = "Sit4\\Delta", lw = 4, ls=:dash, legend=:right)
+plot!(sol_wt, vars = Gln3, label = "vildtyp", lw = 4, ls=:dash, color = "red")
 p1 = plot!([0.0, 60.0], [u0_SS_wt[16], u0_SS_wt[16]], ls=:dash, lw=4, color = "red", label="")
 vline!([60], color = "gray", label = "")
 # annotate!(65, 0.95, "Rapamycin treatment")
@@ -46,7 +46,7 @@ xlabel!("t [min]")
 ylabel!("Gln3") 
 xlims!((0, 150))
 ylims!((0, 1.0))
-title!("Rapamycin treatment, TORC1_T = 0")
+title!("Rapamycinbehandling")
 display(p1)
 
 file_name = "Gln3_rap_treat_wt_sit4_reconstr"

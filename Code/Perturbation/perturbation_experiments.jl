@@ -135,7 +135,7 @@ shift_values_wt = [shift_magnitude_wt exp_shift_magnitude_wt]
 plot1 = groupedbar(                                                                                                                                         
     shift_values_wt, group=repeat(["Simulering", "Experiment"], inner = length(shift_names_wt)), xlims=(-1.05, 1.05),
     yticks=(1:length(shift_names_wt), shift_names_wt), bar_position=:group, ytickfont=font(9), legend=:topleft,
-    ylabel="Readouts, wt", xlabel="Shift magnitude", bar_width = 0.65, framestyle=:box, orientation=:horizontal
+    ylabel="Signalmolekyler, vildtyp", xlabel="Skiftets magnitud", bar_width = 0.65, framestyle=:box, orientation=:horizontal
 )
 display(plot1)
 
@@ -195,7 +195,7 @@ shift_values_mutant = [shift_magnitude_mutant exp_shift_magnitude_mutant]
 plot2 = groupedbar(
     shift_values_mutant, group=repeat(["Simulering", "Experiment"], inner = length(shift_names_mutant)),
     yticks=(1:length(shift_names_mutant), shift_names_mutant), xlims=(-1.05, 1.05), bar_position=:group, bar_width=0.65, legend=:topleft,
-    ylabel="Readouts mutanter", xlabel="Shift magnitude", orientation=:horizontal, ytickfont = font(9), framestyle=:box
+    ylabel="Signalmolekyler, mutanter", xlabel="Skiftets magnitud", orientation=:horizontal, ytickfont = font(9), framestyle=:box
 )
 display(plot2)
 

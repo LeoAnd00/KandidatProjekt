@@ -27,12 +27,12 @@ include("../../Data/exp_data_norm.jl")
 # Creat plot for cAMP and Sch9 separtly with experimental data in each
 plot1 = scatter(t_cAMP, data_cAMP, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
-plot!(sol, vars = cAMP, legend = false, color=color_jalihal)
+plot!(sol, vars = cAMP, legend = false, color=color_jalihal, lw=2.0)
 xlabel!("t [min]")
 ylabel!("cAMP")
 ylims!((0.0, 1.02))
 xlims!((-0.02, last(tspan_cAMP)*1.02))
-title!("Glucose addition")
+title!("Glukostillsättning")
 display(plot1)
 
 file_name = "cAMP_gluc_add_reconstr"
@@ -45,12 +45,12 @@ sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan
 
 # Plot the solutions for Sch9
 plot2 = scatter(t_Sch9_glucose_relief, data_Sch9_glucose_relief, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
-plot!(sol, vars = Sch9, legend = false, color=color_jalihal)
+plot!(sol, vars = Sch9, legend = false, color=color_jalihal, lw=2.0)
 xlabel!("t [min]")
 ylabel!("Sch9")
 ylims!((0.0, 1.02))
 xlims!((-0.3, last(tspan_Sch9)*1.02))
-title!("Glucose addition")
+title!("Glukostillsättning")
 display(plot2)
 
 file_name = "Snf1_gluc_starve_reconstr"

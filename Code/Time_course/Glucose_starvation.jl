@@ -24,12 +24,12 @@ include("../../Data/exp_data_norm.jl")
 
 # Creates the plot for Snf1 with experimental data from another file
 plot1 = scatter(t_Snf1, data_Snf1, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
-plot!(sol_Snf1, vars=Snf1, legend=false, color=color_jalihal)
+plot!(sol_Snf1, vars=Snf1, legend=false, color=color_jalihal, lw=2.0)
 xlabel!("t [min]")
 ylabel!("Snf1")
 ylims!((0.0, 1.1))
 xlims!((-0.5, last(tspan_Snf1)*1.02))
-title!("Glucose starvation")
+title!("Glukossvältning")
 display(plot1)
 
 file_name = "Snf1_gluc_starve_reconstr"
@@ -47,7 +47,7 @@ xlabel!("t [min]")
 ylabel!("Sch9")
 ylims!((0.0, 1.1))
 xlims!((-0.5, last(tspan_Sch9)*1.02))
-title!("Glucose starvation")
+title!("Glukossvältning")
 display(plot2)
 
 file_name = "Sch9_gluc_starve_reconstr"

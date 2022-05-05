@@ -24,7 +24,7 @@ plot_simulation_result(false, sol_array_nit_starve, Rtg13, (0.0, 1.0), "Kvävesv
 sol_array_gluc_add = Generate_sol_array(index_glucose_addition, (0.0, 15.0))
 
 plot_simulation_result(false, sol_array_gluc_add, cAMP, (0.0, 15.0), (0.0, 1.05), "Glukostillsättning", "cAMP_gluc_add", :right) 
-plot_simulation_result(false, sol_array_gluc_add, PKA, (0.0, 15.0), (0.0, 1.05), "Glukostillsättning", "PKA_gluc_add", :right) 
+plot_simulation_result(false, sol_array_gluc_add, PKA, (0.0, 15.0), (0.0, 1.05), "Glukostillsättning", "PKA_gluc_add", :bottomright) 
 plot_simulation_result(false, sol_array_gluc_add, Snf1, (0.0, 10.0), (0.0, 1.0), "Glukostillsättning", "Snf1_gluc_add", :right) 
 plot_simulation_result(false, sol_array_gluc_add, Gis1, (0.0, 7.0), (0.0, 1.0), "Glukostillsättning", "Gis1_gluc_add", :right) 
 

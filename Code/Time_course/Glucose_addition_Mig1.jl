@@ -24,13 +24,13 @@ include("../../Data/exp_data_norm.jl")
 scatter(t_Mig1_glucose_relief, data_Mig1_glucose_relief, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
 # Plot the results for Mig1
-plot1 = plot!(sol, vars=log(10, Mig1/(1e-5 + 1.0-Mig1)), color = color_jalihal, lw=1.5, legend=false) # 1e-5 ensures denom != 0
+plot1 = plot!(sol, vars=log(10, Mig1/(1e-5 + 1.0-Mig1)), color = color_jalihal, lw=2.0, legend=false) # 1e-5 ensures denom != 0
 xlabel!("t [min]")
-ylabel!("log(Mig1/(Mig1_T-Mig1)")
+ylabel!("log(nMig1/cMig1)")
 ylims!((1.0, 1.6))
 xticks!([0.0, 10.0, 20.0])
 # yticks!([1.2, 1.4])
-title!("Glucose addition")
+title!("Glukostillsättning")
 display(plot1)
 
 file_name = "Mig1_gluc_add_reconstr"

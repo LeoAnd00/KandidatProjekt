@@ -30,12 +30,12 @@ include("../../Data/exp_data_norm.jl")
 # Plot the solution with experimental data from a seperate file
 plot1 = scatter(t_Sch9_gtr1Delta, data_Sch9_gtr1Delta, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
-plot!(sol, vars=Sch9, legend=false, color=color_jalihal)
+plot!(sol, vars=Sch9, legend=false, color=color_jalihal, lw=2.0)
 xlabel!("t [min]")
 ylabel!("Sch9")
 ylims!((0.0, 1.1))
 xlims!((-0.5, last(tspan)*1.02))
-title!("Glutamine addition gtr1\\Delta, Glutamine_{ext} = 1.0")
+title!("Kvävetillsättning, gtr1\\Delta")
 display(plot1)
 
 file_name = "Sch9_nit_add_reconstr"
