@@ -28,10 +28,10 @@ include("../../Data/exp_data_norm.jl")
 # Plot the results from the simulations and data from a seperate file
 plot1 = scatter(t_Rib_rap, data_Rib_rap, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
-plot!(sol, vars=Rib/(1e-3+u0_SS[25]), legend=false, color=color_jalihal) # 1e-2 ensures denom != 0
+plot!(sol, vars=Rib/(1e-3+u0_SS[25]), legend=false, color=color_jalihal, lw=2.0) # 1e-2 ensures denom != 0
 xlabel!("t [min]")
 ylabel!("Rel. RPL32 mRNA") # Corresponds to Rib relativt steady state
-title!("Rapamycin treatment, TORC1_T = 0")
+title!("Rapamycinbehandling (TORC1 = 0)")
 display(plot1)
 
 file_name = "Rib_rap_treat_reconstr"

@@ -144,7 +144,7 @@ function plot_wt_mut_results(show_plot::Bool, sol_array_wt, sol_array_mut, outpu
     end
 
     # Adds invisible lines for extra legend entries
-    plot!([1], [0], label = "wt", color="black")
+    plot!([1], [0], label = "vildtyp", color="black")
     plot!([1], [0], linestyle=:dash, label="mutant", color="black")
 
     ylims!(y_lims)

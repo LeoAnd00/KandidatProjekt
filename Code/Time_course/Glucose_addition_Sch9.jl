@@ -26,12 +26,12 @@ include("../../Data/exp_data_norm.jl")
 scatter(t_sch9Delta_cAMP, data_sch9Delta_cAMP, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
 # Plot results from simulation and experimental data
-plot1 = plot!(sol, vars=cAMP, legend=false, color=color_jalihal)
+plot1 = plot!(sol, vars=cAMP, legend=false, color=color_jalihal, lw=2.0)
 xlabel!("t [min]")
 ylabel!("cAMP")
 ylims!((0, 1.1))
 xlims!((-0.03, last(tspan)*1.01))
-title!("Glucose addition Sch9\\Delta")
+title!("Glukostillsättning, Sch9\\Delta")
 display(plot1)
 
 file_name = "cAMP_Sch9delta_gluc_starve_reconstr"

@@ -24,12 +24,12 @@ include("../../Data/exp_data_norm.jl")
 # Creates the plot for low glutamine addition after starvation for Sch9
 plot1 = scatter(t_Sch9P_glutamine_L, data_Sch9P_glutamine_L, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
-plot!(sol_low, vars = Sch9, legend = false, color=color_jalihal)
+plot!(sol_low, vars = Sch9, legend = false, color=color_jalihal, lw=2.0)
 xlabel!("t [min]")
 ylabel!("Sch9")
 ylims!((0, 1.1))
 xlims!((-0.5, last(tspan)*1.02))
-title!("Glutamine addition, Low Glutamine (0.3)")
+title!("Kvävetillsättning (låg, 0.3)")
 display(plot1)
 
 file_name = "Sch9_nit_add_low_reconstr"
@@ -42,11 +42,11 @@ sol_high = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), 
 
 # Plot the solution for high glutamine addition, with experimental data form seperate file
 plot2 = scatter(t_Sch9P_glutamine_H, data_Sch9P_glutamine_H, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
-plot!(sol_high, vars = Sch9, label = "High Glutamine (1.0)", legend = false, color=color_jalihal)
+plot!(sol_high, vars = Sch9, legend = false, color=color_jalihal, lw=2.0)
 xlabel!("t [min]")
 xlims!((-0.5, last(tspan)*1.02))
 ylabel!("Sch9")
-title!("Glutamine addition, High glutamine")
+title!("Kvävetillsättning (hög, 1.0)")
 display(plot2)
 
 file_name = "Sch9_nit_add_high_reconstr"

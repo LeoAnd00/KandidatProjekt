@@ -5,7 +5,7 @@ using Plots
 
 #Alt 1
 Color_alt_1 = RGB(249/255,212/255,35/255)
-label_alt_1 = "Alt 1"
+label_alt_1 = "Parametervektor 1"
 
 p_var_alt_1 = [gammacyr => 18.322882081228986, w_cyr_glu => 3.6633999531005634, w_cyr_snf => 0.1285302238461551, 
 w_cyr => 0.6059280389339637, w_dot => 0.29859496480262826, w_dot_sch_pka => 0.26984973500579434, 
@@ -39,7 +39,7 @@ p_conc_alt1 = vcat(p_const, p_var_alt_1)
 
 #Alt2
 Color_alt_2 = RGB(255/255,156/255,91/255)
-label_alt_2 = "Alt 2"
+label_alt_2 = "Parametervektor 2"
 
 p_var_alt_2 = [gammacyr => 7.37813213215515, w_cyr_glu => 4.0997184519675685, w_cyr_snf => 0.15618803057097008, 
 w_cyr => 1.185464238821411, w_dot => 0.4111950209759053, w_dot_sch_pka => 0.1503256183734567, 
