@@ -23,8 +23,8 @@ function Check_if_p_works(p_var, p_const, scaled_plan)
 
         print(" Iteration: ",item)
 
-        #p_values_process = exp10.(scaled_plan[item,:])
-        p_values_process = scaled_plan[item,:]
+        p_values_process = exp10.(scaled_plan[item,:])
+        #p_values_process = scaled_plan[item,:]
         p_values_dual_temp = [Pair(first.(p_var)[1], p_values_process'[1])]
         for i in range(2, length(last.(p_var)))
             B = Pair(first.(p_var)[i], p_values_process'[i])
@@ -93,17 +93,17 @@ end
 function main()
     include("../Model/parameter_values.jl")
 
-    plan = randomLHC(100,81) #samples, dimensions
+    plan = randomLHC(10000,81) #samples, dimensions
 
     #plan_scale = [(0.7*last.(p_var)[1],1.5*last.(p_var)[1])]
-    plan_scale = [(0.95*last.(p_var)[1],1.05*last.(p_var)[1])]
-    #plan_scale = [(-3.0,3.0)]
+    #plan_scale = [(0.95*last.(p_var)[1],1.05*last.(p_var)[1])]
+    plan_scale = [(-3.0,3.0)]
     #plan_scale = [(-3.0,2.2)]
     #plan_scale = [(0.001,120)]
     for i in 1:80
-        push!(plan_scale,(0.95*last.(p_var)[i+1],1.05*last.(p_var)[i+1]))
+        #push!(plan_scale,(0.95*last.(p_var)[i+1],1.05*last.(p_var)[i+1]))
         #push!(plan_scale,(0.7*last.(p_var)[i+1],1.5*last.(p_var)[i+1]))
-        #push!(plan_scale,(-3.0,3.0))
+        push!(plan_scale,(-3.0,3.0))
         #push!(plan_scale,(-3.0,2.2))
         #push!(plan_scale,(0.001,120))
     end
