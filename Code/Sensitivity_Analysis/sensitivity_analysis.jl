@@ -6,6 +6,11 @@ include("../Model/ODE_functions.jl")
 include("shift_info_SA.jl")
 include("../../Results/Parameter_values/Results_from_optimization.jl")
 
+"""
+    dy_dp(param,out_index,i)
+
+    Compute the sensitivities of out signal out_index in the point param.
+"""
 function dy_dp(param,out_index,i)
     sim_param = param
     pre_p_const = p_const
@@ -40,6 +45,11 @@ function dy_dp(param,out_index,i)
     return dy_dp
 end
 
+"""
+    sens_mat(p)
+
+    Compute the sensitivity matrix in the point p.
+"""
 function sens_mat(p)
     sens_mat = []
     for i in 1:length(out_indices)
@@ -53,6 +63,11 @@ function sens_mat(p)
     return sm
 end
 
+"""
+    sum_sens_vecs(sens_mat)
+
+    Compute the sensitivity vector norms and the sum of them for sensitivity matrix sens_mat.
+"""
 function sum_vec_sens(sens_mat)
     s = 0
     v = []
@@ -64,6 +79,13 @@ function sum_vec_sens(sens_mat)
     return s,v
 end
 
+
+"""
+    cos_rel_senses(sens_mat)
+
+    Compute a matrix of cosines of the angles between all pairs of
+    sensitivity vectors in sensitivity matrix sens_mat.
+"""
 function cos_rel_senses(sens_mat)
     m = zeros(81,81)
     for i in 1:81
@@ -79,7 +101,7 @@ function cos_rel_senses(sens_mat)
     return m
 end
 
-#sens_Jalihal = sens_mat(last.(p_var))
+sens_Jalihal = sens_mat(last.(p_var))
 sens_alt1 = sens_mat(last.(p_var_alt_1))
 sens_alt2 = sens_mat(last.(p_var_alt_2))
 
