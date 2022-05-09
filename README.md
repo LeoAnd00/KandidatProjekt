@@ -1,6 +1,6 @@
 README
 ===============
-**Den här GitHub-mappen är en del av kandidatarbete vid Chalmers tekniska högskola: MVEX01-22-03 | Dynamisk modellering av signalvägar som reglerar kol- och kvävemetabolismen i bagerijäst**
+**Den här GitHub-mappen är en del av ett kandidatarbete vid Chalmers tekniska högskola: MVEX01-22-03 | Dynamisk modellering av signalvägar som reglerar kol- och kvävemetabolismen i bagerijäst**
 
 **Sammandrag**
 
