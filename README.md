@@ -16,7 +16,7 @@ Två parametervektorer erhölls som ger en bättre beskrivning av datan. Slutsat
 
 - **Intermediate** innehåller intermediära steg under parameteruppskattningen.
 
-- **Results** innehåller resultaten från bland annat parameteruppskattningen och alla återskpade figurer. 
+- **Results** innehåller resultaten från bland annat parameteruppskattningen och alla återskapade figurer. 
 
 ## Nödvändig programvara
 
