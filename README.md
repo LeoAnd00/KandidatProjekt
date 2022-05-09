@@ -18,8 +18,6 @@ Två parametervektorer erhölls som ger en bättre beskrivning av datan. Slutsat
 
 - **Results** innehåller resultaten från bland annat parameteruppskattningen och alla återskpade figurer. 
 
-Varje mapp har en readmefil med ytterligare information.
-
 ## Nödvändig programvara
 
 Detta projekt genomfördes med programmeringsspråket **Julia**, version 1.7, inklusive vissa paket som kan ses i toml filen.
