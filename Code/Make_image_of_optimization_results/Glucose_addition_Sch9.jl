@@ -13,6 +13,7 @@ function Glucose_addition_Sch9_cAMP()
     include("../Model/ODE_methods.jl")
     include("../../Data/exp_data_norm.jl")
     include("../../Results/Parameter_values/Results_from_optimization.jl")
+    include("../../Data/exp_data_norm.jl")
     # Mutant Sch9_Delta => Sch9_T = 0
     p_const[Get_index(p_const_lookup_table, "Sch9_T")] = Sch9_T => 0.0
 
@@ -23,7 +24,7 @@ function Glucose_addition_Sch9_cAMP()
     tspan = (0.0, 3.0) # [min]
     sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var_alt_1)
 
-    plot1 = scatter(t_sch9Delta_cAMP, data_sch9Delta_cAMP, markersize = 5.5, markercolor="blue", markerstrokewidth=0.8, labels= "Data")
+    plot1 = scatter(t_sch9Delta_cAMP, data_sch9Delta_cAMP, markersize = 5.5, color = color_data, markerstrokewidth=0.8, labels= "Data")
 
     plot!(plot1, sol, vars=cAMP, color = Color_alt_1, lw=2.5, labels= label_alt_1)
 

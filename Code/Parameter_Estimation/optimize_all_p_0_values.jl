@@ -54,7 +54,7 @@ function main_Op_p_0()
 
         values_of_p_and_MK = vcat(last.(p_var_result),MK[end])
         Prior_values_of_p_and_MK = vcat(last.(p_0_var),MK[1])
-        #print("length: ",length(Prior_values_of_p_and_MK))
+
         if i == 1
             df = DataFrame(Parameter = parameters_and_MK,
                         p_0_value_1 = Prior_values_of_p_and_MK,

@@ -13,13 +13,14 @@ function Glutamine_addition_L()
     include("../Model/ODE_methods.jl")
     include("../../Data/exp_data_norm.jl")
     include("../../Results/Parameter_values/Results_from_optimization.jl")
+    include("../../Data/exp_data_norm.jl")
     u0_SS = Steady_state_solver(p_const, p_var_alt_1, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returnerar steady state för parametrarna p
 
     # Low glutamine => Glutamine_ext = 0.3
     tspan = (0.0, 30.0) # [min]
     sol_low = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, p_const, p_var_alt_1)
 
-    plot1 = scatter(t_Sch9P_glutamine_L, data_Sch9P_glutamine_L, markersize = 5.5, markercolor="blue", markerstrokewidth=0.8, labels = "Data")
+    plot1 = scatter(t_Sch9P_glutamine_L, data_Sch9P_glutamine_L, markersize = 5.5, color = color_data, markerstrokewidth=0.8, labels = "Data")
 
     plot!(plot1, sol_low, vars = Sch9, color = Color_alt_1, lw=2.5, labels= label_alt_1)
 
@@ -66,7 +67,7 @@ function Glutamine_addition_H()
     tspan = (0.0, 30.0) # [min]
     sol_high = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var_alt_1)
 
-    plot2 = scatter(t_Sch9P_glutamine_H, data_Sch9P_glutamine_H, markersize = 5.5, markercolor="blue", markerstrokewidth=0.8, labels = "Data")
+    plot2 = scatter(t_Sch9P_glutamine_H, data_Sch9P_glutamine_H, markersize = 5.5, color = color_data, markerstrokewidth=0.8, labels = "Data")
 
     plot!(plot2, sol_high, vars = Sch9, color = Color_alt_1, lw=2.5, labels= label_alt_1)
 

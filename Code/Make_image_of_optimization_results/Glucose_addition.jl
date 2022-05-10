@@ -11,13 +11,14 @@ function Glucose_addition_cAMP()
     include("../Model/ODE_methods.jl")
     include("../../Data/exp_data_norm.jl")
     include("../../Results/Parameter_values/Results_from_optimization.jl")
+    include("../../Data/exp_data_norm.jl")
     u0_SS = Steady_state_solver(p_const, p_var_alt_1, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
 
     # Post-shift, Glucose addition => ATP, Carbon = 1
     tspan_cAMP = (0.0, 3.0) # [min]
     sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan_cAMP, p_const, p_var_alt_1)
 
-    plot1 = scatter(t_cAMP, data_cAMP, markersize = 5.5, markercolor="blue", markerstrokewidth=0.8, labels= "Data")
+    plot1 = scatter(t_cAMP, data_cAMP, markersize = 5.5, color = color_data, markerstrokewidth=0.8, labels= "Data")
 
     plot!(plot1, sol, vars = cAMP, color = Color_alt_1, lw=2.5, labels= label_alt_1)
 
@@ -62,7 +63,7 @@ function Glucose_addition_Sch9()
     tspan_Sch9 = (0.0, 30.0) # [min]
     sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan_Sch9, p_const, p_var_alt_1)
 
-    plot2 = scatter(t_Sch9_glucose_relief, data_Sch9_glucose_relief, markersize = 5.5, markercolor="blue", markerstrokewidth=0.8, label = "Data")
+    plot2 = scatter(t_Sch9_glucose_relief, data_Sch9_glucose_relief, markersize = 5.5, color = color_data, markerstrokewidth=0.8, label = "Data")
 
     plot!(plot2, sol, vars = Sch9, color = Color_alt_1, lw=2.5, labels= label_alt_1)
 

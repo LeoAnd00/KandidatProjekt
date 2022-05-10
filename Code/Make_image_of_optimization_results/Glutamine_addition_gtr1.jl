@@ -13,6 +13,7 @@ function Glutamine_addition_gtr1()
     include("../Model/ODE_methods.jl")
     include("../../Data/exp_data_norm.jl")
     include("../../Results/Parameter_values/Results_from_optimization.jl")
+    include("../../Data/exp_data_norm.jl")
 
     # Mutant gtr1_Delta => EGO_T = 0, w_torc_ego = 0, w_torc_egoin = 0 i 
     p_const[Get_index(p_const_lookup_table, "EGO_T")] = EGO_T => 0.0
@@ -27,7 +28,7 @@ function Glutamine_addition_gtr1()
     tspan = (0.0, 30.0) # [min]
     sol = ODE_solver(u0_SS, (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan, p_const, p_var_alt_1)
 
-    plot1 = scatter(t_Sch9_gtr1Delta, data_Sch9_gtr1Delta, markersize = 5.5, markercolor="blue", markerstrokewidth=0.8, label = "Data")
+    plot1 = scatter(t_Sch9_gtr1Delta, data_Sch9_gtr1Delta, markersize = 5.5, color = color_data, markerstrokewidth=0.8, label = "Data")
 
     plot!(plot1, sol, vars=Sch9, color = Color_alt_1, lw=2.5, labels= label_alt_1)
 
