@@ -19,7 +19,7 @@ u0_SS = Steady_state_solver(p_const, p_var, (ATP => 0.0, Carbon => 0.0, Glutamin
 tspan = (0.0, 20.0) # [min]
 sol = ODE_solver(u0_SS, (ATP => 1.0, Carbon => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var) # Solves the ODEs for the u0 from glucos addition over tspan
 
-# Includes the experimental data for Mig1 glucos relief and presnet as a scatter-plot
+# Includes the experimental data for Mig1 glucose relief and plots the data as a scatter-plot
 include("../../Data/exp_data_norm.jl")
 scatter(t_Mig1_glucose_relief, data_Mig1_glucose_relief, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
@@ -29,7 +29,7 @@ xlabel!("t [min]")
 ylabel!("log(nMig1/cMig1)")
 ylims!((1.0, 1.6))
 xticks!([0.0, 10.0, 20.0])
-# yticks!([1.2, 1.4])
+yticks!([1.0, 1.2, 1.4, 1.6])
 title!("Glukostillsättning")
 display(plot1)
 
