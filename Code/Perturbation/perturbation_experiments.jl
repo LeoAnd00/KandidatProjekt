@@ -97,6 +97,9 @@ using Plots
 using StatsPlots
 
 default(dpi=300)
+# default(ytickfont=7)
+# default(xtickfont=7)
+# default(titlefont=8)
 
 ######## Wild type ############
 shifts_wt = vcat(Rib_shifts_wt_norm, cAMP_shifts_wt_norm, raw_shifts_wt)
@@ -108,13 +111,14 @@ shift_names_wt = ["\$\\mathrm{Rib}\$", "\$\\mathrm{cAMP}\$", "\$\\mathrm{cAMP}\$
  "\$\\mathrm{Sch9_{gtr1-gtr2}}\$","\$\\mathrm{Sch9_{lst4-lst7}}\$"
 ]
 
-# Calculates the diffrence between steady state solutions, add them to an empty vector
+
 shift_magnitude_wt = AbstractFloat[]
+# Calculates the diffrence between steady state values and adding them to the vector
 for i in range(1, length(shifts_wt))
     push!(shift_magnitude_wt, last.(shifts_wt[i]) - first.(shifts_wt[i]))
 end 
  
-# Instead of using the highest and lowest value from the data and simulation, 0 and 100 is used as scaling factors 
+# Instead of using the highest and lowest value from the data and simulation, 0 and 100 is used as scaling for these, since the unit is percentage
 exp_data_wt_special_raw = [2.0 => 73.0, 2.0 => 73.0] # Sch9_gtr1_gtr2, Sch9_lst4_lst7
 exp_data_wt_special_norm = Minmaxnorm_shifts(exp_data_wt_special_raw, 0, 100.0)
 
@@ -123,7 +127,7 @@ exp_data_wt_raw = [150.0 => 600.0, 0.25 => 1.1, 0.25 => 1.1, 0.05 => 2.25, 700.0
 # Combinde all experimental data
 exp_data_wt = vcat(exp_data_wt_norm, exp_data_wt_special_norm)
 
- # Calculates the diffrence between experimental data
+ # Calculates the diffrence between the values for the experimental data
 exp_shift_magnitude_wt = AbstractFloat[]
 for i in range(1, length(exp_data_wt))
     push!(exp_shift_magnitude_wt, last.(exp_data_wt[i]) - first.(exp_data_wt[i]))
@@ -132,19 +136,23 @@ end
 # Creats a vector with the diffrence from pre- and post-shift for both experimental data and simulations ready to plot
 shift_values_wt = [shift_magnitude_wt exp_shift_magnitude_wt] 
 
-plot1 = groupedbar(                                                                                                                                         
+plot11 = groupedbar(                                                                                                                                         
     shift_values_wt, group=repeat(["Simulering", "Experiment"], inner = length(shift_names_wt)), xlims=(-1.05, 1.05),
-    yticks=(1:length(shift_names_wt), shift_names_wt), bar_position=:group, ytickfont=font(9), legend=:topleft,
-    ylabel="Signalmolekyler, vildtyp", xlabel="Skiftets magnitud", bar_width = 0.65, framestyle=:box, orientation=:horizontal
+    yticks=(1:length(shift_names_wt), shift_names_wt), bar_position=:group, legend=:topleft, ytickfont=6, 
+    bar_width = 0.65, framestyle=:box, orientation=:horizontal
 )
-display(plot1)
+
+# title!("Vildtyp")
+# xlabel!("Skiftets magnitud")
+# ylabel="Signalmolekyler"
+# display(plot11)
 
 file_name = "perturb_wt"
-savefig(plot1, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".png")    
-savefig(plot1, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".pdf")
+savefig(plot11, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".png")    
+savefig(plot11, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".pdf")
 
 ####### Mutants #######
-# Do the same thingas above with the mutants
+# Do the same as above, but for the mutants
 
 # Scales the data according to the Minmaxnorm function 
 # cAMP
@@ -183,7 +191,7 @@ exp_data_mutant_norm = vcat(exp_data_Rib_norm[2], exp_data_cAMP_pde_norm[2], exp
 
 exp_data_mutant = vcat(exp_data_mutant_norm, exp_data_mutant_special_norm)
 
-# Calculates the diffrence between steady state solutions, add them to an epty vector
+# Calculates the diffrence between steady state values
 exp_shift_magnitude_mutant = AbstractFloat[]
 for i in range(1, length(exp_data_mutant))
     push!(exp_shift_magnitude_mutant, last.(exp_data_mutant[i]) - first.(exp_data_mutant[i]))
@@ -192,13 +200,15 @@ end
 # Creats the final vector, then plot results
 shift_values_mutant = [shift_magnitude_mutant exp_shift_magnitude_mutant]
 
-plot2 = groupedbar(
+plot12 = groupedbar(
     shift_values_mutant, group=repeat(["Simulering", "Experiment"], inner = length(shift_names_mutant)),
-    yticks=(1:length(shift_names_mutant), shift_names_mutant), xlims=(-1.05, 1.05), bar_position=:group, bar_width=0.65, legend=:topleft,
-    ylabel="Signalmolekyler, mutanter", xlabel="Skiftets magnitud", orientation=:horizontal, ytickfont = font(9), framestyle=:box
+    yticks=(1:length(shift_names_mutant), shift_names_mutant), xlims=(-1.05, 1.05), bar_position=:group, bar_width=0.65, 
+    legend=:topleft, xlabel="Skiftets magnitud", ytickfont=6, orientation=:horizontal, framestyle=:box
 )
-display(plot2)
+title!("Mutanter")
+# ylabel="Signalmolekyler"
+# display(plot12)
 
 file_name = "perturb_mut"
-savefig(plot2, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".png")    
-savefig(plot2, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".pdf") 
+savefig(plot12, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".png")    
+savefig(plot12, pwd()*"/Results/Perturbation_reconstructed/"*file_name*".pdf") 

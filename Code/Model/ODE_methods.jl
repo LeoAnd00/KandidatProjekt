@@ -4,6 +4,7 @@
 using DifferentialEquations
 using DiffEqSensitivity
 using Documenter
+using Plots
 
 color_jalihal = RGB(59/255,129/255,131/255)
 
@@ -33,7 +34,7 @@ function Steady_state_solver(p_const, p_var, model_inputs)
 
     SS_prob = SteadyStateProblem(ODE_sys, u0, p_cat)
 
-    SS_sol = solve(SS_prob, DynamicSS(Rodas5(), abstol=1e-9, reltol=1e-9))
+    SS_sol = solve(SS_prob, DynamicSS(Rodas4P(), abstol=1e-9, reltol=1e-9))
     return SS_sol.u
 end
 
@@ -46,7 +47,7 @@ function Steady_state_solver(p_conc, model_inputs)
     end
     SS_prob = SteadyStateProblem(ODE_sys, u0, p_conc) 
 
-    SS_sol = solve(SS_prob, DynamicSS(Rodas5(), abstol=1e-9, reltol=1e-9)) 
+    SS_sol = solve(SS_prob, DynamicSS(Rodas4P(), abstol=1e-9, reltol=1e-9)) 
     return SS_sol.u
 end
 
@@ -72,7 +73,7 @@ function ODE_solver(u0_SS, model_inputs, tspan, p_const, p_var)
     end
 
     prob = ODEProblem(ODE_sys, u0_SS, tspan, p)
-    return solve(prob, Rodas5(), abstol=1e-9, reltol=1e-9)
+    return solve(prob, Rodas4P(), abstol=1e-9, reltol=1e-9)
 end
 
 function ODE_solver(u0_SS, model_inputs, tspan, p_conc)
@@ -82,7 +83,7 @@ function ODE_solver(u0_SS, model_inputs, tspan, p_conc)
     end
 
     prob = ODEProblem(ODE_sys, u0_SS, tspan, p_conc)
-    return solve(prob, Rodas5(), abstol=1e-9, reltol=1e-9)
+    return solve(prob, Rodas4P(), abstol=1e-9, reltol=1e-9)
 end
 
 """
@@ -98,7 +99,7 @@ function sensitivity_solver(u0_SS, model_inputs, tvals, p_const, p_var)
 
     prob = ODEForwardSensitivityProblem(ODE_sys, u0_SS, [first(tvals),last(tvals)], p, sensealg=ForwardSensitivity(autodiff=false))
 
-    return solve(prob,Rodas5(autodiff = false),saveat=tvals, sensealg=ForwardSensitivity(autodiff=false))
+    return solve(prob,Rodas4P(autodiff = false),saveat=tvals, sensealg=ForwardSensitivity(autodiff=false))
 end
 
 function sensitivity_solver(u0_SS, model_inputs, tspan, p_conc)
@@ -109,7 +110,7 @@ function sensitivity_solver(u0_SS, model_inputs, tspan, p_conc)
 
     prob = ODEForwardSensitivityProblem(ODE_sys, u0_SS, tspan, p_conc)
 
-    return solve(prob, Rodas5())
+    return solve(prob, Rodas4P())
 end
 
 """
