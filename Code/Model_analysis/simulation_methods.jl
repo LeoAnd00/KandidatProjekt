@@ -159,3 +159,57 @@ function plot_wt_mut_results(show_plot::Bool, sol_array_wt, sol_array_mut, outpu
         display(plot1)
     end
 end
+
+###### For plotting all simulation results in subplot #######
+
+function return_simulation_result(sol_array, output_variable::Num, x_lims, y_lims, plot_title::String, legend_placement)
+
+    for (index, sol) in enumerate(sol_array)
+        if index == 1
+        global plot1 = plot(sol, vars = output_variable, title=plot_title, legend=legend_placement, label=labels[index], color=color_scheme[index], show = false)
+        else
+            plot!(sol, vars = output_variable, label=labels[index], color=color_scheme[index], show = false)
+        end
+    end
+
+    ylims!(y_lims)
+    xlims!(x_lims)
+    ylabel!(replace("$output_variable", "(t)" => ""))
+    if string(output_variable)=="Gis1(t)" && plot_title=="Glukostillsättning"
+        xlabel!("t [min]")
+    else
+        xlabel!("")
+    end
+
+    return plot1
+end
+
+function return_wt_mut_results(sol_array_wt, sol_array_mut, output_variable::Num, x_lims, y_lims, plot_title::String, legend_placement)
+    
+    sol_arrays = [sol_array_wt, sol_array_mut]
+
+    for (index_array, sol_array) in enumerate(sol_arrays) 
+        for (index, sol) in enumerate(sol_array)
+            if index_array == 1     # plot the wild type
+                if index == 1   # create the plot object
+                global plot1 = plot(sol, vars = output_variable, title=plot_title, legend=legend_placement, label=labels[index], color=color_scheme[index], show = false)
+                else
+                    plot!(sol, vars = output_variable, label=labels[index], color=color_scheme[index], show = false)
+                end
+            else    # plot the mutants
+                plot!(sol, vars = output_variable, label="", color=color_scheme[index], linestyle=:dash, show = false)
+            end
+        end
+    end
+
+    # Adds invisible lines for extra legend entries
+    plot!([1], [0], label = "vildtyp", color="black")
+    plot!([1], [0], linestyle=:dash, label="mutant", color="black")
+
+    ylims!(y_lims)
+    xlims!(x_lims)
+    xlabel!("t [min]")
+    ylabel!(replace("$output_variable", "(t)" => ""))
+
+    return plot1
+end
