@@ -15,4 +15,5 @@ width = 1000
 height = 300
 
 
-Plots.heatmap(abs_senses',xticks = (1:81,x_labels),yticks = (1:3,y_labels),xrotation=90,size = (width,height),bottom_margin = 75px)
+Plots.heatmap(abs_senses',xticks = (1:81,x_labels),yticks = (1:3,y_labels),xrotation=90,
+size = (width,height),bottom_margin = 75px)
