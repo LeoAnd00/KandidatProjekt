@@ -1,4 +1,9 @@
 using StatsPlots
+"""
+  Histograms_of_cost()
+
+  Makes a subplot for all histograms displaying the cost for all ODE solutions with data.
+"""
 function Histograms_of_cost()
   include("../../Results/Parameter_values/Results_from_optimization.jl")
   #include("Cost_for_histograms.jl")

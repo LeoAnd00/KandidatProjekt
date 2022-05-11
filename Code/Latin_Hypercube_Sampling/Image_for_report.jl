@@ -1,10 +1,12 @@
 using LatinHypercubeSampling
 using Plots
 
-plan = randomLHC(20,2)
-scaled_plan = scaleLHC(plan,[(0.0,1.0),(0.0,1.0)])
+# Creates a figure that illustrates the difference between LHS and random sampling
 
-gr() # We will continue onward using the GR backend
+plan = randomLHC(20,2)
+scaled_plan = scaleLHC(plan,[(0.0,1.0),(0.0,1.0)]) # Defines the interval for which values the 2 dimensions can take
+
+gr() 
 plotd = plot(scaled_plan[:,1], scaled_plan[:,2], seriestype = :scatter, title = "Latin Hypercube Sampling", legend = false)
 
 plotd2 = plot(rand(20), rand(20), seriestype = :scatter, title = "Random Sampling", legend = false, color = "orange")
@@ -16,7 +18,10 @@ ylabel!("Dimension 2")
 xlims!((-0.1, 1.1))
 ylims!((-0.1, 1.1))
 
-
 display(plot_result)
-savefig(plot_result, pwd()*"/Results/LHS/LHS_png.png")
-savefig(plot_result, pwd()*"/Results/LHS/LHS_svg.svg")
+
+Want_to_plot = false
+if Want_to_plot == true
+    savefig(plot_result, pwd()*"/Results/LHS/LHS_png.png")
+    savefig(plot_result, pwd()*"/Results/LHS/LHS_svg.svg")
+end

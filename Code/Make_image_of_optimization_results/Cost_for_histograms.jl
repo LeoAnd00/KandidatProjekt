@@ -1,10 +1,20 @@
+"""
+    Cost_for_histograms()
+
+    Calculates the cost for each set of data for each parametervector from optimization and Jalihal m.fl.
+"""
 function Cost_for_histograms()
     include("../Parameter_Estimation/Optimization.jl")
     include("../Model/ODE_functions.jl")
     include("../Model/parameter_values.jl")
     include("../../Data/exp_data.jl")
     include("../../Results/Parameter_values/Results_from_optimization.jl")
-    function calc_cost_test(p_var_FWD, p_const_FWD)
+    """
+        calc_cost_for_p(p_var_FWD, p_const_FWD)
+
+        Caculates the cost based on p_var_FWD and p_const_FWD.
+    """
+    function calc_cost_for_p(p_var_FWD, p_const_FWD)
 
         function Calc_cost_Glucose_addition_Mig1(p_var_FWD, p_const_FWD, u0_SS)
 
@@ -270,8 +280,8 @@ function Cost_for_histograms()
         return u_approx
     end
 
-    Cost_alt_1 = calc_cost_test(p_var_alt_1, p_const)
-    Cost_alt_2 = calc_cost_test(p_var_alt_2, p_const)
-    Cost_jalihal = calc_cost_test(p_var_jalihal, p_const)
+    Cost_alt_1 = calc_cost_for_p(p_var_alt_1, p_const)
+    Cost_alt_2 = calc_cost_for_p(p_var_alt_2, p_const)
+    Cost_jalihal = calc_cost_for_p(p_var_jalihal, p_const)
     return Cost_alt_1, Cost_alt_2, Cost_jalihal
 end

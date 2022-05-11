@@ -47,8 +47,6 @@ function Glucose_starvation_Snf1()
     ylims!((0.0, 1.1))
     xlims!((-0.5, last(tspan_Snf1)*1.02))
     title!("Glucose starvation Snf1")
-    #display(plot1)
-    #savefig(plot1, pwd()*"/Results/Plots_for_new_and_old_paramter_values/Snf1.png")
     return plot1
 end
 
@@ -89,7 +87,5 @@ function Glucose_starvation_Sch9()
     ylims!((0.0, 1.1))
     xlims!((-0.5, last(tspan_Sch9)*1.02))
     title!("Glucose starvation Sch9")
-    #display(plot2)
-    #savefig(plot2, pwd()*"/Results/Plots_for_new_and_old_paramter_values/Glucose_starvation_Sch9.png")
     return plot2
 end

@@ -50,7 +50,5 @@ function Rapamycin_treatment()
     xlabel!("t [min]")
     ylabel!("Rel. RPL32 mRNA") # Motsvarar konc. Rib relativt steady state
     title!("Rapamycin treatment, TORC1_T = 0")
-    #display(plot1)
-    #savefig(plot1, pwd()*"/Results/Plots_for_new_and_old_paramter_values/Rapamycin.png")
     return plot1
 end

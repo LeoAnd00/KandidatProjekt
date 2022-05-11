@@ -50,7 +50,5 @@ function Glucose_addition_Sch9_cAMP()
     ylims!((0, 1.1))
     xlims!((-0.03, last(tspan)*1.01))
     title!("Glucose addition Sch9\\Delta")
-    #display(plot1)
-    #savefig(plot1, pwd()*"/Results/Plots_for_new_and_old_paramter_values/Glucose_addition_Sch9.png")
     return plot1
 end

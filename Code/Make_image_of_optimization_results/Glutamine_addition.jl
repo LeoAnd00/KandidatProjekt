@@ -47,8 +47,6 @@ function Glutamine_addition_L()
     ylims!((0, 1.1))
     xlims!((-0.5, last(tspan)*1.02))
     title!("Glutamine addition, Low Glutamine (0.3)")
-    #display(plot1)
-    #savefig(plot1, pwd()*"/Results/Plots_for_new_and_old_paramter_values/glutamin_low.png")
     return plot1
 end
 
@@ -91,7 +89,5 @@ function Glutamine_addition_H()
     xlims!((-0.5, last(tspan)*1.02))
     ylabel!("Sch9")
     title!("Glutamine addition, High glutamine")
-    #display(plot2)
-    #savefig(plot2, pwd()*"/Results/Plots_for_new_and_old_paramter_values/Glutamin_high.png")
     return plot2
 end

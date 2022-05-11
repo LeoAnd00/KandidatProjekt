@@ -1,8 +1,10 @@
-include("plot_for_all_p.jl")
+# Makes a plot for visualisation of results from optimization
+
+include("plot_for_all_ODE_solutions_with_data.jl")
 include("Histogram_plots_of_cost.jl")
 include("../../Results/Parameter_values/Results_from_optimization.jl")
 
-plot1 = plot_for_all_p()
+plot1 = plot_for_all_ODE_solutions_with_data()
 plot2 = Histograms_of_cost()
 
 leg_test = true
@@ -44,7 +46,10 @@ elseif leg_test == true
     plot5 = plot(plot3,plot4, layout = grid(2, 1, heights = [0.05, 0.95]), titlefontsize = 14, guidefontsize = 10, guide_position = :left, margin= 20Plots.mm, markersize = 5.5, markercolor="blue", markerstrokewidth=0.2)
     plot!(plot5,size=(3000,3500))
     display(plot5)
-    savefig(plot5, pwd()*"/Results/Plots_for_new_and_old_paramter_values/plot_and_histogram_for_p_sets_with_legend_test.png")
+    Want_to_plot = false
+    if Want_to_plot == true
+        savefig(plot5, pwd()*"/Results/Plots_for_new_and_old_paramter_values/plot_and_histogram_for_p_sets_with_legend_test.png")
+    end
 end
 
 

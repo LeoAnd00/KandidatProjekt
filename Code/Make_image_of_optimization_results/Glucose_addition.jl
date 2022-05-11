@@ -22,7 +22,6 @@ function Glucose_addition_cAMP()
 
     plot!(plot1, sol, vars = cAMP, color = Color_alt_1, lw=2.5, labels= label_alt_1)
 
-
     u0_SS = Steady_state_solver(p_const, p_var_alt_2, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
 
     # Post-shift, Glucose addition => ATP, Carbon = 1
@@ -30,7 +29,6 @@ function Glucose_addition_cAMP()
     sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan_cAMP, p_const, p_var_alt_2)
 
     plot!(plot1, sol, vars=cAMP, color = Color_alt_2, lw=2.5, labels= label_alt_2)
-
 
     u0_SS = Steady_state_solver(p_const, p_var_jalihal, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
 
@@ -45,8 +43,6 @@ function Glucose_addition_cAMP()
     ylims!((0.0, 1.02))
     xlims!((-0.02, last(tspan_cAMP)*1.02))
     title!("Glucose addition cAMP")
-    #display(plot1)
-    #savefig(plot1, pwd()*"/Results/Plots_for_new_and_old_paramter_values/cAMP_gluccos_addition.png")
     return plot1
 end
 
@@ -86,7 +82,5 @@ function Glucose_addition_Sch9()
     ylims!((0.0, 1.02))
     xlims!((-0.3, last(tspan_Sch9)*1.02))
     title!("Glucose addition Sch9 p")
-    #display(plot2)
-    #savefig(plot2, pwd()*"/Results/Plots_for_new_and_old_paramter_values/Glucose_addition_Sch9_2.png")
     return plot2
 end

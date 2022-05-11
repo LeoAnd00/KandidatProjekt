@@ -32,7 +32,6 @@ function Glutamine_addition_gtr1()
 
     plot!(plot1, sol, vars=Sch9, color = Color_alt_1, lw=2.5, labels= label_alt_1)
 
-
     p_var_alt_2[Get_index(p_var_lookup_table, "w_torc_ego")] = w_torc_ego => 0.0
     p_var_alt_2[Get_index(p_var_lookup_table, "w_torc_egoin")] = w_torc_egoin => 0.0
     u0_SS = Steady_state_solver(p_const, p_var_alt_2, (Glutamine_ext => 0.0, Carbon => 1.0, ATP => 1.0)) 
@@ -60,7 +59,5 @@ function Glutamine_addition_gtr1()
     ylims!((0.0, 1.1))
     xlims!((-0.5, last(tspan)*1.02))
     title!("Glutamine addition gtr1\\Delta, Glutamine_{ext} = 1.0")
-    #display(plot1)
-    #savefig(plot1, pwd()*"/Results/Plots_for_new_and_old_paramter_values/gtr1.png")
     return plot1
 end

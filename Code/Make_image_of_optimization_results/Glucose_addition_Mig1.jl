@@ -16,8 +16,6 @@ function Glucose_addition_Mig1()
     include("../../Data/exp_data_norm.jl")
 
     plot1 = scatter(t_Mig1_glucose_relief, data_Mig1_glucose_relief, markersize = 5.5, color = color_data, markerstrokewidth=0.8, labels= "Data")
-    # 1e-5 ensures denom != 0
-
 
     u0_SS = Steady_state_solver(p_const, p_var_alt_1, (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
 
@@ -47,12 +45,9 @@ function Glucose_addition_Mig1()
     xlabel!("t [min]")
     ylabel!("log(Mig1/(Mig1_T-Mig1)")
     ylims!((0.9, 1.6))
-    # yticks!([1.2, 1.4])
     title!("Glucose addition")
-    #display(plot1)
-    #savefig(plot1, pwd()*"/Results/Plots_for_new_and_old_paramter_values/Mig1.png")
+
     return plot1
 end
-#plot1 = Glucose_addition_Mig1()
-#display(plot1)
+
 

@@ -1,4 +1,9 @@
-function plot_for_all_p()
+"""
+    plot_for_all_ODE_solutions_with_data()
+
+    Makes a subplot for all ODE solutions with data for all 3 parametervectors.
+"""
+function plot_for_all_ODE_solutions_with_data()
     include("Glucose_addition_Mig1.jl")
     include("Glucose_addition_Sch9.jl")
     include("Glucose_addition.jl")

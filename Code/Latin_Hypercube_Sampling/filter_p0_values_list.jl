@@ -4,11 +4,11 @@ include("../Model/ODE_functions.jl")
 include("../Model/parameter_values.jl") 
 
 """
-    Check_if_p_MK_under_x(x) 
+    filter_p0_values_list(x) 
 
     Creates a list called p_0_values_MK_under_x.csv which contains all parametervectors from p_0_values.csv with a cost below x.
 """
-function Check_if_p_MK_under_x(x) 
+function filter_p0_values_list(x) 
     N = 0
     df = CSV.read("Intermediate/p_0_values.csv", DataFrame)
     for i in 1:(length(df[1,:])-1)
@@ -33,5 +33,5 @@ function Check_if_p_MK_under_x(x)
     return N
 end
 
-x = 1.6
-Check_if_p_MK_under_x(x)
+x = 1.6 # Define highest allowed cost
+filter_p0_values_list(x)
