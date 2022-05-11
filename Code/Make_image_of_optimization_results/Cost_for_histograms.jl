@@ -234,16 +234,21 @@ function Cost_for_histograms()
             Carbon => 1.0, ATP => 1.0), tspan, p_const_FWD, p_var_FWD, 
             timelist_for_ode)
         
-            u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
+            u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE 
+            # system
             
             #Check if sol was a success
             u_approx = Check_if_cost_is_a_success(sol, u_approx)
 
-            MK_Glutamine_addition_Sch9_gtr1Delta = sum((data_for_ode - u_approx).^2)
+            MK_Glutamine_addition_Sch9_gtr1Delta = sum((data_for_ode - 
+            u_approx).^2)
         
-            p_const_FWD[Get_index(p_const_lookup_table, "EGO_T")] = EGO_T => 1.0
-            p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")] = w_torc_ego_true
-            p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")] = w_torc_egoin_true
+            p_const_FWD[Get_index(p_const_lookup_table, "EGO_T")] = 
+            EGO_T => 1.0
+            p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")] = 
+            w_torc_ego_true
+            p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")] = 
+            w_torc_egoin_true
         
             return MK_Glutamine_addition_Sch9_gtr1Delta
         end
@@ -254,43 +259,66 @@ function Cost_for_histograms()
             timelist_for_ode = t_Rib_rap
             tspan = (0.0, 92.0) # [min]
         
-            #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-        
             # Post-shift: Rapamycin treatment => TORC1_T = 0.0 
-            p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = TORC1_T => 0.0
+            p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = 
+            TORC1_T => 0.0
         
-            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
+            sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, 
+            Glutamine_ext => 1.0), tspan, p_const_FWD, p_var_FWD, 
+            timelist_for_ode)
         
-            u_approx = getindex.(sol.u, 25) #ODE for RIB on row 25 in ODE system
+            u_approx = getindex.(sol.u, 25) #ODE for RIB on row 25 in ODE 
+            # system
 
             #Check if sol was a success
             u_approx = Check_if_cost_is_a_success(sol, u_approx)
 
-            MK_Rapamycin_treatment = sum((data_for_ode - (u_approx./(1e-3 + u0_SS[25]))).^2)
+            MK_Rapamycin_treatment = sum((data_for_ode - (u_approx./(1e-3 + 
+            u0_SS[25]))).^2)
         
-            p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = TORC1_T => 1.0
+            p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = 
+            TORC1_T => 1.0
         
             return MK_Rapamycin_treatment
         end
         
-        u0_SS_A_C_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
-        MK_Glucose_starvation_Snf1_p = Calc_cost_Glucose_starvation_Snf1_p(p_var_FWD, p_const_FWD, u0_SS_A_C_G)
-        MK_Glucose_starvation_Sch9_p = Calc_cost_Glucose_starvation_Sch9_p(p_var_FWD, p_const_FWD, u0_SS_A_C_G)
-        MK_Rapamycin_treatment = Calc_cost_Rapamycin_treatment(p_var_FWD, p_const_FWD, u0_SS_A_C_G)
+        u0_SS_A_C_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+        (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
+        MK_Glucose_starvation_Snf1_p = 
+        Calc_cost_Glucose_starvation_Snf1_p(p_var_FWD, p_const_FWD, 
+        u0_SS_A_C_G)
+        MK_Glucose_starvation_Sch9_p = 
+        Calc_cost_Glucose_starvation_Sch9_p(p_var_FWD, p_const_FWD, 
+        u0_SS_A_C_G)
+        MK_Rapamycin_treatment = 
+        Calc_cost_Rapamycin_treatment(p_var_FWD, p_const_FWD, u0_SS_A_C_G)
 
-        u0_SS_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0))
-        MK_Glucose_addition_Mig1 = Calc_cost_Glucose_addition_Mig1(p_var_FWD, p_const_FWD, u0_SS_G)
-        MK_Glucose_addition_cAMP = Calc_cost_Glucose_addition_cAMP(p_var_FWD, p_const_FWD, u0_SS_G)
-        MK_Glucose_addition_Sch9_p = Calc_cost_Glucose_addition_Sch9_p(p_var_FWD, p_const_FWD, u0_SS_G)
+        u0_SS_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (ATP => 0.0,
+        Carbon => 0.0, Glutamine_ext => 1.0))
+        MK_Glucose_addition_Mig1 = Calc_cost_Glucose_addition_Mig1(p_var_FWD, 
+        p_const_FWD, u0_SS_G)
+        MK_Glucose_addition_cAMP = Calc_cost_Glucose_addition_cAMP(p_var_FWD, 
+        p_const_FWD, u0_SS_G)
+        MK_Glucose_addition_Sch9_p = 
+        Calc_cost_Glucose_addition_Sch9_p(p_var_FWD, p_const_FWD, u0_SS_G)
 
-        u0_SS_A_C = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0))
-        MK_Sch9P_glutamine_L = Calc_cost_Sch9P_glutamine_L(p_var_FWD, p_const_FWD, u0_SS_A_C)
-        MK_Sch9P_glutamine_H = Calc_cost_Sch9P_glutamine_H(p_var_FWD, p_const_FWD, u0_SS_A_C)
+        u0_SS_A_C = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+        (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0))
+        MK_Sch9P_glutamine_L = Calc_cost_Sch9P_glutamine_L(p_var_FWD, 
+        p_const_FWD, u0_SS_A_C)
+        MK_Sch9P_glutamine_H = Calc_cost_Sch9P_glutamine_H(p_var_FWD, 
+        p_const_FWD, u0_SS_A_C)
 
-        MK_Glucose_addition_Sch9 = Calc_cost_Glucose_addition_Sch9(p_var_FWD, p_const_FWD)
-        MK_Glutamine_addition_Sch9_gtr1Delta = Calc_cost_Glutamine_addition_Sch9_gtr1Delta(p_var_FWD, p_const_FWD)
+        MK_Glucose_addition_Sch9 = Calc_cost_Glucose_addition_Sch9(p_var_FWD, 
+        p_const_FWD)
+        MK_Glutamine_addition_Sch9_gtr1Delta = 
+        Calc_cost_Glutamine_addition_Sch9_gtr1Delta(p_var_FWD, p_const_FWD)
 
-        MK = [MK_Glucose_addition_Mig1, MK_Glucose_addition_Sch9, MK_Glucose_addition_cAMP, MK_Glucose_addition_Sch9_p, MK_Glucose_starvation_Snf1_p, MK_Glucose_starvation_Sch9_p, MK_Sch9P_glutamine_L, MK_Sch9P_glutamine_H, MK_Glutamine_addition_Sch9_gtr1Delta, MK_Rapamycin_treatment]
+        MK = [MK_Glucose_addition_Mig1, MK_Glucose_addition_Sch9, 
+        MK_Glucose_addition_cAMP, MK_Glucose_addition_Sch9_p, 
+        MK_Glucose_starvation_Snf1_p, MK_Glucose_starvation_Sch9_p, 
+        MK_Sch9P_glutamine_L, MK_Sch9P_glutamine_H, 
+        MK_Glutamine_addition_Sch9_gtr1Delta, MK_Rapamycin_treatment]
 
         return MK
     end

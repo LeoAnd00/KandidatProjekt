@@ -65,7 +65,8 @@ elseif leg_test == true
     display(plot5)
     Want_to_plot = false
     if Want_to_plot == true
-        savefig(plot5, pwd()*"/Results/Plots_for_new_and_old_paramter_values/plot_and_histogram_for_p_sets_with_legend_test.png")
+        savefig(plot5, 
+        pwd()*"/Results/Plots_for_new_and_old_paramter_values/Result_plot.png")
     end
 end
 
