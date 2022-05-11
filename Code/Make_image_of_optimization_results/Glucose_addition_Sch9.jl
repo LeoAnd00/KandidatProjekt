@@ -62,6 +62,6 @@ function Glucose_addition_Sch9_cAMP()
     ylabel!("cAMP")
     ylims!((0, 1.1))
     xlims!((-0.03, last(tspan)*1.01))
-    title!("Glucose addition Sch9\\Delta")
+    title!("Glukostillsättning Sch9\\Delta")
     return plot1
 end

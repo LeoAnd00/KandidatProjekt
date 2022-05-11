@@ -60,7 +60,7 @@ function Glucose_starvation_Snf1()
     ylabel!("Snf1")
     ylims!((0.0, 1.1))
     xlims!((-0.5, last(tspan_Snf1)*1.02))
-    title!("Glucose starvation Snf1")
+    title!("Glukossvältning Snf1")
     return plot1
 end
 
@@ -113,6 +113,6 @@ function Glucose_starvation_Sch9()
     ylabel!("Sch9")
     ylims!((0.0, 1.1))
     xlims!((-0.5, last(tspan_Sch9)*1.02))
-    title!("Glucose starvation Sch9")
+    title!("Glukossvältning Sch9")
     return plot2
 end

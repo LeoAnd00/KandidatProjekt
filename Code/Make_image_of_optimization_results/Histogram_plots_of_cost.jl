@@ -31,7 +31,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "log(Mig1/(Mig1_T-Mig1)",
+    title = "Glukostillsättning Mig1",
     legend = false
   )
 
@@ -41,7 +41,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glucose addition Sch9\\Delta",
+    title = "Glukostillsättning Sch9\\Delta",
     legend = false
   )
 
@@ -51,7 +51,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glucose addition cAMP",
+    title = "Glukostillsättning cAMP",
     legend = false
   )
 
@@ -61,7 +61,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glucose addition Sch9 p",
+    title = "Glukostillsättning Sch9 p",
     legend = false
   )
 
@@ -71,7 +71,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glucose starvation Snf1",
+    title = "Glukossvältning Snf1",
     legend = false
   )
 
@@ -81,7 +81,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glucose starvation Sch9",
+    title = "Glukossvältning Sch9",
     legend = false
   )
 
@@ -91,7 +91,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glutamine addition, Low Glutamine (0.3)",
+    title = "Kvävetillsättning (Låg, 0.3)",
     legend = false
   )
 
@@ -101,7 +101,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glutamine addition, High glutamine",
+    title = "Kvävetillsättning (Hög, 1.0)",
     legend = false
   )
 
@@ -111,7 +111,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glutamine addition gtr1\\Delta, Glutamine_{ext} = 1.0",
+    title = "Kvävetillsättning gtr1\\Delta",
     legend = false
   )
 
@@ -121,7 +121,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Rapamycin treatment, TORC1_T = 0",
+    title = "Rapamycin, (TORC1_T = 0)",
     legend = false
   )
   plot1 = plot(His1, His2, His3, His4, His5, His6, His7, His8, His9, His10, 

@@ -55,7 +55,7 @@ function Glucose_addition_cAMP()
     ylabel!("cAMP")
     ylims!((0.0, 1.02))
     xlims!((-0.02, last(tspan_cAMP)*1.02))
-    title!("Glucose addition cAMP")
+    title!("Glukostillsättning cAMP")
     return plot1
 end
 
@@ -105,6 +105,6 @@ function Glucose_addition_Sch9()
     ylabel!("Sch9")
     ylims!((0.0, 1.02))
     xlims!((-0.3, last(tspan_Sch9)*1.02))
-    title!("Glucose addition Sch9 p")
+    title!("Glukostillsättning Sch9 p")
     return plot2
 end

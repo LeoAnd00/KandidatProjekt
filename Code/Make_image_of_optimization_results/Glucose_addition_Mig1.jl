@@ -59,7 +59,7 @@ function Glucose_addition_Mig1()
     xlabel!("t [min]")
     ylabel!("log(Mig1/(Mig1_T-Mig1)")
     ylims!((0.9, 1.6))
-    title!("Glucose addition")
+    title!("Glukostillsättning Mig1")
 
     return plot1
 end

@@ -13,7 +13,7 @@ plotd = plot(scaled_plan[:,1], scaled_plan[:,2], seriestype = :scatter,
 title = "Latin Hypercube Sampling", legend = false)
 
 plotd2 = plot(rand(20), rand(20), seriestype = :scatter, 
-title = "Random Sampling", legend = false, color = "orange")
+title = "Slumpmässigt urval", legend = false, color = "orange")
 l = @layout [a b]
 
 plot_result = plot(plotd, plotd2,layout = l, gridalpha=0.3,xticks=0.0:0.2:1.0,

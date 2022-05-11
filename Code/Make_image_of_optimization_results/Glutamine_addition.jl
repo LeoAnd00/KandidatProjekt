@@ -63,7 +63,7 @@ function Glutamine_addition_L()
     ylabel!("Sch9")
     ylims!((0, 1.1))
     xlims!((-0.5, last(tspan)*1.02))
-    title!("Glutamine addition, Low Glutamine (0.3)")
+    title!("Kvävetillsättning (Låg, 0.3)")
     return plot1
 end
 
@@ -120,6 +120,6 @@ function Glutamine_addition_H()
     xlabel!("t [min]")
     xlims!((-0.5, last(tspan)*1.02))
     ylabel!("Sch9")
-    title!("Glutamine addition, High glutamine")
+    title!("Kvävetillsättning (Hög, 1.0)")
     return plot2
 end

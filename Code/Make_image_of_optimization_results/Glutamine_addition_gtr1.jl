@@ -75,6 +75,6 @@ function Glutamine_addition_gtr1()
     ylabel!("Sch9")
     ylims!((0.0, 1.1))
     xlims!((-0.5, last(tspan)*1.02))
-    title!("Glutamine addition gtr1\\Delta, Glutamine_{ext} = 1.0")
+    title!("Kvävetillsättning gtr1\\Delta")
     return plot1
 end
