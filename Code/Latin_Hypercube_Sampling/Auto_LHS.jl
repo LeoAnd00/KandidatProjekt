@@ -8,11 +8,12 @@ using DataFrames
 include("../Model/ODE_functions.jl")
 include("../Model/parameter_values.jl")
 include("../Parameter_Estimation/Optimization.jl")
-######################################### LatinHypercubeSampling ################################################################
+
 """
     Check_if_p_works(p_var, p_const, scaled_plan)
 
-    Checks if the parameter sets from the latin hypercube works and saves them into a CSV file.
+    Checks if the parameter sets from the latin hypercube works and saves them
+    into a CSV file.
 """
 function Check_if_p_works(p_var, p_const, scaled_plan)
 
@@ -58,9 +59,12 @@ end
 """
     main()
 
-    Finds the best parametervector in a list called p_0_values.csv and then generates latin hypercube samples around it
-    (user defines interval), takes the best result and repeats until the user stops the iteration. If none of the costs were 
-    below the previously best one it will try to increase the number of samples by a choosen amount and generate a new latin hypercube.
+    Finds the best parametervector in a list called p_0_values.csv and then 
+    generates latin hypercube samples around it (user defines interval), 
+    takes the best result and repeats until the user stops the iteration. 
+    If none of the costs were below the previously best one it will try to 
+    increase the number of samples by a choosen amount and generate a new 
+    latin hypercube.
 """
 function main()
     include("../Model/parameter_values.jl")
@@ -99,7 +103,9 @@ function main()
         end
         println("Best_i:",Best_i)
         if Best_i == 0
-            Number_of_samples = Number_of_samples + 50 # Adds 50 to the number of samples if none of the parametervectors had lower cost then the previous one
+            Number_of_samples = Number_of_samples + 50 # Adds 50 to the number
+            # of samples if none of the parametervectors had lower cost then 
+            # the previous one
             continue
         end
         try
@@ -143,4 +149,3 @@ end
 
 main()
 
-################################################################################################################################

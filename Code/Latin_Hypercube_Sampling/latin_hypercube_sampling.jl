@@ -8,11 +8,12 @@ using DataFrames
 include("../Model/ODE_functions.jl")
 include("../Model/parameter_values.jl")
 include("../Parameter_Estimation/Optimization.jl")
-######################################### LatinHypercubeSampling ################################################################
+
 """
     Check_if_p_works(p_var, p_const, scaled_plan)
 
-    Checks if the parameter sets from the latin hypercube works and saves them into a CSV file.
+    Checks if the parameter sets from the latin hypercube works and saves 
+    them into a CSV file.
 """
 function Check_if_p_works(p_var, p_const, scaled_plan)
 
@@ -59,7 +60,9 @@ end
 """
     main()
 
-    Here you define different settings for the LHS, like number of samples, and then it generates a LHS and runs the Check_if_p_works(p_var, p_const, scaled_plan)
+    Here you define different settings for the LHS, like number of samples, 
+    and then it generates a LHS and runs the Check_if_p_works(p_var, p_const, 
+    scaled_plan)
 """
 function main()
     include("../Model/parameter_values.jl")

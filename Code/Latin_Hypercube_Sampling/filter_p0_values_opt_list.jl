@@ -6,7 +6,8 @@ include("../Model/parameter_values.jl")
 """
     filter_p0_values_opt_list() 
 
-    Gives the user the parametervector in a form suitable for ModelingToolkit for parametervector i in optimization_of_p0.csv.
+    Gives the user the parametervector in a form suitable for ModelingToolkit 
+    for parametervector i in optimization_of_p0.csv.
 """
 function filter_p0_values_opt_list()
     df = CSV.read("Intermediate/optimization_of_p0.csv", DataFrame)

@@ -6,8 +6,8 @@ include("../Model/parameter_values.jl")
 """
     Get_one_vector_from_p0_values_list(x) 
 
-    Gives the user the parametervector in a form suitable for ModelingToolkit for parametervector i in p_0_values.csv that in
-    the Intermediate folder.
+    Gives the user the parametervector in a form suitable for ModelingToolkit 
+    for parametervector i in p_0_values.csv that in the Intermediate folder.
 """
 function Get_one_vector_from_p0_values_list()
     df = CSV.read("Intermediate/p_0_values.csv", DataFrame)
