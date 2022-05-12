@@ -13,7 +13,7 @@ include("../Model/parameter_values.jl")
 
 # Pre-shift => Carbon, ATP = 1, glucose abundence 
 include("../Model/ODE_methods.jl")
-u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) # Returns the steady state value for p
+u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) 
 
 # Post-shift, Glucose starvation => Carbon, ATP = 0
 tspan_Snf1 = (0.0, 61.0) # [min]
@@ -43,7 +43,10 @@ tspan_Sch9 = (0.0, 30.0) # [min]
 sol_sch9 = ODE_solver(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan_Sch9, p_const, p_var)
 
 # Plot solution with exp data from a different file
-plot6 = scatter(t_Sch9_glucose_starve, data_Sch9_glucose_starve, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
+plot6 = scatter(
+    t_Sch9_glucose_starve, data_Sch9_glucose_starve, markersize = 4.5, 
+    markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8
+    )
 plot!(sol_sch9, vars=Sch9, legend=false, color=color_jalihal)
 xlabel!("t [min]")
 ylabel!("Sch9")

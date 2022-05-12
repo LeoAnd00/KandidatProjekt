@@ -23,7 +23,8 @@ function Steady_state_pertubation_solver(p_changes, model_inputs_preshift, model
 
     # implement parameter changes
     for i in range(1, length(p_changes))
-        p_conc_copy[Get_index(p_conc_lookup_table, string(first.(p_changes)[i]))] = first.(p_changes)[i] => last.(p_changes)[i]
+        p_conc_copy[Get_index(p_conc_lookup_table, string(first.(p_changes)[i]))] = 
+        first.(p_changes)[i] => last.(p_changes)[i]
     end
 
     u0_SS_preshift = Steady_state_solver(p_conc_copy, model_inputs_preshift) 

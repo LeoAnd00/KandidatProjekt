@@ -1,5 +1,6 @@
-# Innehåller de funktioner och verktyg som är nödvändiga för att lösa steady-state och ODE-systemet 
-# Innehåller även ett verktyg för att normalisera data och ett verktyg för att hitta index i lookup_table
+# Contains the functions and tools required to solve the ODE-model over time and to steady-state .
+# Also contains various tools used throughout this process, such as a normalization function and and
+# a tool to get the index of an element in an array using a lookup table
 
 using DifferentialEquations
 using DiffEqSensitivity
@@ -22,10 +23,10 @@ julia> Steady_state_solver(p_conc, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 
 ```
 """
 function Steady_state_solver(p_const, p_var, model_inputs)
-    
-    p_cat = vcat(p_const, p_var) # Concatenates the component vectors in the form required as input by ModelingToolkit
+    # Concatenates the component vectors in the form required as input by ModelingToolkit
+    p_cat = vcat(p_const, p_var) 
 
-    u0 = zeros(length(eqs))     # Initial concentrations of are zero
+    u0 = zeros(length(eqs))  # Initial concentrations of are zero
 
     # Implements the nutrient condition values as initial guesses, values will be kept during calculations
     for i in range(1, length(model_inputs))
@@ -55,8 +56,8 @@ end
     ODE_solver(u0_SS, model_inputs, tspan, p_const, p_var)
     ODE_solver(u0_SS, model_inputs, tspan, p_conc)
 
-Compute the solution of the ODE system with nutrient conditions of `model_inputs`, and the initial conditions in `u0_SS`.
-Unit of time in `tspan` is minutes. 
+Compute the solution of the ODE system with nutrient conditions of `model_inputs`, 
+and the initial conditions in `u0_SS`. Unit of time in `tspan` is minutes. 
 
 # Examples
 ```julia-repl
@@ -97,7 +98,9 @@ function sensitivity_solver(u0_SS, model_inputs, tvals, p_const, p_var)
         u0_SS[Get_index(u_lookup_table, string(first.(model_inputs)[i]))] = last.(model_inputs)[i]
     end
 
-    prob = ODEForwardSensitivityProblem(ODE_sys, u0_SS, [first(tvals),last(tvals)], p, sensealg=ForwardSensitivity(autodiff=false))
+    prob = ODEForwardSensitivityProblem(
+        ODE_sys, u0_SS, [first(tvals),last(tvals)], p, sensealg=ForwardSensitivity(autodiff=false)
+        )
 
     return solve(prob,Rodas4P(autodiff = false),saveat=tvals, sensealg=ForwardSensitivity(autodiff=false))
 end
@@ -164,10 +167,11 @@ end
 """
     Get_index(list_lookup_table, key)
 
-Retrieve the index of an element in a list using the corresponding `list_lookup_table` and the `key` in the form of a string.
+Retrieve the index of an element in a list using the corresponding `list_lookup_table` 
+using a `key` in the form of a string.
 """
 function Get_index(list_lookup_table, key)
-    return findfirst(x->x==key, list_lookup_table)    # Finds the first instance of the key and returns the index 
+    return findfirst(x->x==key, list_lookup_table) # Finds the first instance of the key and returns the index 
 end
 
 nutrient_shifts = [
@@ -176,7 +180,9 @@ nutrient_shifts = [
 (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), 
 (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0) => (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)
 ]
-nutrient_shifts_lookup_table = ["Glucose starvation", "Glucose addition", "High glutamine", "Nitrogen starvation"] # Shiftningarnas position
+nutrient_shifts_lookup_table = [ 
+    "Glucose starvation", "Glucose addition", "High glutamine", "Nitrogen starvation"
+    ] 
 
 index_glucose_starvation = Get_index(nutrient_shifts_lookup_table, "Glucose starvation")
 index_glucose_addition = Get_index(nutrient_shifts_lookup_table, "Glucose addition")
@@ -196,11 +202,10 @@ function Steady_state_solver_FWD(p_const_FWD, p_var_FWD, model_inputs)
         u0[findfirst(x->x==string(first.(model_inputs)[i]), u_lookup_table)] = last.(model_inputs)[i]
     end
 
-    SS_prob = SteadyStateProblem(ODE_sys, u0, p) # Definierar steady-state problemet, vilket är ett simpelt ODE-problem
+    # Defines the SteadyStateProblem, which corresponds to a simple ODEProblem
+    SS_prob = SteadyStateProblem(ODE_sys, u0, p) 
 
-    SS_sol = solve(SS_prob, DynamicSS(Rodas4P(), abstol=1e-3, reltol=1e-3), abstol=1e-8, reltol=1e-8)#,  maxiters = 1e7) # Löser steady-state problemet
-
-    #println(" result_steady_state: ", SS_sol.retcode)
+    SS_sol = solve(SS_prob, DynamicSS(Rodas4P(), abstol=1e-3, reltol=1e-3), abstol=1e-8, reltol=1e-8)
 
     steady_state_solution = SS_sol.u
 
@@ -214,7 +219,7 @@ function Steady_state_solver_FWD(p_const_FWD, p_var_FWD, model_inputs)
                 if abs(du[i]) > 0.03
                     println("i that gave to big gradient after steady state")
                     println("i = $i")
-                    steady_state_solution = "Not working"# Will be flagged as an error in the next step of optimization
+                    steady_state_solution = "Not working" # Will be flagged as an error in the next step of optimization
                     break
                 end
             end

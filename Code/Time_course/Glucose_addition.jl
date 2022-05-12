@@ -45,7 +45,10 @@ tspan_Sch9 = (0.0, 30.0) # [min]
 sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan_Sch9, p_const, p_var)
 
 # Plot the solutions for Sch9
-plot4 = scatter(t_Sch9_glucose_relief, data_Sch9_glucose_relief, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
+plot4 = scatter(
+    t_Sch9_glucose_relief, data_Sch9_glucose_relief, markersize = 4.5, 
+    markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8
+    )
 plot!(sol, vars = Sch9, legend = false, color=color_jalihal, lw=2.0)
 xlabel!("t [min]")
 ylabel!("Sch9")

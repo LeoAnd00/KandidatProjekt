@@ -1,3 +1,5 @@
+# Plots all the reconstructed plots in a subplot 
+
 using DifferentialEquations
 using ModelingToolkit
 using Plots
@@ -17,19 +19,19 @@ include("../Model/parameter_values.jl")
 
 # Pre-shift => ATP, Carbon = 0 which is glucose starvation
 include("../Model/ODE_methods.jl")
-u0_SS = Steady_state_solver(p_const, p_var, (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0)) # Returns the steady state for the parameters with glucose satarvation
+u0_SS = Steady_state_solver(p_const, p_var, (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0))
 
 
 # Post-shift => ATP, Carbon = 1 which is clucos addition after sarvation
 tspan = (0.0, 20.0) # [min]
-sol = ODE_solver(u0_SS, (ATP => 1.0, Carbon => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var) # Solves the ODEs for the u0 from glucos addition over tspan
+sol = ODE_solver(u0_SS, (ATP => 1.0, Carbon => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var)
 
 # Includes the experimental data for Mig1 glucos relief and presnet as a scatter-plot
 include("../../Data/exp_data_norm.jl")
 scatter(t_Mig1_glucose_relief, data_Mig1_glucose_relief, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
 # Plot the results for Mig1
-plot1 = plot!(sol, vars=log(10, Mig1/(1e-5 + 1.0-Mig1)), color = color_jalihal, legend=false) # 1e-5 ensures denom != 0
+plot1 = plot!(sol, vars=log(10, Mig1/(1e-5 + 1.0-Mig1)), color = color_jalihal, legend=false) 
 xlabel!("")
 ylabel!("log(nMig1/cMig1)")
 ylims!((1.0, 1.6))
@@ -44,11 +46,11 @@ p_const[Get_index(p_const_lookup_table, "Sch9_T")] = Sch9_T => 0.0
 
 # Pre-shift => ATP, Carbon = 0, which is glucos starvation
 include("../Model/ODE_methods.jl")
-u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Return steady state parameters for glucos starvation
+u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) 
 
 # Post-shift => ATP, Carbon = 1, which is glucos addition 
 tspan = (0.0, 3.0) # [min]
-sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var)  # Solves the ODEs for the u0 from glucos addition over tspan
+sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var) 
 
 # Makes a scatter-plot from the experimental data from cAMP 
 scatter(t_sch9Delta_cAMP, data_sch9Delta_cAMP, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
@@ -101,8 +103,8 @@ xlims!((-0.3, last(tspan_Sch9)*1.02))
 title4="Glukostillsättning"
 
 ##### Glucose starvation #####
-# Pre-shift => Carbon, ATP = 1, glucose abundence 
-u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) # Returns the steady state value for p
+# Pre-shift => Carbon, ATP = 1, glucose abundance 
+u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
 
 # Post-shift, Glucose starvation => Carbon, ATP = 0
 tspan_Snf1 = (0.0, 61.0) # [min]
@@ -124,7 +126,7 @@ tspan_Sch9 = (0.0, 30.0) # [min]
 # Solves the ODEs for Sch9 in the same way as Snf1 but for a diffrent tspan
 sol_sch9 = ODE_solver(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan_Sch9, p_const, p_var)
 
-# Plot solution with ex data from a diffrent file
+# Plot solution with ex data from a different file
 plot6 = scatter(t_Sch9_glucose_starve, data_Sch9_glucose_starve,  markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 plot!(sol_sch9, vars=Sch9, legend=false, color=color_jalihal)
 xlabel!("")
@@ -161,7 +163,7 @@ title7="Kvävetillsättning, gtr1\\Delta"
 
 ##### Glutamine addition #####
 include("../Model/parameter_values.jl")
-u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returns steady state values for p from pre-shift
+u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) 
 
 # Low glutamine => Glutamine_ext = 0.3
 tspan = (0.0, 30.0) # [min]
@@ -192,21 +194,21 @@ yticks!([0.0, 0.50, 1.00])
 title9="Kvävetillsättning (hög, 1.0)"
 
 ##### Rapamycin treatment #####
-u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) # Returns steady state for the parameters p
+u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) 
 
 # Post-shift: Rapamycin treatment which means TORC1_T = 0.0 
 p_const[Get_index(p_const_lookup_table, "TORC1_T")] = TORC1_T => 0.0
 
 # Steady-state at starvation which is the initial values for Glutamine addition
 tspan = (0.0, 90.0) # [min]
-sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var) # Solve all ODEs
+sol = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var) 
 
 # Rel. RPL32 mRNA corresponds to (Rib/steady-state value for Rib)
 
 # Plot the results from the simulations and data from a seperate file
 plot10 = scatter(t_Rib_rap, data_Rib_rap,  markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
 
-plot!(sol, vars=Rib/(1e-3+u0_SS[Get_index(u_lookup_table, "Rib(t)")]), legend=false, color=color_jalihal, ) # 1e-2 ensures denom != 0
+plot!(sol, vars=Rib/(1e-3+u0_SS[Get_index(u_lookup_table, "Rib(t)")]), legend=false, color=color_jalihal, )
 xlabel!("t [min]")
 ylabel!("Rel. RPL32 mRNA") # Corresponds to Rib relative to it's steady-state value
 yticks!([0.0, 0.50, 1.00])
