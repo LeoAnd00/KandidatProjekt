@@ -1,4 +1,9 @@
-function plot_for_all_p()
+"""
+    plot_for_all_ODE_solutions_with_data()
+
+    Makes a subplot for all ODE solutions with data for all 3 parametervectors.
+"""
+function plot_for_all_ODE_solutions_with_data()
     include("Glucose_addition_Mig1.jl")
     include("Glucose_addition_Sch9.jl")
     include("Glucose_addition.jl")
@@ -31,7 +36,9 @@ function plot_for_all_p()
     display(plot_Rapamycin_treatment)
     """
 
-    plot1 = plot(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, layout = (5, 2), legend = false, titlefontsize = 14, guidefontsize = 10, guide_position = :left, margin= 20Plots.mm)
+    plot1 = plot(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, layout = (5, 2), 
+    legend = false, titlefontsize = 14, guidefontsize = 10, 
+    guide_position = :left, margin= 20Plots.mm)
     plot!(plot1,size=(1500,2500))
     #display(plot1)
     return plot1

@@ -1,4 +1,10 @@
 using StatsPlots
+"""
+  Histograms_of_cost()
+
+  Makes a subplot for all histograms displaying the cost for all ODE solutions
+  with data.
+"""
 function Histograms_of_cost()
   include("../../Results/Parameter_values/Results_from_optimization.jl")
   #include("Cost_for_histograms.jl")
@@ -6,9 +12,18 @@ function Histograms_of_cost()
   #println(Cost_alt_1)
   #println(Cost_alt_2)
   #println(Cost_jalihal)
-  Cost_alt_1 = [0.02771829851138364, 0.11530809012155227, 0.14658811799803514, 0.038428681050842434, 0.02894780772394849, 0.1127683119230797, 0.06509447763039686, 0.10031530561560253, 0.08076111254137344, 0.0036672576122928754]
-  Cost_alt_2= [0.05048587297214781, 0.10025934231377061, 0.14227750026675529, 0.027846845642827887, 0.06587255617950803, 0.0377115142788618, 0.1709282163040912, 0.1258409006202471, 0.029440758752914818, 0.011341041598241662]
-  Cost_jalihal = [0.04352060436354394, 0.16782352005896917, 0.5803849015840222, 0.0813183538847046, 0.02664445093902895, 0.01521022589708537, 0.6459549142857574, 0.6638851878171327, 0.054569323749060414, 0.01492059687602178]
+  Cost_alt_1 = [0.02771829851138364, 0.11530809012155227, 0.14658811799803514,
+  0.038428681050842434, 0.02894780772394849, 0.1127683119230797, 
+  0.06509447763039686, 0.10031530561560253, 0.08076111254137344, 
+  0.0036672576122928754]
+  Cost_alt_2= [0.05048587297214781, 0.10025934231377061, 0.14227750026675529, 
+  0.027846845642827887, 0.06587255617950803, 0.0377115142788618, 
+  0.1709282163040912, 0.1258409006202471, 0.029440758752914818, 
+  0.011341041598241662]
+  Cost_jalihal = [0.04352060436354394, 0.16782352005896917, 
+  0.5803849015840222, 0.0813183538847046, 0.02664445093902895, 
+  0.01521022589708537, 0.6459549142857574, 0.6638851878171327, 
+  0.054569323749060414, 0.01492059687602178]
 
   His_Glucose_addition_Mig1 = His1 = bar(
     [label_alt_1,label_alt_2,label_jalihal],
@@ -16,7 +31,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "log(Mig1/(Mig1_T-Mig1)",
+    title = "Glukostillsättning Mig1",
     legend = false
   )
 
@@ -26,7 +41,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glucose addition Sch9\\Delta",
+    title = "Glukostillsättning Sch9\\Delta",
     legend = false
   )
 
@@ -36,7 +51,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glucose addition cAMP",
+    title = "Glukostillsättning cAMP",
     legend = false
   )
 
@@ -46,7 +61,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glucose addition Sch9 p",
+    title = "Glukostillsättning Sch9 p",
     legend = false
   )
 
@@ -56,7 +71,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glucose starvation Snf1",
+    title = "Glukossvältning Snf1",
     legend = false
   )
 
@@ -66,7 +81,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glucose starvation Sch9",
+    title = "Glukossvältning Sch9",
     legend = false
   )
 
@@ -76,7 +91,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glutamine addition, Low Glutamine (0.3)",
+    title = "Kvävetillsättning (Låg, 0.3)",
     legend = false
   )
 
@@ -86,7 +101,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glutamine addition, High glutamine",
+    title = "Kvävetillsättning (Hög, 1.0)",
     legend = false
   )
 
@@ -96,7 +111,7 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Glutamine addition gtr1\\Delta, Glutamine_{ext} = 1.0",
+    title = "Kvävetillsättning gtr1\\Delta",
     legend = false
   )
 
@@ -106,10 +121,12 @@ function Histograms_of_cost()
     bar_width = 1,
     color = [Color_alt_1, Color_alt_2, Color_jalihal],
     ylabel = "Cost",
-    title = "Rapamycin treatment, TORC1_T = 0",
+    title = "Rapamycin, (TORC1_T = 0)",
     legend = false
   )
-  plot1 = plot(His1, His2, His3, His4, His5, His6, His7, His8, His9, His10, layout = (5, 2), titlefontsize = 14, guidefontsize = 10, guide_position = :left, margin= 20Plots.mm)
+  plot1 = plot(His1, His2, His3, His4, His5, His6, His7, His8, His9, His10, 
+  layout = (5, 2), titlefontsize = 14, guidefontsize = 10, 
+  guide_position = :left, margin= 20Plots.mm)
   plot!(plot1,size=(1500,2500))
   #display(plot1)
   return plot1

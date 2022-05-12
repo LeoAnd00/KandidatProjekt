@@ -4,18 +4,18 @@ include("../Model/ODE_functions.jl")
 include("../Model/parameter_values.jl")
 
 """
-    Check_if_p_MK_under_x() 
+    filter_p0_values_under_MK_list() 
 
-    Gives the user the parametervector in a form suitable for ModelingToolkit for parametervector i in p_0_values_MK_under_x.csv.
+    Gives the user the parametervector in a form suitable for ModelingToolkit 
+    for parametervector i in p_0_values_MK_under_x.csv.
 """
-function Check_if_p_MK_under_x() 
+function filter_p0_values_under_MK_list() 
     df = CSV.read("Intermediate/p_0_values_MK_under_x.csv", DataFrame)
 
-    i = 2 #Choose manually
+    i = 2 #Choose manually which vector to display
     df = CSV.read("Intermediate/p_0_values_MK_under_x.csv", DataFrame)
     
     MK_that_works = df[:, Symbol("p_0_value_$i")][1:end]
-    #println("MK: ",MK_that_works)
 
     p_names_var = first.(p_var)
 
@@ -31,4 +31,4 @@ function Check_if_p_MK_under_x()
     println("MK: ",df[:, Symbol("p_0_value_$i")][end])
 end
 
-Check_if_p_MK_under_x()
+filter_p0_values_under_MK_list()

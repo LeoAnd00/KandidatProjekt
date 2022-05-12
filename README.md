@@ -20,7 +20,7 @@ Två parametervektorer erhölls som ger en bättre beskrivning av datan. Slutsat
 
 ## Nödvändig programvara
 
-Detta projekt genomfördes med programmeringsspråket **Julia**, version 1.7, inklusive vissa paket som kan ses i Project.toml filen.
+Detta projekt genomfördes med programmeringsspråket **Julia**, version 1.7.2, inklusive vissa paket som kan ses i Project.toml filen.
 
 # Skriven av:
 - Leo Andrekson

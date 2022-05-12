@@ -8,11 +8,12 @@ using DataFrames
 include("../Model/ODE_functions.jl")
 include("../Model/parameter_values.jl")
 include("../Parameter_Estimation/Optimization.jl")
-######################################### LatinHypercubeSampling ################################################################
+
 """
     Check_if_p_works(p_var, p_const, scaled_plan)
 
-    Checks if the parameter sets from the latin hypercube works and saves them into a CSV file.
+    Checks if the parameter sets from the latin hypercube works and saves them
+    into a CSV file.
 """
 function Check_if_p_works(p_var, p_const, scaled_plan)
 
@@ -53,17 +54,17 @@ function Check_if_p_works(p_var, p_const, scaled_plan)
 
     end
 
-    #df = CSV.read("Intermediate/p_0_values.csv", DataFrame)
-    #print(df)
-
     return N
 end
 """
     main()
 
-    Finds the best parametervector in a list called p_0_values.csv and then generates latin hypercube samples around it
-    (user defines interval), takes the best result and repeats until the user stops the iteration. If none of the costs were 
-    below the previously best one it will try to increase the number of samples by a choosen amount and generate a new latin hypercube.
+    Finds the best parametervector in a list called p_0_values.csv and then 
+    generates latin hypercube samples around it (user defines interval), 
+    takes the best result and repeats until the user stops the iteration. 
+    If none of the costs were below the previously best one it will try to 
+    increase the number of samples by a choosen amount and generate a new 
+    latin hypercube.
 """
 function main()
     include("../Model/parameter_values.jl")
@@ -71,7 +72,7 @@ function main()
     MK_list = []
     p_0_var = p_var
     N = 0
-    Number_of_samples = 70
+    Number_of_samples = 200
     while true
         N += 1
         p_var = p_0_var
@@ -79,10 +80,8 @@ function main()
             plan = randomLHC(Number_of_samples,81) #samples, dimensions
 
             plan_scale = [(0.97*last.(p_var)[1],1.03*last.(p_var)[1])]
-            #plan_scale = [(-3.0,3.0)]
             for i in 1:80
                 push!(plan_scale,(0.97*last.(p_var)[i+1],1.03*last.(p_var)[i+1]))
-                #push!(plan_scale,(-3.0,3.0))
             end
 
             scaled_plan = scaleLHC(plan,plan_scale)
@@ -104,7 +103,9 @@ function main()
         end
         println("Best_i:",Best_i)
         if Best_i == 0
-            Number_of_samples = Number_of_samples + 20
+            Number_of_samples = Number_of_samples + 50 # Adds 50 to the number
+            # of samples if none of the parametervectors had lower cost then 
+            # the previous one
             continue
         end
         try
@@ -123,7 +124,7 @@ function main()
             println("MK:",MK_current_best)
         catch
             println("didn't work")
-            Number_of_samples = Number_of_samples + 20
+            Number_of_samples = Number_of_samples + 50
             if Number_of_samples > 1000
                 break
             end
@@ -148,4 +149,3 @@ end
 
 main()
 
-################################################################################################################################

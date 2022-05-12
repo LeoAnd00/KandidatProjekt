@@ -17,7 +17,8 @@ include("Optimization.jl")
 """
     main_Op_p_0()
 
-    Optimize the cost for multiple parametervectors from p_0_values.csv and puts the result in a CSV file
+    Optimize the cost for multiple parametervectors from p_0_values.csv and 
+    puts the result in a CSV file
 """
 function main_Op_p_0()
     include("../Model/parameter_values.jl")
@@ -62,7 +63,8 @@ function main_Op_p_0()
             CSV.write("Intermediate/optimization_of_p0.csv",df)
         else
             df = CSV.read("Intermediate/optimization_of_p0.csv", DataFrame)
-            #print(" length_p_0_v: ",length(df[:, Symbol("Optimum_from_p_0_value_1")]))
+            #print(" length_p_0_v: ",length(df[:, Symbol
+            # ("Optimum_from_p_0_value_1")]))
             df[!,Symbol("p_0_value_$i")] = Prior_values_of_p_and_MK
             df[!,Symbol("Optimum_from_p_0_value_$i")] = values_of_p_and_MK
             CSV.write("Intermediate/optimization_of_p0.csv",df)

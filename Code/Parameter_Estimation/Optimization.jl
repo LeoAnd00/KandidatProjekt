@@ -11,11 +11,13 @@ include("../Model/ODE_methods.jl")
 include("../../Data/exp_data.jl")
 
 """
-    main_while_loop(p_var_FWD, p_const_FWD, my, my2, abs_min_alpha, condition_num_to_use_SD)
+    main_while_loop(p_var_FWD, p_const_FWD, my, my2, abs_min_alpha, 
+    condition_num_to_use_SD)
 
     All calculations to be done per iteration.
 """
-function main_while_loop(p_var_FWD, p_const_FWD, my, my2, abs_min_alpha, condition_num_to_use_SD)
+function main_while_loop(p_var_FWD, p_const_FWD, my, my2, abs_min_alpha, 
+    condition_num_to_use_SD)
     N = 0 
     
     #prog = ProgressUnknown(;dt=0.1,desc="Progress:", color=:green)
@@ -33,7 +35,8 @@ function main_while_loop(p_var_FWD, p_const_FWD, my, my2, abs_min_alpha, conditi
 
         if N == 1
             try
-                New_MK = calc_cost(p_var_FWD, p_const_FWD) # Calculates the cost of the initial parameter values
+                New_MK = calc_cost(p_var_FWD, p_const_FWD) # Calculates the 
+                # cost of the initial parameter values
                 MK = append!(MK, New_MK)
             catch
                 return nothing
@@ -49,23 +52,31 @@ function main_while_loop(p_var_FWD, p_const_FWD, my, my2, abs_min_alpha, conditi
             end
         end
 
-        Hessian_inv = calc_hessian(prev_grad, grad, step_length, Hessian_inv, p_var_FWD)
+        Hessian_inv = calc_hessian(prev_grad, grad, step_length, 
+        Hessian_inv, p_var_FWD)
 
-        if cond(inv(Hessian_inv)) > condition_num_to_use_SD || N == 1 # Atm I'm not really using cond(inv(Hessian_inv)) > condition_num_to_use_SD
-            println(" USING STEEPEST ")                                 # I'm doing steepest descent for the first iteration, N == 1
+        if cond(inv(Hessian_inv)) > condition_num_to_use_SD || N == 1 
+            # Atm I'm not really using cond(inv(Hessian_inv)) > 
+            #condition_num_to_use_SD
+            # I'm doing steepest descent for the first iteration, N == 1
+            println(" USING STEEPEST ")
             step_dir = -grad
-            step_length = steepest_descent_calc_length(step_dir, p_var_FWD, p_const_FWD, abs_min_alpha, MK)  
+            step_length = steepest_descent_calc_length(step_dir, p_var_FWD, 
+            p_const_FWD, abs_min_alpha, MK)  
         else
             step_dir = calc_direction(grad, Hessian_inv)
-            step_length, alpha_control = calc_length(step_dir, p_var_FWD, p_const_FWD, MK, grad, my, my2, abs_min_alpha)
+            step_length, alpha_control = calc_length(step_dir, p_var_FWD, 
+            p_const_FWD, MK, grad, my, my2, abs_min_alpha)
             if alpha_control == 0
                 println(" USING STEEPEST ")
                 step_dir = -grad
-                step_length = steepest_descent_calc_length(step_dir, p_var_FWD, p_const_FWD, abs_min_alpha, MK) 
+                step_length = steepest_descent_calc_length(step_dir, 
+                p_var_FWD, p_const_FWD, abs_min_alpha, MK) 
             end
         end
 
-        p_values_process = exp.(log.(last.(p_var_FWD))+step_length) # new p values based on step length calculated previously
+        p_values_process = exp.(log.(last.(p_var_FWD))+step_length) 
+        # new p values based on step length calculated previously
 
         p_values_dual_temp = [Pair(first.(p_var_FWD)[1], p_values_process'[1])]
         for i in range(2, length(last.(p_var_FWD)))
@@ -87,7 +98,8 @@ function main_while_loop(p_var_FWD, p_const_FWD, my, my2, abs_min_alpha, conditi
             break
         end
 
-        Number_of_fulfilled_criteria = termination_criteria(MK, grad, step_length, p_var_FWD)
+        Number_of_fulfilled_criteria = termination_criteria(MK, grad, 
+        step_length, p_var_FWD)
         if Number_of_fulfilled_criteria >= 2
             break
         end
@@ -139,7 +151,10 @@ function calc_hessian(prev_grad, grad, step_length, Hessian_inv, p_var_FWD)
     else
         y = grad .- prev_grad
         #Hessian invers with "Broyden–Fletcher–Goldfarb–Shanno algorithm"
-        Hessian_inv = Hessian_inv .+ (step_length'*y + y'*(Hessian_inv*y))*step_length*step_length'/((y'*step_length)^2) .- (Hessian_inv*y*step_length' .+ step_length*y'*Hessian_inv)/(step_length'*y)
+        Hessian_inv = Hessian_inv .+ (step_length'*y + 
+        y'*(Hessian_inv*y))*step_length*step_length'/((y'*step_length)^2) .- 
+        (Hessian_inv*y*step_length' .+ 
+        step_length*y'*Hessian_inv)/(step_length'*y)
     end
     
     return Hessian_inv
@@ -158,11 +173,13 @@ function calc_direction(grad, Hessian_inv)
 end
 
 """
-    calc_length(step_dir, p_var_FWD, p_const_FWD, MK, grad, my, my2, abs_min_alpha)
+    calc_length(step_dir, p_var_FWD, p_const_FWD, MK, grad, my, my2, 
+    abs_min_alpha)
 
     Finds a step length that fulfills the Armijo and Wolfe condition
 """
-function calc_length(step_dir, p_var_FWD, p_const_FWD, MK, grad, my, my2, abs_min_alpha)
+function calc_length(step_dir, p_var_FWD, p_const_FWD, MK, grad, my, my2, 
+    abs_min_alpha)
     #gå i stegriktningen
     alpha = 1
     p_var_new = []
@@ -171,7 +188,9 @@ function calc_length(step_dir, p_var_FWD, p_const_FWD, MK, grad, my, my2, abs_mi
         #Minimum alpha allowed so it doesn't go to inf.
         if alpha < abs_min_alpha 
             println(" BAD ALPHA ")
-            alpha = 0 # used to switch to steepest descent if alpha < abs_min_alpha for quasi-newton
+            alpha = 0 
+            # used to switch to steepest descent if alpha < abs_min_alpha 
+            # for quasi-newton
             break
         end
 
@@ -186,7 +205,8 @@ function calc_length(step_dir, p_var_FWD, p_const_FWD, MK, grad, my, my2, abs_mi
 
         MK_comp_val = 0
         try
-            MK_comp_val = calc_cost(p_var_new, p_const_FWD) # Checks if the cost can be calculated for the parameters
+            MK_comp_val = calc_cost(p_var_new, p_const_FWD) # Checks if the 
+            # cost can be calculated for the parameters
         catch 
             println(" Can't calculate MK in Quasi, alpha = ",alpha)
             alpha  = alpha/2
@@ -216,7 +236,8 @@ function calc_length(step_dir, p_var_FWD, p_const_FWD, MK, grad, my, my2, abs_mi
 
             Wolfe_cond = -my2 * step_dir[:,end]' * grad[:,end]
 
-            if abs(step_direct_grad) < abs(Wolfe_cond) #strong Wolfe conditions
+            if abs(step_direct_grad) < abs(Wolfe_cond) 
+                #strong Wolfe conditions
                 break
             else
                 alpha = alpha/2
@@ -240,11 +261,14 @@ function calc_grad(p_var_FWD, p_const_FWD)
     function dMK_dp_Glucose_addition_Mig1(p_var_FWD,p_const_FWD, u0_SS)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_FWDgrad(u0_SS, (ATP => 1.0, Carbon => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (ATP => 1.0, Carbon => 1.0, 
+            Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
 
-            u_approx = getindex.(sol.u, 20) #ODE for MIG1 on row 20 in ODE system
+            u_approx = getindex.(sol.u, 20) #ODE for MIG1 on row 20 in 
+            # ODE system
 
-            MK_for_diff = sum((data_for_ode - (log.(10,u_approx./(1e-5 .+ 1.0 .- u_approx)))).^2)
+            MK_for_diff = sum((data_for_ode - 
+            (log.(10,u_approx./(1e-5 .+ 1.0 .- u_approx)))).^2)
             return MK_for_diff
         end
     
@@ -252,7 +276,6 @@ function calc_grad(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_Mig1_glucose_relief
         tspan = (0.0, 20.0) # [min]
         p_values = vcat(p_var_FWD,p_const_FWD)
-        #u0_SS = Steady_state_solver(p_var_FWD, p_const_FWD, (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0)) 
 
         prob = ODEProblem(ODE_sys, u0_SS, tspan, p_values)
         dMK_dp = ForwardDiff.gradient(calc_FWD_grad, log.(prob.p))
@@ -263,7 +286,8 @@ function calc_grad(p_var_FWD, p_const_FWD)
     function dMK_dp_Glucose_addition_Sch9(p_var_FWD,p_const_FWD)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, 
+            Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 6)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -273,12 +297,15 @@ function calc_grad(p_var_FWD, p_const_FWD)
         data_for_ode = Minmaxnorm(raw_data_sch9Delta_cAMP, 0.052, 1.227)
         timelist_for_ode = t_sch9Delta_cAMP
         tspan = (0.0, 3.5) # [min]
-        p_const_FWD[Get_index(p_const_lookup_table, "Sch9_T")] = Sch9_T => 0.0
+        p_const_FWD[Get_index(p_const_lookup_table, "Sch9_T")] = 
+        Sch9_T => 0.0
         p_values = vcat(p_var_FWD,p_const_FWD)
-        u0_SS = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) 
+        u0_SS = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+        (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) 
         prob = ODEProblem(ODE_sys, u0_SS, tspan, p_values)
         dMK_dp = ForwardDiff.gradient(calc_FWD_grad, log.(prob.p))
-        p_const_FWD[Get_index(p_const_lookup_table, "Sch9_T")] = Sch9_T => 1.0
+        p_const_FWD[Get_index(p_const_lookup_table, "Sch9_T")] = 
+        Sch9_T => 1.0
 
         return dMK_dp
     end
@@ -286,7 +313,8 @@ function calc_grad(p_var_FWD, p_const_FWD)
     function dMK_dp_Glucose_addition_cAMP(p_var_FWD,p_const_FWD, u0_SS)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, 
+            Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 6) 
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -298,7 +326,6 @@ function calc_grad(p_var_FWD, p_const_FWD)
         tspan = (0.0, 3.5) # [min]
         p_values = vcat(p_var_FWD,p_const_FWD)
 
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0))
         prob = ODEProblem(ODE_sys, u0_SS, tspan, p_values)
         dMK_dp = ForwardDiff.gradient(calc_FWD_grad, log.(prob.p))
 
@@ -308,7 +335,8 @@ function calc_grad(p_var_FWD, p_const_FWD)
     function dMK_dp_Glucose_addition_Sch9_p(p_var_FWD,p_const_FWD, u0_SS)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, 
+            Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 12) 
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -320,7 +348,6 @@ function calc_grad(p_var_FWD, p_const_FWD)
         tspan = (0.0, 32) # [min]
         p_values = vcat(p_var_FWD,p_const_FWD)
 
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0))
         prob = ODEProblem(ODE_sys, u0_SS, tspan, p_values)
         dMK_dp = ForwardDiff.gradient(calc_FWD_grad, log.(prob.p))
 
@@ -330,7 +357,8 @@ function calc_grad(p_var_FWD, p_const_FWD)
     function dMK_dp_Glucose_starvation_Snf1_p(p_var_FWD,p_const_FWD, u0_SS)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 0.0, ATP => 0.0, 
+            Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 10)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -342,7 +370,6 @@ function calc_grad(p_var_FWD, p_const_FWD)
         tspan = (0.0, 62) # [min]
         p_values = vcat(p_var_FWD,p_const_FWD)
 
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
         prob = ODEProblem(ODE_sys, u0_SS, tspan, p_values)
         dMK_dp = ForwardDiff.gradient(calc_FWD_grad, log.(prob.p))
 
@@ -352,7 +379,8 @@ function calc_grad(p_var_FWD, p_const_FWD)
     function dMK_dp_Glucose_starvation_Sch9_p(p_var_FWD,p_const_FWD, u0_SS)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 0.0, ATP => 0.0, 
+            Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 12)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -364,7 +392,6 @@ function calc_grad(p_var_FWD, p_const_FWD)
         tspan = (0.0, 32) # [min]
         p_values = vcat(p_var_FWD,p_const_FWD)
 
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
         prob = ODEProblem(ODE_sys, u0_SS, tspan, p_values)
         dMK_dp = ForwardDiff.gradient(calc_FWD_grad, log.(prob.p))
 
@@ -374,7 +401,8 @@ function calc_grad(p_var_FWD, p_const_FWD)
     function dMK_dp_Sch9P_glutamine_L(p_var_FWD,p_const_FWD, u0_SS)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, 
+            Glutamine_ext => 0.3), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 12)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -386,7 +414,6 @@ function calc_grad(p_var_FWD, p_const_FWD)
         tspan = (0.0, 32) # [min]
         p_values = vcat(p_var_FWD,p_const_FWD)
 
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0))
         prob = ODEProblem(ODE_sys, u0_SS, tspan, p_values)
         dMK_dp = ForwardDiff.gradient(calc_FWD_grad, log.(prob.p))
 
@@ -396,7 +423,8 @@ function calc_grad(p_var_FWD, p_const_FWD)
     function dMK_dp_Sch9P_glutamine_H(p_var_FWD,p_const_FWD, u0_SS)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, 
+            Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 12)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -408,7 +436,6 @@ function calc_grad(p_var_FWD, p_const_FWD)
         tspan = (0.0, 32) # [min]
         p_values = vcat(p_var_FWD,p_const_FWD)
 
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0))
         prob = ODEProblem(ODE_sys, u0_SS, tspan, p_values)
         dMK_dp = ForwardDiff.gradient(calc_FWD_grad, log.(prob.p))
 
@@ -418,7 +445,9 @@ function calc_grad(p_var_FWD, p_const_FWD)
     function dMK_dp_Glutamine_addition_Sch9_gtr1Delta(p_var_FWD,p_const_FWD)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_FWDgrad(u0_SS, (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, 
+            (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan, 
+            p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 12)
 
             MK_for_diff = sum((data_for_ode - u_approx).^2)
@@ -428,21 +457,30 @@ function calc_grad(p_var_FWD, p_const_FWD)
         data_for_ode = Minmaxnorm(raw_data_Sch9_gtr1Delta, 4.82, 52.27)
         timelist_for_ode = t_Sch9_gtr1Delta
         tspan = (0.0, 32) # [min]
-        w_torc_ego_true = p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")]
-        w_torc_egoin_true = p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")]
+        w_torc_ego_true = 
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")]
+        w_torc_egoin_true = 
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")]
 
-        # Mutant gtr1_Delta => EGO_T = 0, w_torc_ego = 0, w_torc_egoin = 0 i 
-        p_const_FWD[Get_index(p_const_lookup_table, "EGO_T")] = EGO_T => 0.0
-        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")] = w_torc_ego => 0.0
-        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")] = w_torc_egoin => 0.0
+        # Mutant gtr1_Delta => EGO_T = 0, w_torc_ego = 0, 
+        # w_torc_egoin = 0 i 
+        p_const_FWD[Get_index(p_const_lookup_table, "EGO_T")] = 
+        EGO_T => 0.0
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")] = 
+        w_torc_ego => 0.0
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")] = 
+        w_torc_egoin => 0.0
         p_values = vcat(p_var_FWD,p_const_FWD)
-        u0_SS = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (Glutamine_ext => 0.0, Carbon => 1.0, ATP => 1.0)) 
+        u0_SS = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+        (Glutamine_ext => 0.0, Carbon => 1.0, ATP => 1.0)) 
 
         prob = ODEProblem(ODE_sys, u0_SS, tspan, p_values)
         dMK_dp = ForwardDiff.gradient(calc_FWD_grad, log.(prob.p))
         p_const_FWD[Get_index(p_const_lookup_table, "EGO_T")] = EGO_T => 1.0
-        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")] = w_torc_ego_true
-        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")] = w_torc_egoin_true
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")] = 
+        w_torc_ego_true
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")] = 
+        w_torc_egoin_true
 
         return dMK_dp
     end
@@ -450,10 +488,12 @@ function calc_grad(p_var_FWD, p_const_FWD)
     function dMK_dp_Rapamycin_treatment(p_var_FWD,p_const_FWD, u0_SS)
         function calc_FWD_grad(p_values)
             p_values = exp.(p_values)
-            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
+            sol = ODE_solver_FWDgrad(u0_SS, (Carbon => 1.0, ATP => 1.0, 
+            Glutamine_ext => 1.0), tspan, p_values, timelist_for_ode, prob)
             u_approx = getindex.(sol.u, 25)
 
-            MK_for_diff = sum((data_for_ode - (u_approx./(1e-3 .+ u0_SS[25]))).^2)
+            MK_for_diff = 
+            sum((data_for_ode - (u_approx./(1e-3 .+ u0_SS[25]))).^2)
             return MK_for_diff
         end
     
@@ -461,37 +501,60 @@ function calc_grad(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_Rib_rap
         tspan = (0.0, 92.0) # [min]
 
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
-        p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = TORC1_T => 0.0
+        p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = 
+        TORC1_T => 0.0
         p_values = vcat(p_var_FWD,p_const_FWD)
         prob = ODEProblem(ODE_sys, u0_SS, tspan, p_values)
         dMK_dp = ForwardDiff.gradient(calc_FWD_grad, log.(prob.p))
-        p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = TORC1_T => 1.0
+        p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = 
+        TORC1_T => 1.0
 
         return dMK_dp
     end
 
-    u0_SS_A_C_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
+    u0_SS_A_C_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+    (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
     #println("u0_SS_A_C_G:",u0_SS_A_C_G)
-    dMK_dp_Glucose_starvation_Snf1_p_solution = dMK_dp_Glucose_starvation_Snf1_p(p_var_FWD,p_const_FWD, u0_SS_A_C_G)
-    dMK_dp_Glucose_starvation_Sch9_p_solution = dMK_dp_Glucose_starvation_Sch9_p(p_var_FWD,p_const_FWD, u0_SS_A_C_G)
-    dMK_dp_Rapamycin_treatment_solution = dMK_dp_Rapamycin_treatment(p_var_FWD,p_const_FWD, u0_SS_A_C_G)
+    dMK_dp_Glucose_starvation_Snf1_p_solution = 
+    dMK_dp_Glucose_starvation_Snf1_p(p_var_FWD,p_const_FWD, u0_SS_A_C_G)
+    dMK_dp_Glucose_starvation_Sch9_p_solution = 
+    dMK_dp_Glucose_starvation_Sch9_p(p_var_FWD,p_const_FWD, u0_SS_A_C_G)
+    dMK_dp_Rapamycin_treatment_solution = 
+    dMK_dp_Rapamycin_treatment(p_var_FWD,p_const_FWD, u0_SS_A_C_G)
 
-    u0_SS_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0))
+    u0_SS_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+    (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0))
     #println("u0_SS_G:",u0_SS_G)
-    dMK_dp_Glucose_addition_Mig1_solution = dMK_dp_Glucose_addition_Mig1(p_var_FWD,p_const_FWD, u0_SS_G)
-    dMK_dp_Glucose_addition_cAMP_solution = dMK_dp_Glucose_addition_cAMP(p_var_FWD,p_const_FWD, u0_SS_G)
-    dMK_dp_Glucose_addition_Sch9_p_solution = dMK_dp_Glucose_addition_Sch9_p(p_var_FWD,p_const_FWD, u0_SS_G)
+    dMK_dp_Glucose_addition_Mig1_solution = 
+    dMK_dp_Glucose_addition_Mig1(p_var_FWD,p_const_FWD, u0_SS_G)
+    dMK_dp_Glucose_addition_cAMP_solution = 
+    dMK_dp_Glucose_addition_cAMP(p_var_FWD,p_const_FWD, u0_SS_G)
+    dMK_dp_Glucose_addition_Sch9_p_solution = 
+    dMK_dp_Glucose_addition_Sch9_p(p_var_FWD,p_const_FWD, u0_SS_G)
 
-    u0_SS_A_C = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0))
+    u0_SS_A_C = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+    (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0))
     #println("u0_SS_A_C:",u0_SS_A_C)
-    dMK_dp_Sch9P_glutamine_L_solution = dMK_dp_Sch9P_glutamine_L(p_var_FWD,p_const_FWD, u0_SS_A_C)
-    dMK_dp_Sch9P_glutamine_H_solution = dMK_dp_Sch9P_glutamine_H(p_var_FWD,p_const_FWD, u0_SS_A_C)
+    dMK_dp_Sch9P_glutamine_L_solution = 
+    dMK_dp_Sch9P_glutamine_L(p_var_FWD,p_const_FWD, u0_SS_A_C)
+    dMK_dp_Sch9P_glutamine_H_solution = 
+    dMK_dp_Sch9P_glutamine_H(p_var_FWD,p_const_FWD, u0_SS_A_C)
 
-    dMK_dp_Glucose_addition_Sch9_solution = dMK_dp_Glucose_addition_Sch9(p_var_FWD,p_const_FWD)
-    dMK_dp_Glutamine_addition_Sch9_gtr1Delta_solution = dMK_dp_Glutamine_addition_Sch9_gtr1Delta(p_var_FWD,p_const_FWD)
+    dMK_dp_Glucose_addition_Sch9_solution = 
+    dMK_dp_Glucose_addition_Sch9(p_var_FWD,p_const_FWD)
+    dMK_dp_Glutamine_addition_Sch9_gtr1Delta_solution = 
+    dMK_dp_Glutamine_addition_Sch9_gtr1Delta(p_var_FWD,p_const_FWD)
 
-    True_grad = dMK_dp_Glucose_addition_Mig1_solution + dMK_dp_Glucose_addition_Sch9_solution + dMK_dp_Glucose_addition_cAMP_solution + dMK_dp_Glucose_addition_Sch9_p_solution + dMK_dp_Glucose_starvation_Snf1_p_solution + dMK_dp_Glucose_starvation_Sch9_p_solution + dMK_dp_Sch9P_glutamine_L_solution + dMK_dp_Sch9P_glutamine_H_solution + dMK_dp_Glutamine_addition_Sch9_gtr1Delta_solution + dMK_dp_Rapamycin_treatment_solution
+    True_grad = dMK_dp_Glucose_addition_Mig1_solution + 
+    dMK_dp_Glucose_addition_Sch9_solution + 
+    dMK_dp_Glucose_addition_cAMP_solution + 
+    dMK_dp_Glucose_addition_Sch9_p_solution + 
+    dMK_dp_Glucose_starvation_Snf1_p_solution + 
+    dMK_dp_Glucose_starvation_Sch9_p_solution + 
+    dMK_dp_Sch9P_glutamine_L_solution + 
+    dMK_dp_Sch9P_glutamine_H_solution + 
+    dMK_dp_Glutamine_addition_Sch9_gtr1Delta_solution + 
+    dMK_dp_Rapamycin_treatment_solution
 
     True_grad = Rearrange_the_gradient(p_var_FWD, p_const_FWD, True_grad)
 
@@ -501,14 +564,18 @@ end
 """
     Rearrange_the_gradient(p_var_FWD, p_const_FWD, dMK_dp)
 
-    Rearrange the gradient so that they are in the correct order. This is needed since the combination of FAD and ModelingToolkit
-    results in some strange rearranging of the gradient, this also happens to the parameters if you use prob.p to get them from
-    the ODEproblem. (This effect is easier to see in a simpler example.)
+    Rearrange the gradient so that they are in the correct order. 
+    This is needed since the combination of FAD and ModelingToolkit results 
+    in some strange rearranging of the gradient, this also happens to the 
+    parameters if you use prob.p to get them from the ODEproblem. 
+    (This effect is easier to see in a simpler example.)
 """
 function Rearrange_the_gradient(p_var_FWD, p_const_FWD, dMK_dp)
 
-    tspan = (0.0, 30.0) # Simply needs to be defined, but that values doesn't matter
-    u0_SS = ones(1,28) # Simply needs to be defined, but that values doesn't matter
+    tspan = (0.0, 30.0) # Simply needs to be defined, but that values 
+    # doesn't matter
+    u0_SS = ones(1,28) # Simply needs to be defined, but that values 
+    # doesn't matter
 
     p_var_FWD_new = []
     for i in 1:length(last.(p_var_FWD))
@@ -578,16 +645,17 @@ function calc_cost(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_Mig1_glucose_relief
         tspan = (0.0, 20.0) # [min]
 
-        #u0_SS = Steady_state_solver(p_const, p_var, (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-
-        sol = ODE_solver_FWD(u0_SS, (ATP => 1.0, Carbon => 1.0, Glutamine_ext => 1.0), tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
+        sol = ODE_solver_FWD(u0_SS, 
+        (ATP => 1.0, Carbon => 1.0, Glutamine_ext => 1.0), tspan, 
+        p_const_FWD, p_var_FWD, timelist_for_ode)
         
         u_approx = getindex.(sol.u, 20) #ODE for MIG1 on row 20 in ODE system
 
         #Check if sol was a success
         u_approx = Check_if_cost_is_a_success(sol, u_approx)
 
-        MK_Glucose_addition_Mig1 = sum((data_for_ode - (log.(10,u_approx./(1e-5 .+ 1.0 .- u_approx)))).^2)
+        MK_Glucose_addition_Mig1 = sum((data_for_ode - 
+        (log.(10,u_approx./(1e-5 .+ 1.0 .- u_approx)))).^2)
     
         return MK_Glucose_addition_Mig1
     end
@@ -598,13 +666,18 @@ function calc_cost(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_sch9Delta_cAMP
         tspan = (0.0, 3.5) # [min]
         # Mutant Sch9_Delta => Sch9_T = 0
-        p_const_FWD[Get_index(p_const_lookup_table, "Sch9_T")] = Sch9_T => 0.0
+        p_const_FWD[Get_index(p_const_lookup_table, "Sch9_T")] = 
+        Sch9_T => 0.0
     
         # Pre-shift => ATP, Carbon = 0
-        u0_SS = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
+        u0_SS = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+        (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar 
+        # steady state för parametrarna p
     
         # Post-shift => ATP, Carbon = 1
-        sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
+        sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, 
+        Glutamine_ext => 1.0), tspan, p_const_FWD, p_var_FWD, 
+        timelist_for_ode)
         
         u_approx = getindex.(sol.u, 6) #ODE for cAMP on row 6 in ODE system
 
@@ -613,7 +686,8 @@ function calc_cost(p_var_FWD, p_const_FWD)
 
         MK_Glucose_addition_Sch9 = sum((data_for_ode - u_approx).^2)
 
-        p_const_FWD[Get_index(p_const_lookup_table, "Sch9_T")] = Sch9_T => 1.0
+        p_const_FWD[Get_index(p_const_lookup_table, "Sch9_T")] = 
+        Sch9_T => 1.0
     
         return MK_Glucose_addition_Sch9
     end
@@ -624,10 +698,10 @@ function calc_cost(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_cAMP
         tspan = (0.0, 3.5) # [min]
     
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-
         # Post-shift, Glucose addition => ATP, Carbon = 1
-        sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
+        sol = ODE_solver_FWD(u0_SS, 
+        (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, 
+        p_const_FWD, p_var_FWD, timelist_for_ode)
     
         u_approx = getindex.(sol.u, 6) #ODE for cAMP on row 6 in ODE system
             
@@ -645,9 +719,9 @@ function calc_cost(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_Sch9_glucose_relief
         tspan = (0.0, 30) # [min]
     
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-    
-        sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
+        sol = ODE_solver_FWD(u0_SS, 
+        (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, 
+        p_const_FWD, p_var_FWD, timelist_for_ode)
     
         u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
 
@@ -665,11 +739,11 @@ function calc_cost(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_Snf1
         tspan = (0.0, 62) # [min]
     
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-    
         # Post-shift, Glucose starvation => Carbon, ATP = 0
     
-        sol = ODE_solver_FWD(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
+        sol = ODE_solver_FWD(u0_SS, 
+        (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, 
+        p_const_FWD, p_var_FWD, timelist_for_ode)
         u_approx = getindex.(sol.u, 10) #ODE for Snf1 on row 10 in ODE system
 
         #Check if sol was a success
@@ -686,9 +760,9 @@ function calc_cost(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_Sch9_glucose_starve
         tspan = (0.0, 30) # [min]
     
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-    
-        sol = ODE_solver_FWD(u0_SS, (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
+        sol = ODE_solver_FWD(u0_SS, 
+        (Carbon => 0.0, ATP => 0.0, Glutamine_ext => 1.0), tspan, 
+        p_const_FWD, p_var_FWD, timelist_for_ode)
     
         u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
 
@@ -706,10 +780,10 @@ function calc_cost(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_Sch9P_glutamine_L
         tspan = (0.0, 32) # [min]
     
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returnerar steady state för parametrarna p
-    
         # Low glutamine => Glutamine_ext = 0.3
-        sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
+        sol = ODE_solver_FWD(u0_SS, 
+        (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), tspan, 
+        p_const_FWD, p_var_FWD, timelist_for_ode)
     
         u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
 
@@ -727,10 +801,10 @@ function calc_cost(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_Sch9P_glutamine_H
         tspan = (0.0, 32) # [min]
     
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returnerar steady state för parametrarna p
-    
         # High Glutamine => Glutamine_ext = 1.0
-        sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
+        sol = ODE_solver_FWD(u0_SS, 
+        (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, 
+        p_const_FWD, p_var_FWD, timelist_for_ode)
     
         u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
  
@@ -748,30 +822,40 @@ function calc_cost(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_Sch9_gtr1Delta
         tspan = (0.0, 32) # [min]
     
-        w_torc_ego_true = p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")]
-        w_torc_egoin_true = p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")]
+        w_torc_ego_true = 
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")]
+        w_torc_egoin_true = 
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")]
     
         # Mutant gtr1_Delta => EGO_T = 0, w_torc_ego = 0, w_torc_egoin = 0 i 
         p_const_FWD[Get_index(p_const_lookup_table, "EGO_T")] = EGO_T => 0.0
-        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")] = w_torc_ego => 0.0
-        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")] = w_torc_egoin => 0.0
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")] = 
+        w_torc_ego => 0.0
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")] = 
+        w_torc_egoin => 0.0
     
         # Pre-shift => Glutamine_ext = 0, ATP, Carbon = 1 
-        u0_SS = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (Glutamine_ext => 0.0, Carbon => 1.0, ATP => 1.0)) 
+        u0_SS = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+        (Glutamine_ext => 0.0, Carbon => 1.0, ATP => 1.0)) 
     
         # High glutamine => Glutamine_ext = 1
-        sol = ODE_solver_FWD(u0_SS, (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
+        sol = ODE_solver_FWD(u0_SS, 
+        (Glutamine_ext => 1.0, Carbon => 1.0, ATP => 1.0), tspan, 
+        p_const_FWD, p_var_FWD, timelist_for_ode)
     
         u_approx = getindex.(sol.u, 12) #ODE for Sch9 on row 12 in ODE system
            
         #Check if sol was a success
         u_approx = Check_if_cost_is_a_success(sol, u_approx)
 
-        MK_Glutamine_addition_Sch9_gtr1Delta = sum((data_for_ode - u_approx).^2)
+        MK_Glutamine_addition_Sch9_gtr1Delta = 
+        sum((data_for_ode - u_approx).^2)
     
         p_const_FWD[Get_index(p_const_lookup_table, "EGO_T")] = EGO_T => 1.0
-        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")] = w_torc_ego_true
-        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")] = w_torc_egoin_true
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_ego")] = 
+        w_torc_ego_true
+        p_var_FWD[Get_index(p_var_lookup_table, "w_torc_egoin")] = 
+        w_torc_egoin_true
     
         return MK_Glutamine_addition_Sch9_gtr1Delta
     end
@@ -782,43 +866,63 @@ function calc_cost(p_var_FWD, p_const_FWD)
         timelist_for_ode = t_Rib_rap
         tspan = (0.0, 92.0) # [min]
     
-        #u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0)) # Returnerar steady state för parametrarna p
-    
         # Post-shift: Rapamycin treatment => TORC1_T = 0.0 
-        p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = TORC1_T => 0.0
+        p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = 
+        TORC1_T => 0.0
     
-        sol = ODE_solver_FWD(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
+        sol = ODE_solver_FWD(u0_SS, 
+        (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, 
+        p_const_FWD, p_var_FWD, timelist_for_ode)
     
         u_approx = getindex.(sol.u, 25) #ODE for RIB on row 25 in ODE system
 
         #Check if sol was a success
         u_approx = Check_if_cost_is_a_success(sol, u_approx)
 
-        MK_Rapamycin_treatment = sum((data_for_ode - (u_approx./(1e-3 + u0_SS[25]))).^2)
+        MK_Rapamycin_treatment = 
+        sum((data_for_ode - (u_approx./(1e-3 + u0_SS[25]))).^2)
     
-        p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = TORC1_T => 1.0
+        p_const_FWD[Get_index(p_const_lookup_table, "TORC1_T")] = 
+        TORC1_T => 1.0
     
         return MK_Rapamycin_treatment
     end
     
-    u0_SS_A_C_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
-    MK_Glucose_starvation_Snf1_p = Calc_cost_Glucose_starvation_Snf1_p(p_var_FWD, p_const_FWD, u0_SS_A_C_G)
-    MK_Glucose_starvation_Sch9_p = Calc_cost_Glucose_starvation_Sch9_p(p_var_FWD, p_const_FWD, u0_SS_A_C_G)
-    MK_Rapamycin_treatment = Calc_cost_Rapamycin_treatment(p_var_FWD, p_const_FWD, u0_SS_A_C_G)
+    u0_SS_A_C_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+    (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0))
+    MK_Glucose_starvation_Snf1_p = 
+    Calc_cost_Glucose_starvation_Snf1_p(p_var_FWD, p_const_FWD, u0_SS_A_C_G)
+    MK_Glucose_starvation_Sch9_p = 
+    Calc_cost_Glucose_starvation_Sch9_p(p_var_FWD, p_const_FWD, u0_SS_A_C_G)
+    MK_Rapamycin_treatment = 
+    Calc_cost_Rapamycin_treatment(p_var_FWD, p_const_FWD, u0_SS_A_C_G)
 
-    u0_SS_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0))
-    MK_Glucose_addition_Mig1 = Calc_cost_Glucose_addition_Mig1(p_var_FWD, p_const_FWD, u0_SS_G)
-    MK_Glucose_addition_cAMP = Calc_cost_Glucose_addition_cAMP(p_var_FWD, p_const_FWD, u0_SS_G)
-    MK_Glucose_addition_Sch9_p = Calc_cost_Glucose_addition_Sch9_p(p_var_FWD, p_const_FWD, u0_SS_G)
+    u0_SS_G = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+    (ATP => 0.0, Carbon => 0.0, Glutamine_ext => 1.0))
+    MK_Glucose_addition_Mig1 = 
+    Calc_cost_Glucose_addition_Mig1(p_var_FWD, p_const_FWD, u0_SS_G)
+    MK_Glucose_addition_cAMP = 
+    Calc_cost_Glucose_addition_cAMP(p_var_FWD, p_const_FWD, u0_SS_G)
+    MK_Glucose_addition_Sch9_p = 
+    Calc_cost_Glucose_addition_Sch9_p(p_var_FWD, p_const_FWD, u0_SS_G)
 
-    u0_SS_A_C = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0))
-    MK_Sch9P_glutamine_L = Calc_cost_Sch9P_glutamine_L(p_var_FWD, p_const_FWD, u0_SS_A_C)
-    MK_Sch9P_glutamine_H = Calc_cost_Sch9P_glutamine_H(p_var_FWD, p_const_FWD, u0_SS_A_C)
+    u0_SS_A_C = Steady_state_solver_FWD(p_const_FWD, p_var_FWD, 
+    (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0))
+    MK_Sch9P_glutamine_L = 
+    Calc_cost_Sch9P_glutamine_L(p_var_FWD, p_const_FWD, u0_SS_A_C)
+    MK_Sch9P_glutamine_H = 
+    Calc_cost_Sch9P_glutamine_H(p_var_FWD, p_const_FWD, u0_SS_A_C)
 
-    MK_Glucose_addition_Sch9 = Calc_cost_Glucose_addition_Sch9(p_var_FWD, p_const_FWD)
-    MK_Glutamine_addition_Sch9_gtr1Delta = Calc_cost_Glutamine_addition_Sch9_gtr1Delta(p_var_FWD, p_const_FWD)
+    MK_Glucose_addition_Sch9 = 
+    Calc_cost_Glucose_addition_Sch9(p_var_FWD, p_const_FWD)
+    MK_Glutamine_addition_Sch9_gtr1Delta = 
+    Calc_cost_Glutamine_addition_Sch9_gtr1Delta(p_var_FWD, p_const_FWD)
 
-    MK = MK_Glucose_addition_Mig1 + MK_Glucose_addition_Sch9 + MK_Glucose_addition_cAMP + MK_Glucose_addition_Sch9_p + MK_Glucose_starvation_Snf1_p + MK_Glucose_starvation_Sch9_p + MK_Sch9P_glutamine_L + MK_Sch9P_glutamine_H + MK_Glutamine_addition_Sch9_gtr1Delta + MK_Rapamycin_treatment
+    MK = MK_Glucose_addition_Mig1 + MK_Glucose_addition_Sch9 + 
+    MK_Glucose_addition_cAMP + MK_Glucose_addition_Sch9_p + 
+    MK_Glucose_starvation_Snf1_p + MK_Glucose_starvation_Sch9_p + 
+    MK_Sch9P_glutamine_L + MK_Sch9P_glutamine_H + 
+    MK_Glutamine_addition_Sch9_gtr1Delta + MK_Rapamycin_treatment
 
     return MK
 end
@@ -859,11 +963,13 @@ function plot_results(Bild, Bild_format, MK, Number_of_iterations)
 end
 
 """
-    steepest_descent_calc_length(step_dir, p_var_FWD, p_const_FWD, abs_min_alpha, MK)  
+    steepest_descent_calc_length(step_dir, p_var_FWD, p_const_FWD, 
+    abs_min_alpha, MK)  
 
     Finds a step length for steepest descent.
 """
-function steepest_descent_calc_length(step_dir, p_var_FWD, p_const_FWD, abs_min_alpha, MK)  
+function steepest_descent_calc_length(step_dir, p_var_FWD, p_const_FWD, 
+    abs_min_alpha, MK)  
     alpha0 = 1e-9
     alpha = 1e-9
     p_var_temp = []
@@ -930,7 +1036,8 @@ function steepest_descent_calc_length(step_dir, p_var_FWD, p_const_FWD, abs_min_
         println("New_MK: ",new_MK)
 
 
-        # If alpha = 0 it will try reducing alpha0 until alpha is not 0 or alpha0 > abs_min_alpha
+        # If alpha = 0 it will try reducing alpha0 until alpha is not 0 or 
+        # alpha0 > abs_min_alpha
         if new_MK > prev_MK
             alpha = alpha-alpha0
             if alpha == 0
@@ -969,14 +1076,16 @@ end
 """
     main_FWD_optimization(p_0_var)
 
-    Here you choose different options and values for the entire optimisation process.
+    Here you choose different options and values for the entire optimisation 
+    process.
 """
 function main_FWD_optimization(p_0_var)
 
     include("../Model/parameter_values.jl")
 
     p_var = p_0_var
-    condition_num_to_use_SD = 1e100 #Not using atm, hence a big number 1e100
+    condition_num_to_use_SD = 1e100 #Not really using, 
+    # hence a big number 1e100
 
     #calc_length options:
     my = 1e-4
@@ -985,7 +1094,8 @@ function main_FWD_optimization(p_0_var)
     abs_min_alpha = 1e-8
 
     ####################Quasi-Newton######################
-    MK, p_var_reslut, Number_of_iterations = @time main_while_loop(p_var, p_const, my, my2, abs_min_alpha, condition_num_to_use_SD)
+    MK, p_var_reslut, Number_of_iterations = @time main_while_loop(p_var, 
+    p_const, my, my2, abs_min_alpha, condition_num_to_use_SD)
     #######################################################
 
     #plot cost vs iterations

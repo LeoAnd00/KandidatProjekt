@@ -4,11 +4,12 @@ include("../Model/ODE_functions.jl")
 include("../Model/parameter_values.jl") 
 
 """
-    Check_if_p_MK_under_x() 
+    filter_p0_values_opt_list() 
 
-    Gives the user the parametervector in a form suitable for ModelingToolkit for parametervector i in optimization_of_p0.csv.
+    Gives the user the parametervector in a form suitable for ModelingToolkit 
+    for parametervector i in optimization_of_p0.csv.
 """
-function Check_if_p_MK_under_x()
+function filter_p0_values_opt_list()
     df = CSV.read("Intermediate/optimization_of_p0.csv", DataFrame)
 
     i = 11 #Choose manually
@@ -27,4 +28,4 @@ function Check_if_p_MK_under_x()
     println("MK: ",df[:, Symbol("Optimum_from_p_0_value_$i")][end])
 end
 
-Check_if_p_MK_under_x()
+filter_p0_values_opt_list()
