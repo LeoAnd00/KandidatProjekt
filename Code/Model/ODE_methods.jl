@@ -190,7 +190,9 @@ index_high_glutamine = Get_index(nutrient_shifts_lookup_table, "High glutamine")
 index_nitrogen_starvation = Get_index(nutrient_shifts_lookup_table, "Nitrogen starvation")
 
 """
+    Steady_state_solver_FWD(p_const_FWD, p_var_FWD, model_inputs)
 
+    Steady state solver used for optimization.
 """
 function Steady_state_solver_FWD(p_const_FWD, p_var_FWD, model_inputs)
     
@@ -206,6 +208,12 @@ function Steady_state_solver_FWD(p_const_FWD, p_var_FWD, model_inputs)
     SS_prob = SteadyStateProblem(ODE_sys, u0, p) 
 
     SS_sol = solve(SS_prob, DynamicSS(Rodas4P(), abstol=1e-3, reltol=1e-3), abstol=1e-8, reltol=1e-8)
+
+    SS_prob = SteadyStateProblem(ODE_sys, u0, p) 
+
+    SS_sol = solve(SS_prob, DynamicSS(Rodas4P(), abstol=1e-3, reltol=1e-3), abstol=1e-8, reltol=1e-8)
+
+    #println(" result_steady_state: ", SS_sol.retcode)
 
     steady_state_solution = SS_sol.u
 
@@ -230,7 +238,9 @@ function Steady_state_solver_FWD(p_const_FWD, p_var_FWD, model_inputs)
 end
 
 """
+    ODE_solver_FWDgrad(u0_SS, model_inputs, tspan, p_values, timelist_for_ode, prob)
 
+    ODE solver function used within the gradient calculation function used in optimization.
 """
 function ODE_solver_FWDgrad(u0_SS, model_inputs, tspan, p_values, timelist_for_ode, prob)
 
@@ -249,11 +259,13 @@ function ODE_solver_FWDgrad(u0_SS, model_inputs, tspan, p_values, timelist_for_o
         u0_SS[findfirst(x->x==string(first.(prev_model_inputs)[i]), u_lookup_table)] = last.(prev_model_inputs)[i]
     end
 
-    return sol#, maxiters = 1e5,dtmin = 1e-5)
+    return sol
 end
 
 """
+    ODE_solver_FWD(u0_SS, model_inputs, tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
 
+    ODE solver function used for optimization
 """
 function ODE_solver_FWD(u0_SS, model_inputs, tspan, p_const_FWD, p_var_FWD, timelist_for_ode)
 

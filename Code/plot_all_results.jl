@@ -6,7 +6,5 @@ plot_simulation_result(
 plot_simulation_result(
     true, sol_array_gluc_add, PKA, (0.0, 15.0), (0.0, 1.05), "Glukostillsättning", "PKA_gluc_add", :bottomright
     ) 
-
-# Dessa bör köras sist, eftersom de ändrar många defaultvärden på Plots
 include("Time_course/plot_all_reconstr_in_subplot.jl")
 include("Model_analysis/plot_all_sims_in_subplot.jl")
