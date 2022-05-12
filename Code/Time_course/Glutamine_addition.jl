@@ -12,7 +12,7 @@ include("../Model/parameter_values.jl")
 
 # Pre-shift => Glutamine_ext = 0, nitrogen starvation
 include("../Model/ODE_methods.jl")
-u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) # Returns steady state values for p from pre-shift
+u0_SS = Steady_state_solver(p_const, p_var, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.0)) 
 
 # Low glutamine => Glutamine_ext = 0.3
 tspan = (0.0, 30.0) # [min]
@@ -23,7 +23,9 @@ sol_low = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 0.3), t
 include("../../Data/exp_data_norm.jl")
 
 # Creates the plot for low glutamine addition after starvation for Sch9
-plot8 = scatter(t_Sch9P_glutamine_L, data_Sch9P_glutamine_L, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
+plot8 = scatter(
+    t_Sch9P_glutamine_L, data_Sch9P_glutamine_L, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8
+    )
 
 plot!(sol_low, vars = Sch9, legend = false, color=color_jalihal, lw=2.0)
 xlabel!("t [min]")
@@ -41,7 +43,9 @@ savefig(plot8, pwd()*"/Results/Time_course_reconstructed/vector_images/"*file_na
 # Solves the same ODEs with high amounts of glutamine 
 sol_high = ODE_solver(u0_SS, (Carbon => 1.0, ATP => 1.0, Glutamine_ext => 1.0), tspan, p_const, p_var)
 
-plot9 = scatter(t_Sch9P_glutamine_H, data_Sch9P_glutamine_H, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8)
+plot9 = scatter(
+    t_Sch9P_glutamine_H, data_Sch9P_glutamine_H, markersize = 4.5, markercolor=RGB(0.35, 0.4, 1), markerstrokewidth=0.8
+    )
 plot!(sol_high, vars = Sch9, legend = false, color=color_jalihal, lw=2.0)
 xlabel!("t [min]")
 xlims!((-0.5, last(tspan)*1.02))

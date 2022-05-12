@@ -2,44 +2,98 @@
 include("perturbation_methods.jl")
 
 # Perturbation simulations Snf1
-Snf1_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_glucose_starvation]), last.(nutrient_shifts[index_glucose_starvation]), Snf1)
-Snf1_mutant_shift = Steady_state_pertubation_solver([Sak_T => 0.0], first.(nutrient_shifts[index_glucose_starvation]), last.(nutrient_shifts[index_glucose_starvation]), Snf1)
+Snf1_shift = Steady_state_pertubation_solver(
+    first.(nutrient_shifts[index_glucose_starvation]), last.(nutrient_shifts[index_glucose_starvation]), Snf1)
+Snf1_mutant_shift = Steady_state_pertubation_solver(
+    [Sak_T => 0.0], first.(nutrient_shifts[index_glucose_starvation]), 
+    last.(nutrient_shifts[index_glucose_starvation]), Snf1
+    )
 
 # Gis1
-Gis1_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_glucose_addition]), last.(nutrient_shifts[index_glucose_addition]), Gis1)
-Gis1_mutant_shift = Steady_state_pertubation_solver([Sch9_T => 0.0], first.(nutrient_shifts[index_glucose_addition]), last.(nutrient_shifts[index_glucose_addition]), Gis1)
+Gis1_shift = Steady_state_pertubation_solver(
+    first.(nutrient_shifts[index_glucose_addition]), last.(nutrient_shifts[index_glucose_addition]), Gis1
+    )
+Gis1_mutant_shift = Steady_state_pertubation_solver(
+    [Sch9_T => 0.0], first.(nutrient_shifts[index_glucose_addition]), 
+    last.(nutrient_shifts[index_glucose_addition]), Gis1
+    )
+
 # Nth1 (Trehalas)
-Tre_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_glucose_starvation]), last.(nutrient_shifts[index_glucose_starvation]), Trehalase)
-Tre_mutant_shift = Steady_state_pertubation_solver([PKA_T => 0.3], first.(nutrient_shifts[index_glucose_starvation]), last.(nutrient_shifts[index_glucose_starvation]), Trehalase)
+Tre_shift = Steady_state_pertubation_solver(
+    first.(nutrient_shifts[index_glucose_starvation]), last.(nutrient_shifts[index_glucose_starvation]), Trehalase
+    )
+Tre_mutant_shift = Steady_state_pertubation_solver(
+    [PKA_T => 0.3], first.(nutrient_shifts[index_glucose_starvation]), 
+    last.(nutrient_shifts[index_glucose_starvation]), Trehalase
+    )
 
 # cAMP
-cAMP_shift_pde = Steady_state_pertubation_solver(first.(nutrient_shifts[index_glucose_addition]), last.(nutrient_shifts[index_glucose_addition]), cAMP)
-cAMP_mutant_pde_shift = Steady_state_pertubation_solver([PDE_T => 0.0], first.(nutrient_shifts[index_glucose_addition]), last.(nutrient_shifts[index_glucose_addition]), cAMP)	
-cAMP_shift_ras = Steady_state_pertubation_solver(first.(nutrient_shifts[index_glucose_addition]), last.(nutrient_shifts[index_glucose_addition]), cAMP)
-cAMP_mutant_ras_shift = Steady_state_pertubation_solver([Ras_T => 0.0, w_pka_camp => 0.0], first.(nutrient_shifts[index_glucose_addition]), last.(nutrient_shifts[index_glucose_addition]), cAMP)
+cAMP_shift_pde = Steady_state_pertubation_solver(
+    first.(nutrient_shifts[index_glucose_addition]), last.(nutrient_shifts[index_glucose_addition]), cAMP
+    )
+cAMP_mutant_pde_shift = Steady_state_pertubation_solver(
+    [PDE_T => 0.0], first.(nutrient_shifts[index_glucose_addition]), 
+    last.(nutrient_shifts[index_glucose_addition]), cAMP
+    )	
+cAMP_shift_ras = Steady_state_pertubation_solver(
+    first.(nutrient_shifts[index_glucose_addition]), 
+    last.(nutrient_shifts[index_glucose_addition]), cAMP
+    )
+cAMP_mutant_ras_shift = Steady_state_pertubation_solver(
+    [Ras_T => 0.0, w_pka_camp => 0.0], first.(nutrient_shifts[index_glucose_addition]), 
+    last.(nutrient_shifts[index_glucose_addition]), cAMP
+    )
 
 # Rib
-Rib_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Rib)
-Rib_mutant_shift = Steady_state_pertubation_solver([Sch9_T => 0.0], first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Rib)
+Rib_shift = Steady_state_pertubation_solver(
+    first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Rib
+    )
+Rib_mutant_shift = Steady_state_pertubation_solver(
+    [Sch9_T => 0.0], first.(nutrient_shifts[index_high_glutamine]), 
+    last.(nutrient_shifts[index_high_glutamine]), Rib)
 
 # Sch9 wild type
-Sch9_lst4_lst7_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
-Sch9_gtr1_gtr2_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
-Sch9_gtr1_2_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
+Sch9_lst4_lst7_shift = Steady_state_pertubation_solver(
+    first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9
+    )
+Sch9_gtr1_gtr2_shift = Steady_state_pertubation_solver(
+    first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9
+    )
+Sch9_gtr1_2_shift = Steady_state_pertubation_solver(
+    first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9
+    )
 
 # Sch9 mutants
-Sch9_lst4_lst7_mutant_shift = Steady_state_pertubation_solver([EGOGAP_T => 0.0], first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
-Sch9_gtr1_gtr2_mutant_shift = Steady_state_pertubation_solver([EGO_T => 0.0, w_torc_ego => 0.0, w_torc_egoin => 0.0, w_torc_glut => 0.5], first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
+Sch9_lst4_lst7_mutant_shift = Steady_state_pertubation_solver(
+    [EGOGAP_T => 0.0], first.(nutrient_shifts[index_high_glutamine]), 
+    last.(nutrient_shifts[index_high_glutamine]), Sch9
+    )
+Sch9_gtr1_gtr2_mutant_shift = Steady_state_pertubation_solver(
+    [EGO_T => 0.0, w_torc_ego => 0.0, w_torc_egoin => 0.0, w_torc_glut => 0.5], 
+    first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9
+    )
 
-Sch9_gtr1_2_mutant_shift = Steady_state_pertubation_solver([EGO_T => 0.0, w_torc_ego => 0.0, w_torc_egoin => 0.0], first.(nutrient_shifts[index_high_glutamine]), last.(nutrient_shifts[index_high_glutamine]), Sch9)
+Sch9_gtr1_2_mutant_shift = Steady_state_pertubation_solver(
+    [EGO_T => 0.0, w_torc_ego => 0.0, w_torc_egoin => 0.0], first.(nutrient_shifts[index_high_glutamine]), 
+    last.(nutrient_shifts[index_high_glutamine]), Sch9
+    )
  
 # Gcn4
-Gcn4_shift = Steady_state_pertubation_solver(first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gcn4)
-Gcn4_mutant_shift = Steady_state_pertubation_solver([Gcn2_T => 0.0], first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gcn4)
+Gcn4_shift = Steady_state_pertubation_solver(
+    first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gcn4
+    )
+Gcn4_mutant_shift = Steady_state_pertubation_solver(
+    [Gcn2_T => 0.0], first.(nutrient_shifts[index_nitrogen_starvation]), 
+    last.(nutrient_shifts[index_nitrogen_starvation]), Gcn4
+    )
 
 # Gln3
-Gln3_shift_sit = Steady_state_pertubation_solver(first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gln3)
-Gln3_mutant_shift_sit = Steady_state_pertubation_solver([w_gln_sit => 0.0, TORC1_T => 0.0], first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gln3)
+Gln3_shift_sit = Steady_state_pertubation_solver(
+    first.(nutrient_shifts[index_nitrogen_starvation]), last.(nutrient_shifts[index_nitrogen_starvation]), Gln3)
+Gln3_mutant_shift_sit = Steady_state_pertubation_solver(
+    [w_gln_sit => 0.0, TORC1_T => 0.0], first.(nutrient_shifts[index_nitrogen_starvation]),
+     last.(nutrient_shifts[index_nitrogen_starvation]), Gln3
+     )
 
 # Normalization of Rib and cAMP simulations
 cAMP_shifts = [cAMP_shift_ras, cAMP_shift_pde, cAMP_mutant_ras_shift, cAMP_mutant_pde_shift]
@@ -90,7 +144,11 @@ exp_data_Gcn4_norm = Minmaxnorm_data(exp_data_Gcn4)
 exp_data_Gln3_sit = [461.0 => 6248.0, 0.0 => 789.0]
 exp_data_Gln3_sit_norm = Minmaxnorm_data(exp_data_Gln3_sit)
 
-exp_data_wt_norm = vcat(exp_data_Rib_norm[1], exp_data_cAMP_pde_norm[1], exp_data_cAMP_ras_norm[1], exp_data_Snf1_norm[1], exp_data_Gis1_norm[1], exp_data_Tre_norm[1], exp_data_Sch9_gtr1_2_norm[1], exp_data_Gcn4_norm[1], exp_data_Gln3_sit_norm[1])
+exp_data_wt_norm = vcat(
+    exp_data_Rib_norm[1], exp_data_cAMP_pde_norm[1], exp_data_cAMP_ras_norm[1], 
+    exp_data_Snf1_norm[1], exp_data_Gis1_norm[1], exp_data_Tre_norm[1], exp_data_Sch9_gtr1_2_norm[1],
+     exp_data_Gcn4_norm[1], exp_data_Gln3_sit_norm[1]
+     )
 
 # Plotting the results
 using Plots
@@ -104,7 +162,6 @@ default(dpi=300)
 ######## Wild type ############
 shifts_wt = vcat(Rib_shifts_wt_norm, cAMP_shifts_wt_norm, raw_shifts_wt)
 
-# shift_names_wt = ["\$\\mathrm{Rib}\$", "\$\\mathrm{cAMP_{pde}}\$", "\$\\mathrm{cAMP_{ras}}\$", "\$\\mathrm{Snf1}\$", "\$\\mathrm{Gis1}\$", "\$\\mathrm{Nth1}\$", "\$\\mathrm{Sch9_{gtr1-2}}\$","\$\\mathrm{Gcn4}\$", "\$\ \mathrm{Gln3_{sit}}\$", "\$\\mathrm{Sch9_{gtr1-gtr2}}\$", "\$\\mathrm{Sch9_{lst4-1st7}}\$"]
 shift_names_wt = ["\$\\mathrm{Rib}\$", "\$\\mathrm{cAMP}\$", "\$\\mathrm{cAMP}\$", 
  "\$\\mathrm{Snf1}\$", "\$\\mathrm{Gis1}\$", "\$\\mathrm{Nth1}\$", 
  "\$\\mathrm{Sch9_{gtr1-2}}\$", "\$\\mathrm{Gcn4}\$", "\$\\mathrm{Gln3}\$", 
@@ -118,11 +175,15 @@ for i in range(1, length(shifts_wt))
     push!(shift_magnitude_wt, last.(shifts_wt[i]) - first.(shifts_wt[i]))
 end 
  
-# Instead of using the highest and lowest value from the data and simulation, 0 and 100 is used as scaling for these, since the unit is percentage
+# Instead of using the highest and lowest value from the data and simulation, 0 and 100 is used as scaling for these, 
+# since the unit is percentage
 exp_data_wt_special_raw = [2.0 => 73.0, 2.0 => 73.0] # Sch9_gtr1_gtr2, Sch9_lst4_lst7
 exp_data_wt_special_norm = Minmaxnorm_shifts(exp_data_wt_special_raw, 0, 100.0)
 
-exp_data_wt_raw = [150.0 => 600.0, 0.25 => 1.1, 0.25 => 1.1, 0.05 => 2.25, 700.0 => 35.0, 100.0 => 25.0, 5.0 => 55.0, 7.3 => 100.0, 461.0 => 6248.0]  
+exp_data_wt_raw = [
+    150.0 => 600.0, 0.25 => 1.1, 0.25 => 1.1, 0.05 => 2.25, 700.0 => 35.0, 
+    100.0 => 25.0, 5.0 => 55.0, 7.3 => 100.0, 461.0 => 6248.0
+    ]  
 
 # Combinde all experimental data
 exp_data_wt = vcat(exp_data_wt_norm, exp_data_wt_special_norm)
@@ -143,7 +204,7 @@ plot11 = groupedbar(
 )
 
 # title!("Vildtyp")
-# xlabel!("Skiftets magnitud")
+# xlabel!("Differens mellan stationärvärden")
 # ylabel="Signalmolekyler"
 # display(plot11)
 
@@ -164,8 +225,8 @@ Rib_shifts_mutant = [Rib_mutant_shift]
 Rib_shifts_mutant_norm = Minmaxnorm_shifts(Rib_shifts_mutant, min_Rib, max_Rib)
 
 # Placing the mutant simulations i order for the plot
-raw_shifts_mutant = [Snf1_mutant_shift, Gis1_mutant_shift, Tre_mutant_shift, Sch9_gtr1_2_mutant_shift, Gcn4_mutant_shift, Gln3_mutant_shift_sit,
-Sch9_gtr1_gtr2_mutant_shift, Sch9_lst4_lst7_mutant_shift]
+raw_shifts_mutant = [Snf1_mutant_shift, Gis1_mutant_shift, Tre_mutant_shift, Sch9_gtr1_2_mutant_shift, 
+Gcn4_mutant_shift, Gln3_mutant_shift_sit, Sch9_gtr1_gtr2_mutant_shift, Sch9_lst4_lst7_mutant_shift]
  
 shifts_mutant = vcat(Rib_shifts_mutant_norm, cAMP_shifts_mutant_norm, raw_shifts_mutant)
 
@@ -187,7 +248,11 @@ exp_data_mutant_special_norm = Minmaxnorm_shifts(exp_data_mutant_special_raw, 0.
 exp_data_mutant_raw = [100.0 => 100.0, 0.25 => 3.8, 0.25 => 0.25, 0.01 => 0.01, 100.0 => 10.0, 
 50.0 => 25.0, 5.0 => 55.0, 11.0 => 38.0, 0.0 => 789.0] 
 
-exp_data_mutant_norm = vcat(exp_data_Rib_norm[2], exp_data_cAMP_pde_norm[2], exp_data_cAMP_ras_norm[2], exp_data_Snf1_norm[2], exp_data_Gis1_norm[2], exp_data_Tre_norm[2], exp_data_Sch9_gtr1_2_norm[2], exp_data_Gcn4_norm[2], exp_data_Gln3_sit_norm[2])
+exp_data_mutant_norm = vcat(
+    exp_data_Rib_norm[2], exp_data_cAMP_pde_norm[2], exp_data_cAMP_ras_norm[2], 
+    exp_data_Snf1_norm[2], exp_data_Gis1_norm[2], exp_data_Tre_norm[2], exp_data_Sch9_gtr1_2_norm[2], 
+    exp_data_Gcn4_norm[2], exp_data_Gln3_sit_norm[2]
+    )
 
 exp_data_mutant = vcat(exp_data_mutant_norm, exp_data_mutant_special_norm)
 
@@ -203,7 +268,7 @@ shift_values_mutant = [shift_magnitude_mutant exp_shift_magnitude_mutant]
 plot12 = groupedbar(
     shift_values_mutant, group=repeat(["Simulering", "Experiment"], inner = length(shift_names_mutant)),
     yticks=(1:length(shift_names_mutant), shift_names_mutant), xlims=(-1.05, 1.05), bar_position=:group, bar_width=0.65, 
-    legend=:topleft, xlabel="Skiftets magnitud", ytickfont=6, orientation=:horizontal, framestyle=:box
+    legend=:topleft, xlabel="Differens mellan stationärvärden", ytickfont=6, orientation=:horizontal, framestyle=:box
 )
 title!("Mutanter")
 # ylabel="Signalmolekyler"
